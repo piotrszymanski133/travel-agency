@@ -6,50 +6,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b654dd94-e128-4cc0-9ff2-0917b0377fe0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ApiGateway/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ApiGateway/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ApiGateway/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.ApiGateway/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ApiGateway/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ApiGateway/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontend-client/src/api/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontend-client/src/components/About.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontend-client/src/components/Home.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontend-client/src/components/Navigation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../frontend-client/src/components/Offer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/.idea/.idea.WebApplication/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/.idea/.idea.WebApplication/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/.idea/.idea.WebApplication/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/.idea/.idea.WebApplication/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication.sln" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/.dockerignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/Controllers/WeatherForecastController.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/Properties/launchSettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/Startup.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/WeatherForecast.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/WebApplication.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/appsettings.Development.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/appsettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/Debug/net5.0/.NETCoreApp,Version=v5.0.AssemblyAttributes.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/Debug/net5.0/WebApplication.AssemblyInfo.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/Debug/net5.0/WebApplication.AssemblyInfoInputs.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/Debug/net5.0/WebApplication.GeneratedMSBuildEditorConfig.editorconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/Debug/net5.0/WebApplication.assets.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/Debug/net5.0/WebApplication.csproj.AssemblyReference.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/WebApplication.csproj.nuget.dgspec.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/WebApplication.csproj.nuget.g.props" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/WebApplication.csproj.nuget.g.targets" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/project.assets.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/project.nuget.cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/project.packagespec.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../WebApplication/WebApplication/obj/rider.project.restore.info" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ApiGateway/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ApiGateway/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend-client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend-client/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../frontend-client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend-client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend-client/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend-client/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend-client/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend-client/src/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend-client/src/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend-client/src/components/Offer.js" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend-client/src/components/Offer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +71,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1650117922335</updated>
-      <workItem from="1650117944524" duration="1235000" />
+      <workItem from="1650117944524" duration="1975000" />
     </task>
     <servers />
   </component>
