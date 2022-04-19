@@ -1,0 +1,18 @@
+version: "3.4"
+
+services:
+    front:
+        hostname: front
+        container_name: front
+        build:
+            context: ./frontend-client
+        ports:
+            - 8080:3000
+
+    api:
+        hostname: api
+        container_name: api
+        build:
+            context: ./ApiGateway
+        ports:
+            - 8081:80
