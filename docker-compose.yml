@@ -16,3 +16,26 @@ services:
             context: ./ApiGateway
         ports:
             - 8081:80
+            
+    rabbitmq:
+        container_name: rabbitmq
+        image: rabbitmq:latest
+        
+    postgres:
+        container_name: postgres
+        restart: always
+        ports:
+          - 5432:5432
+        build:
+            context: ./postgres
+        environment:
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: example
+            POSTGRES_DB: db
+
+    adminer:
+        container_name: adminer
+        image: adminer
+        restart: always
+        ports:
+          - 9080:8080
