@@ -19,7 +19,10 @@ services:
             
     rabbitmq:
         container_name: rabbitmq
-        image: rabbitmq:latest
+        image: rabbitmq:management
+        ports:
+          - 5672:5672
+          - 15672:15672
         
     postgres:
         container_name: postgres
@@ -31,7 +34,7 @@ services:
         environment:
             POSTGRES_USER: user
             POSTGRES_PASSWORD: example
-            POSTGRES_DB: db
+            POSTGRES_DB: hotels
 
     adminer:
         container_name: adminer

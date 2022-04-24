@@ -9,7 +9,7 @@ CREATE TABLE Destinations (
 CREATE TABLE Hotels (
     ID character varying(36) NOT NULL,
     Name character varying(255) NOT NULL,
-	Destination_ID smallint,
+	Destination_ID smallint NOT NULL,
 	Rating real NOT NULL,
 	Food character varying(36) NOT NULL,
 	Stars smallint,
@@ -32,7 +32,6 @@ CREATE TABLE Tours (
     Country character varying(255) NOT NULL,
 	Rating real NOT NULL,
 	Food character varying(36) NOT NULL,
-	Stars smallint,
 	PRIMARY KEY (ID)
 );
 
