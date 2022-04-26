@@ -1,15 +1,26 @@
 using System;
 using System.Threading.Tasks;
+using HotelsService.Models;
 using HotelsService.Queries;
+using HotelsService.Repositories;
 using MassTransit;
 
 namespace HotelsService.Consumers
 {
     public class GetHotelsConsumer : IConsumer<GetHotelsQuery>
     {
+        private IHotelRepository _hotelRepository;
+
+        public GetHotelsConsumer(IHotelRepository hotelRepository)
+        {
+            _hotelRepository = hotelRepository;
+        }
         public Task Consume(ConsumeContext<GetHotelsQuery> context)
         {
-            Console.WriteLine($"{context.Message.City} {context.Message.Country}");
+            foreach (HotelWithDescription hotel in _hotelRepository.GetAllHotels())
+            {
+                Console.WriteLine($"{hotel.Name} {hotel.Description}");
+            }
             return Task.CompletedTask;
         }
     }

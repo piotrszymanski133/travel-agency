@@ -2,7 +2,7 @@ using System;
 using HotelsService;
 using HotelsService.Consumers;
 using HotelsService.Models;
-using HotelsService.Services;
+using HotelsService.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +19,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<hotelsContext>(
     o => o.UseNpgsql(builder.Configuration.GetConnectionString("HotelsDb"))
 );
-builder.Services.AddScoped<IHotelService, HotelService>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<GetHotelsConsumer>(typeof(GetHotelsConsumerDefinition));
@@ -49,6 +49,10 @@ builder.Services.AddOptions<MassTransitHostOptions>()
         // if specified, limits the wait time when stopping the bus
         options.StopTimeout = TimeSpan.FromSeconds(30);
     });
+
+builder.Services.Configure<HotelDescriptionDbSettings>(
+    builder.Configuration.GetSection("DescriptionDb")
+);
 
 var app = builder.Build();
 
