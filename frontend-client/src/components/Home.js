@@ -1,12 +1,14 @@
 ﻿import React,{Component} from 'react';
+import {SearchForm} from "./SearchForm";
 
 export class Home extends Component{
 
     render(){
-        return(
-            <div className="mt-5 d-flex justify-content-left">
-                This is Home page.
+        return[
+            <SearchForm></SearchForm>,
+            <div className="position-absolute top-50">
+                <p>Biuro Podróży <strong> ITAKA </strong> - Twoje wymarzone wakacje. Wyjedź z nami na wczasy all inclusive! </p>
             </div>
-        )
+        ]
     }
 }

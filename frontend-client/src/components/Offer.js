@@ -18,7 +18,7 @@ export class Offer extends Component {
 
     render() {
         return (
-            <div>
+            <div className="p-5 mb-4 align-items-center">
                 <h2 className="text-center">Offers</h2>
                 <div className = "row">
                     <table className = "table table-striped table-bordered">
