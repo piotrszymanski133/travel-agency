@@ -21,6 +21,7 @@
 
 #TripService
 /TripService/obj
+/TripService/bin
 
 #ApiGateway
 /ApiGateway/obj
@@ -28,3 +29,7 @@
 
 #frontend-client
 /frontend-client/.idea
+
+#CommonComponents
+/CommonComponents/obj
+/CommonComponents/bin

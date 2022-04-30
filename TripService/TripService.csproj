@@ -8,6 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="MassTransit" Version="8.0.1" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CommonComponents\CommonComponents.csproj" />
   </ItemGroup>
 
 </Project>

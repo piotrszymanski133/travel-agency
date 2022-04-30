@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HotelsService.Models
 {
-    public partial class Hotel
+    public class Hotel
     {
         public Hotel()
         {
-            Hotelrooms = new HashSet<Hotelroom>();
+            Hotelrooms = new List<Hotelroom>();
         }
 
         public string Id { get; set; } = null!;
@@ -18,6 +19,6 @@ namespace HotelsService.Models
         public short? Stars { get; set; }
 
         public virtual Destination? Destination { get; set; }
-        public virtual ICollection<Hotelroom> Hotelrooms { get; set; }
+        public virtual List<Hotelroom> Hotelrooms { get; set; }
     }
 }

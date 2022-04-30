@@ -9,13 +9,7 @@ services:
         ports:
             - 8080:3000
 
-    api:
-        hostname: api
-        container_name: api
-        build:
-            context: ./ApiGateway
-        ports:
-            - 8081:80
+   
             
     rabbitmq:
         container_name: rabbitmq

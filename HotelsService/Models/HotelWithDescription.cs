@@ -9,10 +9,12 @@ namespace HotelsService.Models
             Id = hotel.Id;
             Name = hotel.Name;
             DestinationId = hotel.DestinationId;
+            Destination = hotel.Destination;
             Rating = hotel.Rating;
             Food = hotel.Food;
             Stars = hotel.Stars;
             Description = hotelDescription.Description;
+            Hotelrooms = hotel.Hotelrooms;
         }
     }
 }

@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using HotelsService.Models;
-using HotelsService.Queries;
+using CommonComponents;
+using CommonComponents.Models;
 using HotelsService.Repositories;
 using MassTransit;
+using HotelsService.Models;
+using Hotel = CommonComponents.Models.Hotel;
 
 namespace HotelsService.Consumers
 {
@@ -15,27 +18,35 @@ namespace HotelsService.Consumers
         {
             _hotelRepository = hotelRepository;
         }
-        public Task Consume(ConsumeContext<GetHotelsQuery> context)
+        public async Task Consume(ConsumeContext<GetHotelsQuery> context)
         {
-            foreach (HotelWithDescription hotel in _hotelRepository.GetAllHotels())
+            List<HotelWithDescription> allHotels = _hotelRepository.GetAllHotels();
+            List<Hotel> hotels = new List<Hotel>();
+            foreach (HotelWithDescription hotel in allHotels)
             {
-                Console.WriteLine($"{hotel.Name} {hotel.Description}");
+                List<HotelRoom> rooms = new List<HotelRoom>();
+                foreach (Hotelroom room in hotel.Hotelrooms)
+                {
+                    rooms.Add(new HotelRoom
+                    {
+                        CapacityPeople = room.CapacityPeople,
+                        Quantity = room.Quantity
+                    });
+                }
+                hotels.Add(new Hotel
+                {
+                    Id = hotel.Id,
+                    Name = hotel.Name,
+                    DestinationCity = hotel.Destination.City,
+                    DestinationCountry = hotel.Destination.Country,
+                    Rating = hotel.Rating,
+                    Food = hotel.Food,
+                    Stars = hotel.Stars.GetValueOrDefault(),
+                    Description = hotel.Description,
+                    Rooms = rooms
+                });
             }
-            return Task.CompletedTask;
-        }
-    }
-
-    public class GetHotelsConsumerDefinition : ConsumerDefinition<GetHotelsConsumer>
-    {
-        public GetHotelsConsumerDefinition()
-        {
-            EndpointName = "get-hotels-queue";
-        }
-
-        protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator, IConsumerConfigurator<GetHotelsConsumer> consumerConfigurator)
-        {
-            endpointConfigurator.UseMessageRetry(r => r.Intervals(100,200,500,800,1000));
-            endpointConfigurator.UseInMemoryOutbox();
+            await context.RespondAsync(new GetHotelsRespond { Hotels = hotels});
         }
     }
 }

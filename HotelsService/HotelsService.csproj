@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services" />
+    <ProjectReference Include="..\CommonComponents\CommonComponents.csproj" />
   </ItemGroup>
 
 </Project>

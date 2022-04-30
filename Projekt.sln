@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotelsService", "HotelsServ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\ApiGateway.csproj", "{87055B81-F2C6-41A3-A033-2FDA7B3510EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonComponents", "CommonComponents\CommonComponents.csproj", "{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{87055B81-F2C6-41A3-A033-2FDA7B3510EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87055B81-F2C6-41A3-A033-2FDA7B3510EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87055B81-F2C6-41A3-A033-2FDA7B3510EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
