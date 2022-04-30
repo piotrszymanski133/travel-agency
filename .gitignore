@@ -17,3 +17,14 @@
 /ApiGateway/ApiGateway/obj/
 /ApiGateway/.vs/
 /ApiGateway/.idea/
+*/.idea
+
+#TripService
+/TripService/obj
+
+#ApiGateway
+/ApiGateway/obj
+/ApiGateway/bin
+
+#frontend-client
+/frontend-client/.idea
