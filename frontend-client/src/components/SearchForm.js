@@ -12,11 +12,12 @@ const DateInput = (fieldProps) => {
 
     const {
         label, onBlur, value, onChange, onFocus} = fieldProps;
+    const current = new Date();
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
             <label>
                 { label }
-                <DateRangePicker onApply={onChange}>
+                <DateRangePicker onApply={onChange} initialSettings={ {minDate:current }}>
                     <input 
                         type="text"
                         value={value}
@@ -75,7 +76,7 @@ const handleSubmit = (data, event) => {
 }
 
 const requiredValidator = (value) => {
-    return value ? "" : "This field is required";
+    return value ? "" : "Podaj liczbę osób!";
 }
 
 export class SearchForm extends Component {
