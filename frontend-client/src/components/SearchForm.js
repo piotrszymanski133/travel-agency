@@ -9,23 +9,20 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 
 
 const DateInput = (fieldProps) => {
+
     const {
-        fieldType, minValue, label, value, visited, valid,
-        onChange, onBlur, onFocus, validationMessage,
-    } = fieldProps;
-    const invalid = !valid && visited;
+        label, onBlur, value, onChange, onFocus} = fieldProps;
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
             <label>
                 { label }
-                <DateRangePicker
-                    placeholder="Select Date Range"
-                    initialSettings={{ startDate: '4/30/2022'}}>
-                    <button>dowolnie</button>
+                <DateRangePicker onApply={onChange}>
+                    <input 
+                        type="text"
+                        value={value}
+                        className="form-control"/>
                 </DateRangePicker>
             </label>
-            { invalid &&
-            (<div className="required">{validationMessage}</div>) }
         </div>
     );
 };
@@ -61,7 +58,7 @@ const DropDown = ({ label, value, options,
                 { label }
             </label>
             <select
-                value={value.name_pl}
+                value={value}
                 onChange={onChange}>
                 {options.map(option => (
                     <option key={option}>{option}</option>
@@ -70,8 +67,9 @@ const DropDown = ({ label, value, options,
         </div>
     )
 }
-
+ 
 const handleSubmit = (data, event) => {
+    console.log(data)
     alert(`Kiedy?  ${data.when} \nDokąd?  ${data.country} \nIle osób?  ${data.people}`);
     event.preventDefault();
 }
@@ -87,7 +85,7 @@ export class SearchForm extends Component {
             <Form
                 onSubmit={handleSubmit}
                 initialValues={{
-                    when: "", country: "", people: ""
+                    when: "dowolnie", country: "dowolnie", people: ""
                 }}
                 render={(formRenderProps) => (
                     <form onSubmit={formRenderProps.onSubmit}>
