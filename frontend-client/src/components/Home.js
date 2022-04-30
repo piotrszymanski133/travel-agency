@@ -1,17 +1,18 @@
 ﻿import React,{Component} from 'react';
 import {SearchForm} from './SearchForm';
-import {NewSearchForm} from './NewSearchForm';
 
 const Aux = props => props.children;
 
 export class Home extends Component{
 
     render(){
-        return(
+        return[
+            <div className="baner">
+                <p>Biuro Podróży <strong> ITAKA </strong> - Twoje wymarzone wakacje. Wyjedź z nami na wczasy all inclusive! </p>
+            </div>,
             <div className="mt-5">
                 <SearchForm className="row"></SearchForm>
-                <NewSearchForm className="row"></NewSearchForm>
             </div>
-        )
+        ]
     }
 }

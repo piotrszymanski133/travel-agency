@@ -40,16 +40,27 @@ form {
 
 label {
   margin-top: 20px;
+  margin-right: 30px;
 }
 
 input{
   flex-direction: column;
-  padding: 10px 10px;
+  padding: 5px 5px;
   border-radius: 5px;
   border: 1px solid #d6d1d5;
   width: 25%;
+  float: right;
+}
+
+select{
+  float: right;
 }
 
 .submitButton{
   margin: 0 auto;
+}
+
+.baner{
+  margin-top: 100px;
+  margin-left: 300px;
 }
