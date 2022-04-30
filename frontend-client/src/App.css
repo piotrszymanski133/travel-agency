@@ -27,9 +27,9 @@
 form {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 500px;
   min-width: 100px;
-  min-height: 350px;
+  min-height: 500px;
   padding: 40px 40px 40px 40px;
   border-radius: 6px;
   box-shadow: 0px 4px 20px #222;
@@ -41,19 +41,20 @@ form {
 label {
   margin-top: 20px;
   margin-right: 30px;
+  display: block;
 }
 
 input{
-  flex-direction: column;
   padding: 5px 5px;
   border-radius: 5px;
   border: 1px solid #d6d1d5;
   width: 25%;
   float: right;
+  display: inline-block;
 }
 
 select{
-  float: right;
+  display: inline-block;
 }
 
 .submitButton{
@@ -63,4 +64,15 @@ select{
 .baner{
   margin-top: 100px;
   margin-left: 300px;
+}
+
+.invalid {
+  border: 1px solid #db2269;
+  box-shadow: none;
+}
+
+.required {
+  color:#db2269;
+  font-size: 0.8em;
+  margin-top: 0.5em;
 }

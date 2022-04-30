@@ -1,22 +1,54 @@
 ﻿import React, { Component } from "react";
 import { Form, Field } from "@progress/kendo-react-form";
 import countries from "./countries";
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+// a tool like webpack, you can do the following:
+import 'bootstrap/dist/css/bootstrap.css';
+// you will also need the css that comes with bootstrap-daterangepicker
+import 'bootstrap-daterangepicker/daterangepicker.css';
 
 
-const Input = (fieldProps) => {
+const DateInput = (fieldProps) => {
     const {
-        fieldType, label, value,
-        onChange, onBlur, onFocus
+        fieldType, minValue, label, value, visited, valid,
+        onChange, onBlur, onFocus, validationMessage,
     } = fieldProps;
+    const invalid = !valid && visited;
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
             <label>
                 { label }
+                <DateRangePicker
+                    placeholder="Select Date Range"
+                    initialSettings={{ startDate: '4/30/2022'}}>
+                    <button>dowolnie</button>
+                </DateRangePicker>
             </label>
-            <input
-                type={fieldType}
-                value={value}
-                onChange={onChange} />
+            { invalid &&
+            (<div className="required">{validationMessage}</div>) }
+        </div>
+    );
+};
+
+const NumberInput = (fieldProps) => {
+    const {
+        fieldType, minValue, label, value, visited, valid,
+        onChange, onBlur, onFocus, validationMessage,
+    } = fieldProps;
+    const invalid = !valid && visited;
+    return (
+        <div onBlur={onBlur} onFocus={onFocus}>
+            <label>
+                { label }
+                <input
+                    type={fieldType}
+                    min={minValue}
+                    className={invalid ? "invalid" : ""}
+                    value={value}
+                    onChange={onChange} />
+            </label>
+            { invalid &&
+            (<div className="required">{validationMessage}</div>) }
         </div>
     );
 };
@@ -29,7 +61,7 @@ const DropDown = ({ label, value, options,
                 { label }
             </label>
             <select
-                value={value}
+                value={value.name_pl}
                 onChange={onChange}>
                 {options.map(option => (
                     <option key={option}>{option}</option>
@@ -44,6 +76,9 @@ const handleSubmit = (data, event) => {
     event.preventDefault();
 }
 
+const requiredValidator = (value) => {
+    return value ? "" : "This field is required";
+}
 
 export class SearchForm extends Component {
     
@@ -61,7 +96,7 @@ export class SearchForm extends Component {
                         <Field
                             label="Kiedy?"
                             name="when"
-                            component={Input}/>
+                            component={DateInput}/>
 
                         <Field
                             label="Dokąd?"
@@ -72,7 +107,10 @@ export class SearchForm extends Component {
                         <Field
                             label="Ile osób?"
                             name="people"
-                            component={Input}/>
+                            fieldType="number"
+                            minValue="1"
+                            component={NumberInput}
+                            validator={requiredValidator}/>
 
                         <input className="submitButton mt-4" type="submit" value="Szukaj" />
                         
