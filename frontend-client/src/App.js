@@ -7,7 +7,7 @@ import { Navigation } from './components/Navigation';
 function App() {
   return (
       <BrowserRouter>
-          <div className="container justify-content-center">
+          <div className="container w-75 justify-content-center">
               
               <Navigation/>
 
