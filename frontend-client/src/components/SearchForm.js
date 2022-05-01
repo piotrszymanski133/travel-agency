@@ -108,7 +108,7 @@ export class SearchForm extends Component {
             body: JSON.stringify(data)
         }).then(() => {
             console.log("Data was sent")
-            window.location.href = "/offer?";
+            window.location.href = "/offer?" + data.when;
         })
     }
     

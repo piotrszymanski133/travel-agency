@@ -3,6 +3,7 @@ import './App.css';
 import { Home } from './components/Home';
 import { Offer } from './components/Offer';
 import { Navigation } from './components/Navigation';
+import {OfferDetails} from "./components/OfferDetails";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
               <Routes>
                   <Route path="/" element={<Home/>} exact/>
                   <Route path="/offer" element={<Offer/>}/>
+                  <Route path="/offer_details" element={<OfferDetails/>}/>
               </Routes>
           </div>
       </BrowserRouter>
