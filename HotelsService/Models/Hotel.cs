@@ -9,6 +9,7 @@ namespace HotelsService.Models
         public Hotel()
         {
             Hotelrooms = new List<Hotelroom>();
+            Events = new List<Event>();
         }
 
         public string Id { get; set; } = null!;
@@ -20,5 +21,6 @@ namespace HotelsService.Models
 
         public virtual Destination? Destination { get; set; }
         public virtual List<Hotelroom> Hotelrooms { get; set; }
+        public virtual List<Event> Events { get; set; }
     }
 }

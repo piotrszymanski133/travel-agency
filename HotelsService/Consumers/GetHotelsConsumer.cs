@@ -29,8 +29,9 @@ namespace HotelsService.Consumers
                 {
                     rooms.Add(new HotelRoom
                     {
-                        CapacityPeople = room.CapacityPeople,
-                        Quantity = room.Quantity
+                        Quantity = room.Quantity,
+                        Name = room.Roomtype.Name,
+                        CapacityPeople = room.Roomtype.CapacityPeople
                     });
                 }
                 hotels.Add(new Hotel

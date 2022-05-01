@@ -4,5 +4,7 @@ namespace CommonComponents.Models
     {
         public short CapacityPeople { get; set; }
         public short Quantity { get; set; }
+
+        public string Name { get; set; }
     }
 }
