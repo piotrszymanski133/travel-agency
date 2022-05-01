@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using HotelsService.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace HotelsService.Models
+namespace HotelsService
 {
     public partial class hotelsContext : DbContext
     {
@@ -17,8 +18,11 @@ namespace HotelsService.Models
         }
 
         public virtual DbSet<Destination> Destinations { get; set; } = null!;
+        public virtual DbSet<Event> Events { get; set; } = null!;
+        public virtual DbSet<Eventroom> Eventrooms { get; set; } = null!;
         public virtual DbSet<Hotel> Hotels { get; set; } = null!;
         public virtual DbSet<Hotelroom> Hotelrooms { get; set; } = null!;
+        public virtual DbSet<Hotelroomtype> Hotelroomtypes { get; set; } = null!;
         public virtual DbSet<Tour> Tours { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,7 +30,7 @@ namespace HotelsService.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Server=postgres;Database=hotels;User Id=user;Password=example");
+                optionsBuilder.UseNpgsql("Host=localhost;Database=hotels;Username=user;Password=example");
             }
         }
 
@@ -47,6 +51,50 @@ namespace HotelsService.Models
                 entity.Property(e => e.Country)
                     .HasMaxLength(255)
                     .HasColumnName("country");
+
+            });
+
+            modelBuilder.Entity<Event>(entity =>
+            {
+                entity.ToTable("events");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("gen_random_uuid()");
+
+                entity.Property(e => e.HotelId)
+                    .HasMaxLength(36)
+                    .HasColumnName("hotel_id");
+
+                entity.Property(e => e.Type)
+                    .HasMaxLength(16)
+                    .HasColumnName("type");
+
+                entity.HasOne(d => d.Hotel)
+                    .WithMany(p => p.Events)
+                    .HasForeignKey(d => d.HotelId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("hotel_id");
+            });
+
+            modelBuilder.Entity<Eventroom>(entity =>
+            {
+                entity.ToTable("eventrooms");
+
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("gen_random_uuid()");
+
+                entity.Property(e => e.EventId).HasColumnName("event_id");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+                entity.Property(e => e.RoomtypeId).HasColumnName("roomtype_id");
+
+                entity.HasOne(d => d.Event)
+                    .WithMany(p => p.Eventrooms)
+                    .HasForeignKey(d => d.EventId)
+                    .HasConstraintName("event_id");
             });
 
             modelBuilder.Entity<Hotel>(entity =>
@@ -74,6 +122,7 @@ namespace HotelsService.Models
                 entity.HasOne(d => d.Destination)
                     .WithMany(p => p.Hotels)
                     .HasForeignKey(d => d.DestinationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("destination_id");
             });
 
@@ -85,19 +134,40 @@ namespace HotelsService.Models
                     .ValueGeneratedNever()
                     .HasColumnName("id");
 
-                entity.Property(e => e.CapacityPeople).HasColumnName("capacity_people");
-
                 entity.Property(e => e.HotelId)
                     .HasMaxLength(36)
                     .HasColumnName("hotel_id");
 
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
+                entity.Property(e => e.RoomtypeId).HasColumnName("roomtype_id");
+
                 entity.HasOne(d => d.Hotel)
                     .WithMany(p => p.Hotelrooms)
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("hotel_id");
+
+                entity.HasOne(d => d.Roomtype)
+                    .WithMany(p => p.Hotelrooms)
+                    .HasForeignKey(d => d.RoomtypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("roomtype_id");
+            });
+
+            modelBuilder.Entity<Hotelroomtype>(entity =>
+            {
+                entity.ToTable("hotelroomtypes");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.CapacityPeople).HasColumnName("capacity_people");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(36)
+                    .HasColumnName("name");
             });
 
             modelBuilder.Entity<Tour>(entity =>
@@ -121,8 +191,6 @@ namespace HotelsService.Models
                     .HasColumnName("name");
 
                 entity.Property(e => e.Rating).HasColumnName("rating");
-
-                entity.Property(e => e.Stars).HasColumnName("stars");
             });
 
             OnModelCreatingPartial(modelBuilder);
