@@ -34,7 +34,7 @@ export class Offer extends Component {
                         {
                             this.state.offers.map(
                                 offer =>
-                                    <tr key = {offer.id}>
+                                    <tr key = {offer.date}>
                                         <td> { offer.date} </td>
                                         <td> { offer.temperatureC} </td>
                                         <td> { offer.temperatureF} </td>

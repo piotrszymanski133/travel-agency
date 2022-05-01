@@ -1,4 +1,4 @@
-﻿import React, { Component } from "react";
+﻿import React, {Component} from "react";
 import { Form, Field } from "@progress/kendo-react-form";
 import countries from "./countries";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -9,20 +9,17 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 
 
 const DateInput = (fieldProps) => {
-
     const {
         label, onBlur, value, onChange, onFocus} = fieldProps;
-    const current = new Date();
-    return (
+        const current = new Date();return (
         <div onBlur={onBlur} onFocus={onFocus}>
             <label>
                 { label }
             </label>
-            <DateRangePicker onApply={onChange} initialSettings={ {minDate:current }}>
-                <input
-                    type="text"
-                    value={value}
-                    className="form-control"/>
+            <DateRangePicker onApply={onChange} onCancel={(event, picker)=>handleDateCancel(event, picker)} initialSettings={ {minDate:current}}>
+                <input readOnly
+                       value={value}
+                       type="text"/>
             </DateRangePicker>
         </div>
     );
@@ -103,6 +100,11 @@ const handleSubmit = (data, event) => {
     })
 }
 
+const handleDateCancel = (event, picker) => {
+    picker.setStartDate(new Date())
+    picker.setEndDate(new Date())
+}
+    
 const requiredValidator = (value) => {
     return value ? "" : "Podaj liczbę osób!";
 }
@@ -114,7 +116,7 @@ export class SearchForm extends Component {
             <Form
                 onSubmit={handleSubmit}
                 initialValues={{
-                    when: "dowolnie", departure: "dowolnie", destination: "dowolnie",adults: "",
+                    when: "dowolnie",departure: "dowolnie", destination: "dowolnie",adults: "",
                     children_under_3:"", children_under_10:"", children_under_18:""
                 }}
                 render={(formRenderProps) => (
