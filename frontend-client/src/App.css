@@ -48,8 +48,6 @@ input{
   padding: 5px 5px;
   border-radius: 5px;
   border: 1px solid #d6d1d5;
-  width: 25%;
-  float: right;
   display: inline-block;
 }
 
@@ -75,4 +73,9 @@ select{
   color:#db2269;
   font-size: 0.8em;
   margin-top: 0.5em;
+}
+
+.form-control{
+  width: 50%;
+  display: inline-block;
 }

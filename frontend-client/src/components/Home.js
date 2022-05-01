@@ -10,7 +10,7 @@ export class Home extends Component{
             <div className="baner">
                 <p>Biuro Podróży <strong> ITAKA </strong> - Twoje wymarzone wakacje. Wyjedź z nami na wczasy all inclusive! </p>
             </div>,
-            <div className="mt-5">
+            <div className="mt-4">
                 <SearchForm className="row"></SearchForm>
             </div>
         ]
