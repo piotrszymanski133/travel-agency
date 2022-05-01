@@ -13,4 +13,9 @@ namespace CommonComponents
     {
         public List<Hotel> Hotels { get; set; }
     }
+    
+    public class GetTransportRespond
+    {
+        public List<Transport> Transports { get; set; }
+    }
 }
