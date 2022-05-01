@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiGateway", "ApiGateway\Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonComponents", "CommonComponents\CommonComponents.csproj", "{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportService", "TransportService\TransportService.csproj", "{B357391B-3459-4FCF-8176-43B8DB974334}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C92E14AF-26B6-4AA7-B383-49597AD5D4FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B357391B-3459-4FCF-8176-43B8DB974334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B357391B-3459-4FCF-8176-43B8DB974334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B357391B-3459-4FCF-8176-43B8DB974334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B357391B-3459-4FCF-8176-43B8DB974334}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

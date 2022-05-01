@@ -33,3 +33,6 @@
 #CommonComponents
 /CommonComponents/obj
 /CommonComponents/bin
+
+/TransportService/obj/*
+/TransportService/bin/*
