@@ -23,16 +23,18 @@ namespace TransportService.Consumer
             var command = context.Message;
             var city = command.DestinationCity;
 
-            await context.RespondAsync<GetTransportRespond>( new List<Transport>()
-            {
-                new Transport()
+            await context.RespondAsync<GetTransportRespond>( new GetTransportRespond(){
+                Transports = new List<Transport>()
                 {
-                    Id = "1",
-                    DestinationCity = "Dest",
-                    DestinationCountry = "Country",
-                    Name = "Name"
+                    new Transport()
+                    {
+                        Id = "1",
+                        DestinationCity = "Dest",
+                        DestinationCountry = "Country",
+                        Name = "Name"
+                    }
+
                 }
-                    
             });
         }
     }

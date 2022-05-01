@@ -10,10 +10,9 @@ namespace TripService.Consumers
     public class GetTripsQueryConsumer : IConsumer<GetTripsQuery>
     {
         private IRequestClient<GetHotelsQuery> _hotelclient;
-        private IRequestClient<GetHotelsQuery> _transportclient;
+        private IRequestClient<GetTransportQuery> _transportclient;
         
-        //TODO: ADD TRANSPORT
-        public GetTripsQueryConsumer(IRequestClient<GetHotelsQuery> client, IRequestClient<GetHotelsQuery> transportclient)
+        public GetTripsQueryConsumer(IRequestClient<GetHotelsQuery> client, IRequestClient<GetTransportQuery> transportclient)
         {
             _hotelclient = client;
             _transportclient = transportclient;
