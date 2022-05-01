@@ -6,39 +6,40 @@ export class Offer extends Component {
         super(props)
 
         this.state = {
-            offers: []
+            offers: { 'trips': []
+            } 
         }
     }
-    
+
     componentDidMount(){
-        createAPIEndpoint(ENDPOINTS.weatherForecast).fetch().then((res) => {
+        createAPIEndpoint(ENDPOINTS.trip).fetch().then((res) => {
             this.setState({ offers: res.data});
         });
     }
-
+    
     render() {
         return (
             <div className="p-5 mb-4 align-items-center">
-                <h2 className="text-center mt-5">Offers</h2>
+                <h2 className="text-center mt-5">Znalezione oferty</h2>
                 <div className = "row">
                     <table className = "table table-striped table-bordered">
                         <thead>
                         <tr>
-                            <th> Date </th>
-                            <th> Temperature in C </th>
-                            <th> Temperature in F </th>
-                            <th> Summary </th>
+                            <th> Hotel ID </th>
+                            <th> Hotel name </th>
+                            <th> Transport ID </th>
+                            <th> Transport name </th>
                         </tr>
                         </thead>
                         <tbody>
                         {
-                            this.state.offers.map(
+                            this.state.offers.trips.map(
                                 offer =>
-                                    <tr key = {offer.date}>
-                                        <td> { offer.date} </td>
-                                        <td> { offer.temperatureC} </td>
-                                        <td> { offer.temperatureF} </td>
-                                        <td> { offer.summary} </td>
+                                    <tr key = {offer.hotel.id}>
+                                        <td> { offer.hotel.id} </td>
+                                        <td> { offer.hotel.name} </td>
+                                        <td> { offer.transport.id} </td>
+                                        <td> { offer.transport.name} </td>
                                     </tr>
                             )
                         }

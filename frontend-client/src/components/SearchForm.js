@@ -87,19 +87,6 @@ const DropDown = ({ label, value, options,
     )
 }
 
-const handleSubmit = (data, event) => {
-    console.log(data)
-    alert(`Kiedy?  ${data.when} \nSkąd?  ${data.departure} \nDokąd?  ${data.destination} \nIle osób dorosłych?  ${data.adults} \nIle dzieci poniżej 3 roku życia?  ${data.children_under_3} \nIle dzieci w wieku 3-10 lat?  ${data.children_under_10} \nIle dzieci w wieku 10-18 lat?  ${data.children_under_18}`);
-    event.preventDefault();
-    fetch('http://localhost:8081/WeatherForecast', {
-        method: 'POST',
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(data)
-    }).then(() => {
-        console.log("Data was sent")
-    })
-}
-
 const handleDateCancel = (event, picker) => {
     picker.setStartDate(new Date())
     picker.setEndDate(new Date())
@@ -110,11 +97,25 @@ const requiredValidator = (value) => {
 }
 
 export class SearchForm extends Component {
+
+    handleSubmit = (data, event) => {
+        console.log(data)
+        //alert(`Kiedy?  ${data.when} \nSkąd?  ${data.departure} \nDokąd?  ${data.destination} \nIle osób dorosłych?  ${data.adults} \nIle dzieci poniżej 3 roku życia?  ${data.children_under_3} \nIle dzieci w wieku 3-10 lat?  ${data.children_under_10} \nIle dzieci w wieku 10-18 lat?  ${data.children_under_18}`);
+        event.preventDefault();
+        fetch('http://localhost:8081/WeatherForecast', {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        }).then(() => {
+            console.log("Data was sent")
+            window.location.href = "/offer?";
+        })
+    }
     
     render() {
         return (
             <Form
-                onSubmit={handleSubmit}
+                onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
                     when: "dowolnie",departure: "dowolnie", destination: "dowolnie",adults: "",
                     children_under_3:"", children_under_10:"", children_under_18:""

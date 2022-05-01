@@ -15,13 +15,7 @@ export class Navigation extends Component{
                             Strona główna
                         </NavLink>
                         <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/offer">
-                            Wszystko
-                        </NavLink>
-                        <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/offer">
-                            Wczasy
-                        </NavLink>
-                        <NavLink className="d-inline p-3 text-primary text-decoration-none " to="/offer">
-                            Wycieczki objazdowe
+                            Oferty
                         </NavLink>
                     </Nav>
                     <Nav>
