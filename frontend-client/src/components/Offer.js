@@ -17,7 +17,7 @@ export class Offer extends Component {
         });
     }
 
-    handleClick = (data, event) => {
+    handleClick = () => {
         window.location.href = "/offer_details";
     }
     
