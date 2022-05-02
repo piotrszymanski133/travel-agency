@@ -116,7 +116,7 @@ export class SearchForm extends Component {
         fetch('http://localhost:8081/Trip', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
-            body: dataToSent
+            body: JSON.stringify(dataToSent)
         }).then(() => {
             console.log("Data was sent")
             console.log(dataToSent)
