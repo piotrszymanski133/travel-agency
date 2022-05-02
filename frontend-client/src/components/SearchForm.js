@@ -113,7 +113,7 @@ export class SearchForm extends Component {
         }
         //alert(`Kiedy?  ${data.when} \nSkąd?  ${data.departure} \nDokąd?  ${data.destination} \nIle osób dorosłych?  ${data.adults} \nIle dzieci poniżej 3 roku życia?  ${data.children_under_3} \nIle dzieci w wieku 3-10 lat?  ${data.children_under_10} \nIle dzieci w wieku 10-18 lat?  ${data.children_under_18}`);
         event.preventDefault();
-        fetch('http://localhost:8081/WeatherForecast', {
+        fetch('http://localhost:8081/Trip', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body: dataToSent
@@ -128,7 +128,7 @@ export class SearchForm extends Component {
             searchParams.append("children_under_3", data.children_under_3);
             searchParams.append("children_under_10", data.children_under_10);
             searchParams.append("children_under_18", data.children_under_18);
-            //window.location.href = "/offer/?" + searchParams;
+            window.location.href = "/offer/?" + searchParams;
         })
     }
     
