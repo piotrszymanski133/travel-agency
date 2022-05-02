@@ -7,16 +7,21 @@ import 'bootstrap/dist/css/bootstrap.css';
 // you will also need the css that comes with bootstrap-daterangepicker
 import 'bootstrap-daterangepicker/daterangepicker.css';
 
+const current = new Date();
+//var startDate = new Date();
+//var endDate = new Date();
+//startDate.setDate(current.getDay() + 7)
+//endDate.setDate(current.getDay() + 14)
 
 const DateInput = (fieldProps) => {
     const {
         label, onBlur, value, onChange, onFocus} = fieldProps;
-        const current = new Date();return (
+    return (
         <div onBlur={onBlur} onFocus={onFocus}>
             <label>
                 { label }
             </label>
-            <DateRangePicker onApply={onChange} onCancel={(event, picker)=>handleDateCancel(event, picker)} initialSettings={ {minDate:current}}>
+            <DateRangePicker onApply={onChange} onCancel={(event, picker)=>handleDateCancel(event, picker)} initialSettings={ {minDate:current, startDate: '5/20/2022', endDate: '5/27/2022'}}>
                 <input readOnly
                        value={value}
                        type="text"/>
@@ -93,17 +98,28 @@ const handleDateCancel = (event, picker) => {
 }
 
 export class SearchForm extends Component {
-
+    
     handleSubmit = (data, event) => {
-        console.log(data)
+        var date = data.when.split("-");
+        var dataToSent = {
+            'startDate': date[0].replace(/\s/g, ""),
+            'endDate': date[1].replace(/\s/g, ""),
+            'departure': data.departure,
+            'destination': data.destination,
+            'adults': data.adults,
+            'children_under_3': data.children_under_3,
+            'children_under_10': data.children_under_10,
+            'children_under_18': data.children_under_18
+        }
         //alert(`Kiedy?  ${data.when} \nSkąd?  ${data.departure} \nDokąd?  ${data.destination} \nIle osób dorosłych?  ${data.adults} \nIle dzieci poniżej 3 roku życia?  ${data.children_under_3} \nIle dzieci w wieku 3-10 lat?  ${data.children_under_10} \nIle dzieci w wieku 10-18 lat?  ${data.children_under_18}`);
         event.preventDefault();
         fetch('http://localhost:8081/WeatherForecast', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(data)
+            body: dataToSent
         }).then(() => {
             console.log("Data was sent")
+            console.log(dataToSent)
             const searchParams = new URLSearchParams();
             searchParams.append("when", data.when);
             searchParams.append("departure", data.departure);
@@ -112,7 +128,7 @@ export class SearchForm extends Component {
             searchParams.append("children_under_3", data.children_under_3);
             searchParams.append("children_under_10", data.children_under_10);
             searchParams.append("children_under_18", data.children_under_18);
-            window.location.href = "/offer/?" + searchParams;
+            //window.location.href = "/offer/?" + searchParams;
         })
     }
     
@@ -121,7 +137,7 @@ export class SearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    when: "dowolnie",departure: "dowolnie", destination: "", adults: 0,
+                    when: "5/20/2022 - 5/27/2022", departure: "", destination: "", adults: 0,
                     children_under_3:0, children_under_10:0, children_under_18:0
                 }}
                 render={(formRenderProps) => (

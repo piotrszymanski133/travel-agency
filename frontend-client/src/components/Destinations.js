@@ -19,7 +19,7 @@ export class Destinations extends Component {
     }
 
     handleClick = (data) => {
-        window.location.href = "/form?destination=" + data;
+        window.location.href = "/offer?destination=" + data;
     }
 
     render() {

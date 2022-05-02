@@ -1,7 +1,6 @@
 ﻿import React, { Component} from "react";
 import { Form, Field } from "@progress/kendo-react-form";
 import countries from "./countries";
-import ReactDOM from "react-dom/client";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 // a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
@@ -169,7 +168,7 @@ export class OfferSearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    when: "dowolnie",departure: "dowolnie", adults: 0,
+                    departure: "dowolnie", adults: 0,
                     children_under_3:0, children_under_10:0, children_under_18:0
                 }}
                 render={(formRenderProps) => (
