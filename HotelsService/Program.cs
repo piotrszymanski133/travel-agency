@@ -40,7 +40,7 @@ builder.Services.AddMassTransit(x =>
 builder.Services.Configure<HotelDescriptionDbSettings>(
     builder.Configuration.GetSection("DescriptionDb")
 );
-
+/*
 builder.Services.AddQuartz(q =>
     {
         q.UseMicrosoftDependencyInjectionJobFactory();
@@ -54,7 +54,7 @@ builder.Services.AddQuartz(q =>
 builder.Services.AddQuartzHostedService(
     q => q.WaitForJobsToComplete = true
     );
-
+*/
 var app = builder.Build();
 
 app.MapControllers();

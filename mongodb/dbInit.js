@@ -15,5 +15,7 @@ db.createCollection('Descriptions', { capped: false });
 
 db.Descriptions.insert([
     { "_id": 'abcdefg', "Description": 'opisHotel1' },
-    { "_id": 'hijklmn', "Description": 'opisHotel2' }
+    { "_id": 'hijklmn', "Description": 'opisHotel2' },
+    { "_id": 'qwertyu', "Description": 'opis Hotel Francja' },
+    { "_id": 'zxcvb', "Description": 'opis Hotel Włochy' }
 ]);

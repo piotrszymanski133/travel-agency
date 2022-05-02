@@ -66,6 +66,12 @@ namespace HotelsService
                     .HasColumnName("creationtime")
                     .HasDefaultValueSql("now()");
 
+                entity.Property(e => e.StartDate)
+                    .HasColumnName("startdate");
+
+                entity.Property(e => e.EndDate)
+                    .HasColumnName("enddate");
+
                 entity.Property(e => e.HotelId)
                     .HasMaxLength(36)
                     .HasColumnName("hotel_id");

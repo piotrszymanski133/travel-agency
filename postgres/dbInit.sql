@@ -47,6 +47,8 @@ CREATE TABLE Events (
     ID uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     Type character varying(16) NOT NULL,
     Hotel_ID character varying(36) NOT NULL,
+    StartDate date NOT NULL,
+    EndDate date NOT NULL,
     CreationTime timestamptz DEFAULT now(),
     CONSTRAINT Hotel_ID FOREIGN KEY(Hotel_ID) REFERENCES Hotels(ID)
 );
@@ -63,13 +65,17 @@ CREATE TABLE EventRooms(
 
 INSERT INTO Destinations(ID, Country, City)
 VALUES
-	(1, 'Poland', 'Gdansk'),
-	(2, 'Poland', 'Warsaw');
+	(1, 'Polska', 'Gdansk'),
+	(2, 'Polska', 'Warszawa'),
+	(3, 'Francja', 'Paryz'),
+	(4, 'Włochy', 'Rzym');
 	
 INSERT INTO Hotels(ID, Name, Destination_ID, Rating, Food, Stars)
 VALUES
 	('abcdefg', 'Hotel GDA', 1, 4.7, '2 posilki', 3),
-	('hijklmn', 'Mariott', 2, 5.5, '2 posilki', 5);
+	('hijklmn', 'Mariott', 2, 5.5, '2 posilki', 5),
+	('qwertyu', 'France hotel', 3, 5.5, '2 posilki', 5),
+	('zxcvb', 'Italy hotel', 4, 5.5, '2 posilki', 5);
 	
 INSERT INTO HotelRoomTypes(ID, Name, Capacity_people)
 VALUES 
@@ -82,10 +88,15 @@ VALUES
 INSERT INTO HotelRooms(ID, Hotel_ID, RoomType_ID, Quantity)
 VALUES
 	(1, 'abcdefg', 1, 10),
-	(2, 'abcdefg', 2, 6),
 	(3, 'hijklmn', 1, 50),
 	(4, 'hijklmn', 2, 30),
-	(5, 'hijklmn', 4, 10);
+	(5, 'hijklmn', 4, 10),
+    (6, 'qwertyu', 1, 50),
+    (7, 'qwertyu', 2, 30),
+    (8, 'qwertyu', 4, 10),
+    (9, 'zxcvb', 1, 50),
+    (10, 'zxcvb', 2, 30),
+    (11, 'zxcvb', 4, 10);
 
 
 CREATE DATABASE transportsdb;
