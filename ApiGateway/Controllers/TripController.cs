@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using ApiGateway.Models;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using CommonComponents;
@@ -17,12 +19,12 @@ namespace ApiGateway.Controllers
         {
             _client = client;
         }
-        
-        [HttpGet(Name = "GetTrip")]
-        public async Task<GetTripsRespond> Index(CancellationToken cancellationToken)
+
+        [HttpPost]
+        public async Task<GetTripsRespond> Index([FromBody] TripParameters tripParameters)
         {
             var response =
-                await _client.GetResponse<GetTripsRespond>(new GetTripsQuery {Country = "Poland"}, cancellationToken);
+                await _client.GetResponse<GetTripsRespond>(new GetTripsQuery {TripParameters = tripParameters});
             return response.Message;
         }
     }

@@ -102,7 +102,7 @@ export class SearchForm extends Component {
     convertDate(inputFormat) {
         function pad(s) { return (s < 10) ? '0' + s : s; }
         var d = new Date(inputFormat)
-        return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
+        return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate()].join('-')
     }
     
     handleSubmit = (data, event) => {

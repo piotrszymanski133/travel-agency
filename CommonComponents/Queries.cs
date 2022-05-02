@@ -1,16 +1,16 @@
 ﻿using System;
+using ApiGateway.Models;
 
 namespace CommonComponents;
 
 public class GetTripsQuery
 {
-    public string Country { get; set; }
+    public TripParameters TripParameters { get; set; }
 }
 
 public class GetHotelsQuery
 {
-    public string? Country { get; set; }
-    public string? City { get; set; }
+    public TripParameters TripParameters { get; set; }
 }
 
 public class GetTransportQuery
