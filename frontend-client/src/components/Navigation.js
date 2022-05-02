@@ -14,9 +14,6 @@ export class Navigation extends Component{
                         <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/">
                             Strona główna
                         </NavLink>
-                        <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/offer">
-                            Oferty
-                        </NavLink>
                         <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/destinations">
                             Nasze kierunki
                         </NavLink>
