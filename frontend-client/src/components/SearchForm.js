@@ -138,7 +138,7 @@ export class SearchForm extends Component {
             searchParams.append("children_under_3", data.children_under_3);
             searchParams.append("children_under_10", data.children_under_10);
             searchParams.append("children_under_18", data.children_under_18);
-            //window.location.href = "/offer/?" + searchParams;
+            window.location.href = "/offer?" + searchParams;
         })
     }
     

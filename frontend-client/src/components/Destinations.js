@@ -19,7 +19,15 @@ export class Destinations extends Component {
     }
 
     handleClick = (data) => {
-        window.location.href = "/offer?destination=" + data;
+        const searchParams = new URLSearchParams();
+        searchParams.append("when", "05/20/2022 - 05/27/2022");
+        searchParams.append("departure", "");
+        searchParams.append("destination", "");
+        searchParams.append("adults", '1');
+        searchParams.append("children_under_3", '0');
+        searchParams.append("children_under_10", '0');
+        searchParams.append("children_under_18", '0');
+        window.location.href = "/offer?" + searchParams;
     }
 
     render() {
