@@ -10,6 +10,10 @@ export class OfferDetails extends Component {
         return (
             <div className="p-5 mb-4 align-items-center">
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
+                
+                <div className="offerDetails">
+                    <img src="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" alt="new"/>
+                </div>
             </div>
         )
     }

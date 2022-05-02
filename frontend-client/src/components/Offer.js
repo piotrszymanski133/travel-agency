@@ -57,7 +57,15 @@ export class Offer extends Component {
     }
 
     handleClick = () => {
-        window.location.href = "/offer_details";
+        const searchParams = new URLSearchParams();
+        searchParams.append("when", when);
+        searchParams.append("departure", departure);
+        searchParams.append("destination", destination);
+        searchParams.append("adults", adults);
+        searchParams.append("children_under_3", children_under_3);
+        searchParams.append("children_under_10", children_under_10);
+        searchParams.append("children_under_18", children_under_18);
+        window.location.href = "/offer_details?" + searchParams;
     }
     
     render() {
