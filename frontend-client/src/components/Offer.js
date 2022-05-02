@@ -1,7 +1,15 @@
 ﻿import React, { Component } from 'react'
 import { createAPIEndpoint, ENDPOINTS, BASE_URL } from '../api'
 import {OfferSearchForm} from "./OfferSearchForm";
-import {SearchForm} from "./SearchForm";
+
+const queryParams = new URLSearchParams(window.location.search);
+var when = queryParams.get('when');
+var departure = queryParams.get('departure');
+var destination = queryParams.get('destination');
+var adults = queryParams.get('adults');
+var children_under_3 = queryParams.get('children_under_3')
+var children_under_10 = queryParams.get('children_under_10')
+var children_under_18 = queryParams.get('children_under_18')
 
 export class Offer extends Component {
     constructor(props) {
@@ -13,8 +21,37 @@ export class Offer extends Component {
         }
     }
 
+    convertDate(inputFormat) {
+        function pad(s) { return (s < 10) ? '0' + s : s; }
+        var d = new Date(inputFormat)
+        return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate()].join('-')
+    }
+
     componentDidMount(){
-        createAPIEndpoint(ENDPOINTS.trip).fetch().then((res) => {
+        if(when !== null) {
+            var date = when.split("-");
+            var startDate = date[0].replace(/\s/g, "");
+            var endDate = date[1].replace(/\s/g, "")
+            startDate = this.convertDate(startDate)
+            endDate = this.convertDate(endDate)
+        }
+        const searchParams = new URLSearchParams();
+        if(departure === ""){
+            departure = "any"
+        }
+        if(destination === ""){
+            destination = "any"
+        }
+        searchParams.append("startDate", startDate);
+        searchParams.append("endDate", endDate);
+        searchParams.append("departure", departure);
+        searchParams.append("destination", destination);
+        searchParams.append("adults", adults);
+        searchParams.append("children_under_3", children_under_3);
+        searchParams.append("children_under_10", children_under_10);
+        searchParams.append("children_under_18", children_under_18);
+        
+        createAPIEndpoint(ENDPOINTS.trip + '?' + searchParams).fetch().then((res) => {
             this.setState({ offers: res.data});
         });
     }

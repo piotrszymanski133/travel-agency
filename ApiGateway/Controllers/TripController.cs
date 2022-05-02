@@ -20,8 +20,8 @@ namespace ApiGateway.Controllers
             _client = client;
         }
 
-        [HttpPost]
-        public async Task<GetTripsRespond> Index([FromBody] TripParameters tripParameters)
+        [HttpGet]
+        public async Task<GetTripsRespond> Index([FromQuery] TripParameters tripParameters)
         {
             var response =
                 await _client.GetResponse<GetTripsRespond>(new GetTripsQuery {TripParameters = tripParameters});

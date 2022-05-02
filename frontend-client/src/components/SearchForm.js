@@ -98,48 +98,17 @@ const handleDateCancel = (event, picker) => {
 }
 
 export class SearchForm extends Component {
-
-    convertDate(inputFormat) {
-        function pad(s) { return (s < 10) ? '0' + s : s; }
-        var d = new Date(inputFormat)
-        return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate()].join('-')
-    }
     
-    handleSubmit = (data, event) => {
-        var date = data.when.split("-");
-        var startDate = date[0].replace(/\s/g, "");
-        var endDate = date[1].replace(/\s/g, "")
-        startDate = this.convertDate(startDate)
-        endDate = this.convertDate(endDate)
-        var dataToSent = {
-            'startDate': startDate,
-            'endDate': endDate,
-            'departure': data.departure,
-            'destination': data.destination,
-            'adults': data.adults,
-            'children_under_3': data.children_under_3,
-            'children_under_10': data.children_under_10,
-            'children_under_18': data.children_under_18
-        }
-        //alert(`Kiedy?  ${data.when} \nSkąd?  ${data.departure} \nDokąd?  ${data.destination} \nIle osób dorosłych?  ${data.adults} \nIle dzieci poniżej 3 roku życia?  ${data.children_under_3} \nIle dzieci w wieku 3-10 lat?  ${data.children_under_10} \nIle dzieci w wieku 10-18 lat?  ${data.children_under_18}`);
-        event.preventDefault();
-        fetch('http://localhost:8081/Trip', {
-            method: 'POST',
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(dataToSent, null, 2)
-        }).then(() => {
-            console.log("Data was sent")
-            console.log(JSON.stringify(dataToSent, null, 2))
-            const searchParams = new URLSearchParams();
-            searchParams.append("when", data.when);
-            searchParams.append("departure", data.departure);
-            searchParams.append("destination", data.destination);
-            searchParams.append("adults", data.adults);
-            searchParams.append("children_under_3", data.children_under_3);
-            searchParams.append("children_under_10", data.children_under_10);
-            searchParams.append("children_under_18", data.children_under_18);
-            window.location.href = "/offer?" + searchParams;
-        })
+    handleSubmit = (data) => {
+        const searchParams = new URLSearchParams();
+        searchParams.append("when", data.when);
+        searchParams.append("departure", data.departure);
+        searchParams.append("destination", data.destination);
+        searchParams.append("adults", data.adults);
+        searchParams.append("children_under_3", data.children_under_3);
+        searchParams.append("children_under_10", data.children_under_10);
+        searchParams.append("children_under_18", data.children_under_18);
+        window.location.href = "/offer?" + searchParams;
     }
     
     render() {
