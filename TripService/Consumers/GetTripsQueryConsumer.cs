@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiGateway.Models;
 using CommonComponents;
 using CommonComponents.Models;
 using MassTransit;
@@ -20,21 +21,24 @@ namespace TripService.Consumers
 
         public async Task Consume(ConsumeContext<GetTripsQuery> context)
         {
-            var hotelresponse = await _hotelclient.GetResponse<GetHotelsRespond>(new GetHotelsQuery());
+            TripParameters tripParameters = context.Message.TripParameters;
+            
+            var hotelResponse = await _hotelclient.GetResponse<GetHotelsRespond>(
+                new GetHotelsQuery {TripParameters = tripParameters});
             List<Trip> trips = new List<Trip>();
-            foreach (Hotel hotel in hotelresponse.Message.Hotels)
+            foreach (Hotel hotel in hotelResponse.Message.Hotels)
             {
                 trips.Add(new Trip {Hotel = hotel});
             }
             
-            var transportresponse =  await _transportclient.GetResponse<GetTransportRespond>(new GetTransportQuery()
+            var transportResponse =  await _transportclient.GetResponse<GetTransportRespond>(new GetTransportQuery()
             {
                 DestinationCity = "City"
             });
 
             for (var i = 0; i < trips.Count; i++)
             {
-                trips[i].Transport = transportresponse.Message.Transports.First();
+                trips[i].Transport = transportResponse.Message.Transports.First();
             }
             
             await context.RespondAsync(new GetTripsRespond {Trips = trips,});
