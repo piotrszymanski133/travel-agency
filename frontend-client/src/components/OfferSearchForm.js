@@ -27,7 +27,7 @@ const DateInput = (fieldProps) => {
 
 const NumberInputAdults = (fieldProps) => {
     const {
-        fieldType, minValue, maxValue, label, value, visited, valid,
+        fieldType, minValue, maxValue, label, visited, valid,
         onChange, onBlur, onFocus, validationMessage,
     } = fieldProps;
     const invalid = !valid && visited;
@@ -41,7 +41,6 @@ const NumberInputAdults = (fieldProps) => {
                 min={minValue}
                 max={maxValue}
                 className={invalid ? "invalid" : ""}
-                value={value}
                 onChange={onChange} />
             { invalid &&
             (<div className="required">{validationMessage}</div>) }
@@ -51,7 +50,7 @@ const NumberInputAdults = (fieldProps) => {
 
 const NumberInputChildren = (fieldProps) => {
     const {
-        fieldType, minValue, maxValue, label, value,
+        fieldType, minValue, maxValue, label,
         onChange, onBlur, onFocus,
     } = fieldProps;
     return (
@@ -63,7 +62,6 @@ const NumberInputChildren = (fieldProps) => {
                 type={fieldType}
                 min={minValue}
                 max={maxValue}
-                value={value}
                 onChange={onChange} />
         </div>
     );
@@ -112,6 +110,14 @@ const handleDateCancel = (event, picker) => {
     picker.setEndDate(new Date())
 }
 
+const queryParams = new URLSearchParams(window.location.search);
+const adults = queryParams.get('adults');
+var children_under_3 = queryParams.get('children_under_3');
+if (children_under_3 === ""){
+    children_under_3 = '0'
+}
+var children_under_10 = queryParams.get('children_under_10');
+var children_under_18 = queryParams.get('children_under_18');
 
 export class OfferSearchForm extends Component {
 
@@ -168,8 +174,8 @@ export class OfferSearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    departure: "dowolnie", adults: 0,
-                    children_under_3:0, children_under_10:0, children_under_18:0
+                    departure: "dowolnie", adults: adults,
+                    children_under_3: children_under_3, children_under_10: children_under_10, children_under_18: children_under_18
                 }}
                 render={(formRenderProps) => (
                     <form className="row offerSearchForm" onSubmit={formRenderProps.onSubmit}>

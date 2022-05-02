@@ -98,12 +98,22 @@ const handleDateCancel = (event, picker) => {
 }
 
 export class SearchForm extends Component {
+
+    convertDate(inputFormat) {
+        function pad(s) { return (s < 10) ? '0' + s : s; }
+        var d = new Date(inputFormat)
+        return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/')
+    }
     
     handleSubmit = (data, event) => {
         var date = data.when.split("-");
+        var startDate = date[0].replace(/\s/g, "");
+        var endDate = date[1].replace(/\s/g, "")
+        startDate = this.convertDate(startDate)
+        endDate = this.convertDate(endDate)
         var dataToSent = {
-            'startDate': date[0].replace(/\s/g, ""),
-            'endDate': date[1].replace(/\s/g, ""),
+            'startDate': startDate,
+            'endDate': endDate,
             'departure': data.departure,
             'destination': data.destination,
             'adults': data.adults,
@@ -121,7 +131,7 @@ export class SearchForm extends Component {
             console.log("Data was sent")
             console.log(dataToSent)
             const searchParams = new URLSearchParams();
-            searchParams.append("when", data.when);
+            searchParams.append("when", date[0].toString());
             searchParams.append("departure", data.departure);
             searchParams.append("destination", data.destination);
             searchParams.append("adults", data.adults);
