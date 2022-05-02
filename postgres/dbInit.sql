@@ -115,6 +115,8 @@ CREATE TABLE TransportEvent (
     ID bigserial NOT NULL,
     Transport_ID bigserial NOT NULL,
     Places int NOT NULL,
+    Type character varying(16) NOT NULL,
+    CreationTime timestamptz DEFAULT now(),
     PRIMARY KEY (ID),
     CONSTRAINT Transport_ID FOREIGN KEY(Transport_ID) REFERENCES Transport(ID)
 );
@@ -135,10 +137,10 @@ VALUES
     (4, 4, 2,'Plane', '2022-05-02',30),
     (5, 4, 2,'Bus', '2022-05-02',10);
 
-INSERT INTO TransportEvent(ID, Places, Transport_ID)
+INSERT INTO TransportEvent(ID, Places, Transport_ID,Type)
 VALUES
-    (1, 3, 5),
-    (2, 2, 3),
-    (3, 4, 4),
-    (4, 3, 2),
-    (5, 5, 1);
+    (1, 3, 5,'Book'),
+    (2, 2, 3,'Book'),
+    (3, 4, 4,'Book'),
+    (4, 3, 2,'Reservation'),
+    (5, 5, 1,'Reservation');

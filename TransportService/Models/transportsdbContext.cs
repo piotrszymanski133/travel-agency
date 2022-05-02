@@ -92,6 +92,14 @@ namespace TransportService.Models
                 entity.Property(e => e.TransportId)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("transport_id");
+                
+                entity.Property(e => e.Creationtime)
+                    .HasColumnName("creationtime")
+                    .HasDefaultValueSql("now()");
+                
+                entity.Property(e => e.Type)
+                    .HasMaxLength(16)
+                    .HasColumnName("type");
 
                 entity.HasOne(d => d.Transport)
                     .WithMany(p => p.Transportevents)
