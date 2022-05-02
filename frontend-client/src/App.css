@@ -102,3 +102,7 @@ select{
 .submitButtonOffer {
   width: 150px
 }
+
+.center-column{
+  margin: 0 auto;
+}

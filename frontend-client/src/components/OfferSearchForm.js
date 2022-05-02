@@ -69,7 +69,7 @@ const NumberInputChildren = (fieldProps) => {
     );
 };
 
-const DropDownDeparture = ({ label, options,
+const DropDownDeparture = ({ label, options, value,
                       onChange, onBlur, onFocus}) => {
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
@@ -78,6 +78,7 @@ const DropDownDeparture = ({ label, options,
             </label>
             <select
                 id="selectDeparture"
+                value={value}
                 onChange={onChange}>
                 {options.map(option => (
                     <option key={option}>{option}</option>
@@ -133,6 +134,8 @@ var children_under_18 = 0
 if(queryParams.get('children_under_18')){
     children_under_18 = queryParams.get('children_under_18')
 }
+const destination = queryParams.get('destination');
+const departure = queryParams.get('departure');
 
 export class OfferSearchForm extends Component {
 
@@ -141,9 +144,6 @@ export class OfferSearchForm extends Component {
     }
 
     componentDidMount() {
-        const queryParams = new URLSearchParams(window.location.search);
-        const destination = queryParams.get('destination');
-        const departure = queryParams.get('departure');
         let selectDeparture = document.querySelector('#selectDeparture')
         let selectDestination = document.querySelector('#selectDestination')
         var optionsDeparture = selectDeparture.getElementsByTagName('option');
@@ -189,7 +189,7 @@ export class OfferSearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit}
                 initialValues={{
-                    when: when, departure: "dowolnie", adults: adults,
+                    when: when, departure: departure, destination: destination, adults: adults,
                     children_under_3: children_under_3, children_under_10: children_under_10, children_under_18: children_under_18
                 }}
                 render={(formRenderProps) => (

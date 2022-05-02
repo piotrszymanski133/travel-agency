@@ -27,7 +27,7 @@ export class Offer extends Component {
         return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate()].join('-')
     }
 
-    componentDidMount(){
+    componentWillMount(){
         if(when !== null) {
             var date = when.split("-");
             var startDate = date[0].replace(/\s/g, "");
