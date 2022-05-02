@@ -79,3 +79,14 @@ select{
   width: 50%;
   display: inline-block;
 }
+
+.check_offer{
+  float: right
+}
+
+.offer img {
+  float: left;
+  height: 100%;
+  width: 30%;
+  margin-right: 30px;
+}

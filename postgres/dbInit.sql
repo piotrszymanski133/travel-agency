@@ -86,3 +86,59 @@ VALUES
 	(3, 'hijklmn', 1, 50),
 	(4, 'hijklmn', 2, 30),
 	(5, 'hijklmn', 4, 10);
+
+
+CREATE DATABASE transportsdb;
+\connect transportsdb;
+
+
+CREATE TABLE Places (
+    ID bigserial NOT NULL,
+    Country character varying(255) NOT NULL,
+    City character varying(255) NOT NULL,
+    PRIMARY KEY (ID)
+);
+
+CREATE TABLE Transport (
+    ID bigserial NOT NULL,
+    Destination_Places_ID bigserial NOT NULL,
+    Source_Places_ID bigserial NOT NULL,
+    TransportType character varying(255) NOT NULL,
+    TransportDate DATE NOT NULL,
+    Places int NOT NULL,
+    PRIMARY KEY (ID),
+    CONSTRAINT Destination_Places_ID FOREIGN KEY(Destination_Places_ID) REFERENCES Places(ID),
+    CONSTRAINT Source_Places_ID FOREIGN KEY(Source_Places_ID) REFERENCES Places(ID)
+);
+
+CREATE TABLE TransportEvent (
+    ID bigserial NOT NULL,
+    Transport_ID bigserial NOT NULL,
+    Places int NOT NULL,
+    PRIMARY KEY (ID),
+    CONSTRAINT Transport_ID FOREIGN KEY(Transport_ID) REFERENCES Transport(ID)
+);
+
+
+INSERT INTO Places(ID, Country, City)
+VALUES
+    (1, 'Poland', 'Gdansk'),
+    (2, 'Poland', 'Warsaw'),
+    (3, 'Italy', 'Rome'),
+    (4, 'France', 'Paris');
+
+INSERT INTO Transport(ID, Destination_Places_ID,Source_Places_ID,TransportType,TransportDate,Places)
+VALUES
+    (1, 3, 1,'Plane','2022-05-01',7),
+    (2, 3, 1,'Plane', '2022-05-01',6),
+    (3, 4, 1,'Bus', '2022-05-02',50),
+    (4, 4, 2,'Plane', '2022-05-02',30),
+    (5, 4, 2,'Bus', '2022-05-02',10);
+
+INSERT INTO TransportEvent(ID, Places, Transport_ID)
+VALUES
+    (1, 3, 5),
+    (2, 2, 3),
+    (3, 4, 4),
+    (4, 3, 2),
+    (5, 5, 1);

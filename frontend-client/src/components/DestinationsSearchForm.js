@@ -11,7 +11,7 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 const DateInput = (fieldProps) => {
     const {
         label, onBlur, value, onChange, onFocus} = fieldProps;
-        const current = new Date();return (
+    const current = new Date();return (
         <div onBlur={onBlur} onFocus={onFocus}>
             <label>
                 { label }
@@ -52,7 +52,7 @@ const NumberInputAdults = (fieldProps) => {
 const NumberInputChildren = (fieldProps) => {
     const {
         fieldType, minValue, maxValue, label, value,
-        onChange, onBlur, onFocus, 
+        onChange, onBlur, onFocus,
     } = fieldProps;
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
@@ -69,7 +69,7 @@ const NumberInputChildren = (fieldProps) => {
     );
 };
 
-const DropDown = ({ label, value, options,
+const DropDownDeparture = ({ label, value, options,
                       onChange, onBlur, onFocus}) => {
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
@@ -87,16 +87,35 @@ const DropDown = ({ label, value, options,
     )
 }
 
+const DropDownDestination = ({ label, onBlur, onFocus, onChange}) => {
+    return (
+        <div onBlur={onBlur} onFocus={onFocus}>
+            <label>
+                { label }
+            </label>
+            <input
+                value={destination}
+                onChange={onChange} >
+            </input>
+        </div>
+    )
+}
+
+
+
+const queryParams = new URLSearchParams(window.location.search);
+const destination = queryParams.get('destination');
+
 const handleDateCancel = (event, picker) => {
     picker.setStartDate(new Date())
     picker.setEndDate(new Date())
 }
-    
+
 const requiredValidator = (value) => {
     return value ? "" : "Podaj liczbę osób!";
 }
 
-export class SearchForm extends Component {
+export class DestinationsSearchForm extends Component {
 
     handleSubmit = (data, event) => {
         console.log(data)
@@ -111,7 +130,7 @@ export class SearchForm extends Component {
             window.location.href = "/offer?" + data.when;
         })
     }
-    
+
     render() {
         return (
             <Form
@@ -132,14 +151,15 @@ export class SearchForm extends Component {
                         <Field
                             label="Skąd?"
                             name="departure"
-                            component={DropDown}
+                            component={DropDownDeparture}
                             options={countries}/>
 
                         <Field
                             label="Dokąd?"
                             name="destination"
-                            component={DropDown}
-                            options={countries}/>
+                            component={DropDownDestination}
+                            value={destination}
+                            />
 
                         <Field
                             label="Ile osób dorosłych?"
@@ -175,7 +195,7 @@ export class SearchForm extends Component {
                             component={NumberInputChildren}/>
 
                         <input className="submitButton mt-4" type="submit" value="Szukaj" />
-                        
+
                     </form>
                 )}>
             </Form>
