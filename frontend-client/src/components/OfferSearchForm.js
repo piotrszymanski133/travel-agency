@@ -1,6 +1,7 @@
-﻿import React, {Component} from "react";
+﻿import React, { Component} from "react";
 import { Form, Field } from "@progress/kendo-react-form";
 import countries from "./countries";
+import ReactDOM from "react-dom/client";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 // a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
@@ -11,7 +12,7 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 const DateInput = (fieldProps) => {
     const {
         label, onBlur, value, onChange, onFocus} = fieldProps;
-        const current = new Date();return (
+    const current = new Date();return (
         <div onBlur={onBlur} onFocus={onFocus}>
             <label>
                 { label }
@@ -52,7 +53,7 @@ const NumberInputAdults = (fieldProps) => {
 const NumberInputChildren = (fieldProps) => {
     const {
         fieldType, minValue, maxValue, label, value,
-        onChange, onBlur, onFocus, 
+        onChange, onBlur, onFocus,
     } = fieldProps;
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
@@ -69,7 +70,7 @@ const NumberInputChildren = (fieldProps) => {
     );
 };
 
-const DropDown = ({ label, value, options,
+const DropDownDeparture = ({ label, options,
                       onChange, onBlur, onFocus}) => {
     return (
         <div onBlur={onBlur} onFocus={onFocus}>
@@ -77,6 +78,26 @@ const DropDown = ({ label, value, options,
                 { label }
             </label>
             <select
+                id="selectDeparture"
+                onChange={onChange}>
+                {options.map(option => (
+                    <option key={option}>{option}</option>
+                ))}
+            </select>
+        </div>
+    )
+}
+
+const DropDownDestination = ({ label, value, options,
+                      onChange, onBlur, onFocus}) => {
+    
+    return (
+        <div onBlur={onBlur} onFocus={onFocus}>
+            <label>
+                { label }
+            </label>
+            <select
+                id="selectDestination"
                 value={value}
                 onChange={onChange}>
                 {options.map(option => (
@@ -92,13 +113,40 @@ const handleDateCancel = (event, picker) => {
     picker.setEndDate(new Date())
 }
 
-export class SearchForm extends Component {
+
+export class OfferSearchForm extends Component {
+
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        const queryParams = new URLSearchParams(window.location.search);
+        const destination = queryParams.get('destination');
+        const departure = queryParams.get('departure');
+        let selectDeparture = document.querySelector('#selectDeparture')
+        let selectDestination = document.querySelector('#selectDestination')
+        var optionsDeparture = selectDeparture.getElementsByTagName('option');
+        var optionsDestination = selectDestination.getElementsByTagName('option');
+        var indexDeparture = 0;
+        var indexDestination = 0;
+        for(var i=0; i< optionsDeparture.length; i++){
+            if(departure === optionsDeparture[i].value){
+                indexDeparture = i;
+            }
+        }
+        for(var i=0; i< optionsDestination.length; i++){
+            if(destination === optionsDestination[i].value){
+                indexDestination = i;
+            }
+        }
+        selectDeparture.selectedIndex = indexDeparture;
+        selectDestination.selectedIndex = indexDestination;
+    }
 
     handleSubmit = (data, event) => {
-        console.log(data)
-        //alert(`Kiedy?  ${data.when} \nSkąd?  ${data.departure} \nDokąd?  ${data.destination} \nIle osób dorosłych?  ${data.adults} \nIle dzieci poniżej 3 roku życia?  ${data.children_under_3} \nIle dzieci w wieku 3-10 lat?  ${data.children_under_10} \nIle dzieci w wieku 10-18 lat?  ${data.children_under_18}`);
         event.preventDefault();
-        fetch('http://localhost:8081/WeatherForecast', {
+        fetch('http://localhost:8081/Trip', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
@@ -115,19 +163,19 @@ export class SearchForm extends Component {
             window.location.href = "/offer/?" + searchParams;
         })
     }
-    
+
     render() {
         return (
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    when: "dowolnie",departure: "dowolnie", destination: "", adults: 0,
+                    when: "dowolnie",departure: "dowolnie", adults: 0,
                     children_under_3:0, children_under_10:0, children_under_18:0
                 }}
                 render={(formRenderProps) => (
-                    <form onSubmit={formRenderProps.onSubmit}>
-                        <h5>Znajdź wakacje marzeń!</h5>
+                    <form className="row offerSearchForm" onSubmit={formRenderProps.onSubmit}>
 
+                        <div className="col-auto">
                         <Field
                             label="Kiedy?"
                             name="when"
@@ -136,15 +184,17 @@ export class SearchForm extends Component {
                         <Field
                             label="Skąd?"
                             name="departure"
-                            component={DropDown}
+                            component={DropDownDeparture}
                             options={countries}/>
 
                         <Field
                             label="Dokąd?"
                             name="destination"
-                            component={DropDown}
+                            component={DropDownDestination}
                             options={countries}/>
+                        </div>
 
+                        <div className="col-auto">
                         <Field
                             label="Ile osób dorosłych?"
                             name="adults"
@@ -176,9 +226,14 @@ export class SearchForm extends Component {
                             minValue="0"
                             maxValue="5"
                             component={NumberInputChildren}/>
-
-                        <input className="submitButton mt-4" type="submit" value="Szukaj" />
+                        </div>
                         
+                        <div>
+                            <input className="submitButtonOffer" type="submit" value="Szukaj" />
+                        </div>
+                        
+                        
+
                     </form>
                 )}>
             </Form>

@@ -111,9 +111,6 @@ const handleDateCancel = (event, picker) => {
     picker.setEndDate(new Date())
 }
 
-const requiredValidator = (value) => {
-    return value ? "" : "Podaj liczbę osób!";
-}
 
 export class DestinationsSearchForm extends Component {
 
@@ -127,7 +124,15 @@ export class DestinationsSearchForm extends Component {
             body: JSON.stringify(data)
         }).then(() => {
             console.log("Data was sent")
-            window.location.href = "/offer?" + data.when;
+            const searchParams = new URLSearchParams();
+            searchParams.append("when", data.when);
+            searchParams.append("departure", data.departure);
+            searchParams.append("destination", destination);
+            searchParams.append("adults", data.adults);
+            searchParams.append("children_under_3", data.children_under_3);
+            searchParams.append("children_under_10", data.children_under_10);
+            searchParams.append("children_under_18", data.children_under_18);
+            window.location.href = "/offer/?" + searchParams;
         })
     }
 
@@ -136,8 +141,8 @@ export class DestinationsSearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    when: "dowolnie",departure: "dowolnie", destination: "", adults: "",
-                    children_under_3:"", children_under_10:"", children_under_18:""
+                    when: "dowolnie",departure: "dowolnie", destination: "", adults: 0,
+                    children_under_3:0, children_under_10:0, children_under_18:0
                 }}
                 render={(formRenderProps) => (
                     <form onSubmit={formRenderProps.onSubmit}>
@@ -167,8 +172,7 @@ export class DestinationsSearchForm extends Component {
                             fieldType="number"
                             minValue="1"
                             maxValue="10"
-                            component={NumberInputAdults}
-                            validator={requiredValidator}/>
+                            component={NumberInputAdults}/>
 
                         <Field
                             label="Ile dzieci poniżej 3 roku życia?"
