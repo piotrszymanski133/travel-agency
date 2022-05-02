@@ -110,6 +110,7 @@ namespace HotelsService.Repositories
                         Id = hotel.Id,
                         Name = hotel.Name,
                         Rating = hotel.Rating,
+                        Stars = hotel.Stars.GetValueOrDefault(),
                         Rooms = offerRooms
                     });
                 }
