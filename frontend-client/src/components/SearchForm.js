@@ -126,19 +126,19 @@ export class SearchForm extends Component {
         fetch('http://localhost:8081/Trip', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(dataToSent)
+            body: JSON.stringify(dataToSent, null, 2)
         }).then(() => {
             console.log("Data was sent")
-            console.log(dataToSent)
+            console.log(JSON.stringify(dataToSent, null, 2))
             const searchParams = new URLSearchParams();
-            searchParams.append("when", date[0].toString());
+            searchParams.append("when", data.when);
             searchParams.append("departure", data.departure);
             searchParams.append("destination", data.destination);
             searchParams.append("adults", data.adults);
             searchParams.append("children_under_3", data.children_under_3);
             searchParams.append("children_under_10", data.children_under_10);
             searchParams.append("children_under_18", data.children_under_18);
-            window.location.href = "/offer/?" + searchParams;
+            //window.location.href = "/offer/?" + searchParams;
         })
     }
     
@@ -147,8 +147,8 @@ export class SearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    when: "5/20/2022 - 5/27/2022", departure: "", destination: "", adults: 0,
-                    children_under_3:0, children_under_10:0, children_under_18:0
+                    when: "05/20/2022 - 05/27/2022", departure: "", destination: "", adults: "0",
+                    children_under_3:"0", children_under_10:"0", children_under_18:"0"
                 }}
                 render={(formRenderProps) => (
                     <form onSubmit={formRenderProps.onSubmit}>

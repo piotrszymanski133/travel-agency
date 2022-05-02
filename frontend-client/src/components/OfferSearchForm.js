@@ -27,7 +27,7 @@ const DateInput = (fieldProps) => {
 
 const NumberInputAdults = (fieldProps) => {
     const {
-        fieldType, minValue, maxValue, label, visited, valid,
+        fieldType, minValue, maxValue, value, label, visited, valid,
         onChange, onBlur, onFocus, validationMessage,
     } = fieldProps;
     const invalid = !valid && visited;
@@ -40,6 +40,7 @@ const NumberInputAdults = (fieldProps) => {
                 type={fieldType}
                 min={minValue}
                 max={maxValue}
+                value={value}
                 className={invalid ? "invalid" : ""}
                 onChange={onChange} />
             { invalid &&
@@ -50,7 +51,7 @@ const NumberInputAdults = (fieldProps) => {
 
 const NumberInputChildren = (fieldProps) => {
     const {
-        fieldType, minValue, maxValue, label,
+        fieldType, minValue, maxValue, value, label,
         onChange, onBlur, onFocus,
     } = fieldProps;
     return (
@@ -62,6 +63,7 @@ const NumberInputChildren = (fieldProps) => {
                 type={fieldType}
                 min={minValue}
                 max={maxValue}
+                value={value}
                 onChange={onChange} />
         </div>
     );
@@ -111,13 +113,26 @@ const handleDateCancel = (event, picker) => {
 }
 
 const queryParams = new URLSearchParams(window.location.search);
-const adults = queryParams.get('adults');
-var children_under_3 = queryParams.get('children_under_3');
-if (children_under_3 === ""){
-    children_under_3 = '0'
+var when = "05/20/2022 - 05/27/2022";
+if(queryParams.get('when')){
+    when = queryParams.get('when')
 }
-var children_under_10 = queryParams.get('children_under_10');
-var children_under_18 = queryParams.get('children_under_18');
+var adults = 1;
+if(queryParams.get('adults')){
+    adults = queryParams.get('adults');
+}
+var children_under_3 = 0
+if(queryParams.get('children_under_3')){
+    children_under_3 = queryParams.get('children_under_3')
+}
+var children_under_10 = 0
+if(queryParams.get('children_under_10')){
+    children_under_10 = queryParams.get('children_under_10')
+}
+var children_under_18 = 0
+if(queryParams.get('children_under_18')){
+    children_under_18 = queryParams.get('children_under_18')
+}
 
 export class OfferSearchForm extends Component {
 
@@ -172,9 +187,9 @@ export class OfferSearchForm extends Component {
     render() {
         return (
             <Form
-                onSubmit={this.handleSubmit.bind(this)}
+                onSubmit={this.handleSubmit}
                 initialValues={{
-                    departure: "dowolnie", adults: adults,
+                    when: when, departure: "dowolnie", adults: adults,
                     children_under_3: children_under_3, children_under_10: children_under_10, children_under_18: children_under_18
                 }}
                 render={(formRenderProps) => (
@@ -237,8 +252,6 @@ export class OfferSearchForm extends Component {
                             <input className="submitButtonOffer" type="submit" value="Szukaj" />
                         </div>
                         
-                        
-
                     </form>
                 )}>
             </Form>
