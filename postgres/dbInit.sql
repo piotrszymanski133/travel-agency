@@ -47,6 +47,7 @@ CREATE TABLE Events (
     ID uuid DEFAULT gen_random_uuid() PRIMARY KEY,
     Type character varying(16) NOT NULL,
     Hotel_ID character varying(36) NOT NULL,
+    CreationTime timestamptz DEFAULT now(),
     CONSTRAINT Hotel_ID FOREIGN KEY(Hotel_ID) REFERENCES Hotels(ID)
 );
 

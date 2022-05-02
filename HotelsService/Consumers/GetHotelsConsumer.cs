@@ -21,6 +21,7 @@ namespace HotelsService.Consumers
         public async Task Consume(ConsumeContext<GetHotelsQuery> context)
         {
             List<HotelWithDescription> allHotels = _hotelRepository.GetAllHotels();
+            _hotelRepository.CreateReservationEvent();
             List<Hotel> hotels = new List<Hotel>();
             foreach (HotelWithDescription hotel in allHotels)
             {
