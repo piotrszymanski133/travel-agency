@@ -3,7 +3,7 @@
 export const BASE_URL = 'http://localhost:8081/';
 
 export const ENDPOINTS = {
-    weatherForecast: 'WeatherForecast'
+    trip: 'Trip'
 }
 
 export const createAPIEndpoint = endpoint => {

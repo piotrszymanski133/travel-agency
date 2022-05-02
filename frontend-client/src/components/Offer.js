@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react'
 import { createAPIEndpoint, ENDPOINTS, BASE_URL } from '../api'
+import {OfferSearchForm} from "./OfferSearchForm";
+import {SearchForm} from "./SearchForm";
 
 export class Offer extends Component {
     constructor(props) {
@@ -24,6 +26,9 @@ export class Offer extends Component {
     render() {
         return (
             <div className="p-5 mb-4 align-items-center">
+                <div className="mt-5">
+                    <OfferSearchForm className="row"></OfferSearchForm>
+                </div>
                 <h3 className="text-center mt-5">Znalezione oferty</h3>
                     <ul className="list-group">
                         {

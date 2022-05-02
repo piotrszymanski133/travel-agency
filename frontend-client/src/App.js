@@ -5,7 +5,6 @@ import { Offer } from './components/Offer';
 import { Navigation } from './components/Navigation';
 import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
-import {HomeWithDestination} from "./components/HomeWithDestination";
 
 function App() {
   return (
@@ -19,7 +18,6 @@ function App() {
                   <Route path="/offer" element={<Offer/>}/>
                   <Route path="/offer_details" element={<OfferDetails/>}/>
                   <Route path="/destinations" element={<Destinations/>}/>
-                  <Route path="/form" element={<HomeWithDestination/>}/>
               </Routes>
           </div>
       </BrowserRouter>
