@@ -38,17 +38,30 @@ namespace HotelsService.Repositories
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters)
         {
             List<Hotel> matchedHotels = new List<Hotel>();
+            List<Hotel> hotels = new List<Hotel>();
             using var db = new hotelsContext();
-            List<Hotel> hotels = db.Hotels
-                .Include(h => h.Events)
-                .ThenInclude(e => e.Eventrooms)
-                .Include(h => h.Destination)
-                .Include(h => h.Hotelrooms)
-                .ThenInclude(r => r.Roomtype)
-                .Where(h => h.Destination.Country == tripParameters.Destination)
-                .ToList();
+            if (tripParameters.Destination == "any")
+            {
+                hotels = db.Hotels
+                    .Include(h => h.Events)
+                    .ThenInclude(e => e.Eventrooms)
+                    .Include(h => h.Destination)
+                    .Include(h => h.Hotelrooms)
+                    .ThenInclude(r => r.Roomtype)
+                    .ToList();
+            }
+            else
+            {
+                hotels = db.Hotels
+                    .Include(h => h.Events)
+                    .ThenInclude(e => e.Eventrooms)
+                    .Include(h => h.Destination)
+                    .Include(h => h.Hotelrooms)
+                    .ThenInclude(r => r.Roomtype)
+                    .Where(h => h.Destination.Country == tripParameters.Destination)
+                    .ToList();
+            }
 
-            
             List<CommonComponents.Models.Hotel> offeredHotels = new List<CommonComponents.Models.Hotel>();
             foreach (Hotel hotel in hotels)
             {
