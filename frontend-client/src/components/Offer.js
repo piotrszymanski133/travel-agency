@@ -56,9 +56,9 @@ export class Offer extends Component {
         });
     }
 
-    handleClick = (hotelId) => {
+    handleClick = (hotelID) => {
         const searchParams = new URLSearchParams();
-        searchParams.append("hotelId", hotelId);
+        searchParams.append("hotelID", hotelID);
         searchParams.append("when", when);
         searchParams.append("departure", departure);
         searchParams.append("destination", destination);

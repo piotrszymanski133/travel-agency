@@ -2,6 +2,7 @@
 import {createAPIEndpoint, ENDPOINTS} from "../api";
 
 const queryParams = new URLSearchParams(window.location.search);
+var hotelID = queryParams.get('hotelID');
 var when = queryParams.get('when');
 var departure = queryParams.get('departure');
 var destination = queryParams.get('destination');
@@ -39,6 +40,7 @@ export class OfferDetails extends Component {
         if(destination === ""){
             destination = "any"
         }
+        searchParams.append("hotelID", hotelID);
         searchParams.append("startDate", startDate);
         searchParams.append("endDate", endDate);
         searchParams.append("departure", departure);
