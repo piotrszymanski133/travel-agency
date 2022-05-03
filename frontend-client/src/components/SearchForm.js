@@ -117,7 +117,7 @@ export class SearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    when: "05/20/2022 - 05/27/2022", departure: "", destination: "", adults: "0",
+                    when: "05/20/2022 - 05/27/2022", departure: "dowolnie", destination: "dowolnie", adults: "0",
                     children_under_3:"0", children_under_10:"0", children_under_18:"0"
                 }}
                 render={(formRenderProps) => (

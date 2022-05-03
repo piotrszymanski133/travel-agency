@@ -31,7 +31,11 @@ export class OfferDetails extends Component {
                 }},
             
             selectedRoomType: "",
-            selectedTransportType: ""
+            roomPrices: [],
+            roomPricesConverted: {},
+            selectedTransportType: "",
+            transportPrices: [],
+            transportPricesConverted: {},
         }
     }
 
@@ -44,10 +48,10 @@ export class OfferDetails extends Component {
             endDate = convertDate(endDate)
         }
         const searchParams = new URLSearchParams();
-        if(departure === ""){
+        if(departure === "" || departure === "dowolnie"){
             departure = "any"
         }
-        if(destination === ""){
+        if(destination === "" || destination === "dowolnie"){
             destination = "any"
         }
         searchParams.append("hotelID", hotelID);
@@ -62,8 +66,13 @@ export class OfferDetails extends Component {
 
         createAPIEndpoint(ENDPOINTS.getTrip + '?' + searchParams).fetch().then((res) => {
             this.setState({ offer: res.data});
+            this.setState({ roomPrices: res.data.tripOffer.hotelOffer.roomsConfigurations});
+            this.setState({ selectedRoomType: res.data.tripOffer.hotelOffer.roomsConfigurations[0].name});
+            this.setState({ transportPrices: res.data.tripOffer.transportOffers});
+            this.setState({ selectedTransportType: res.data.tripOffer.transportOffers[0].transportName});
         });
-
+        
+        
         const key = Object.keys(localStorage)
         const user = localStorage.getItem(key)
         if(user === null){
@@ -75,11 +84,14 @@ export class OfferDetails extends Component {
         }
     }
 
-    handleTypesChange = (data) => {
-        //this.setState({ selectedRoomType: data});
+    handleTypesChange = () => {
         let selectRoomType = document.querySelector('#selectRoomType')
         var optionsRoomType = selectRoomType.getElementsByTagName('option');
-        alert('Wybrano: ' + optionsRoomType[selectRoomType.selectedIndex].value)
+        this.setState({ selectedRoomType: optionsRoomType[selectRoomType.selectedIndex].value});
+
+        let selectTransportType = document.querySelector('#selectTransport')
+        var optionsTransportType = selectTransportType.getElementsByTagName('option');
+        this.setState({ selectedTransportType: optionsTransportType[selectTransportType.selectedIndex].value});
     }
 
     handleSubmit(event) {
@@ -87,8 +99,25 @@ export class OfferDetails extends Component {
         window.location.href = "/reservation";
     }
     
+    convertRoomPricesList = () =>{
+        this.state.roomPrices.map(
+            room => {
+                this.state.roomPricesConverted[room.name] = room.price
+            })
+    }
+
+    convertTransportPricesList = () =>{
+        this.state.transportPrices.map(
+            transport => {
+                this.state.transportPricesConverted[transport.transportName] = transport.price
+            })
+    }
+    
     render() {
         this.state.roomTypeList = this.state.offer.tripOffer.hotelOffer.roomsConfigurations
+        this.state.transportTypeList = this.state.offer.tripOffer.transportOffers
+        this.convertRoomPricesList()
+        this.convertTransportPricesList()
         return (
             <div className="p-5 mb-4 align-items-center">
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
@@ -107,8 +136,8 @@ export class OfferDetails extends Component {
                         </select>
                         <label className="mt-5"> Rodzaj transportu</label>
                         <select id="selectTransport">
-                            {this.state.roomTypeList.map(room => (
-                                <option key={room.name}>{room.name}</option>
+                            {this.state.transportTypeList.map(transport => (
+                                <option key={transport.transportName}>{transport.transportName}</option>
                             ))}
                         </select>
                         <button onClick={this.handleTypesChange} className="mt-5 mx-auto row center-column">Przelicz</button>
@@ -116,7 +145,7 @@ export class OfferDetails extends Component {
                     </div>
                     <form className="col border border-dark list-group-item text-center reservationForm" onSubmit={this.handleSubmit}>
                     <h5 className="mt-5">Cena: </h5>
-                    <h5 className="mt-5">696969 PLN</h5>
+                    <h5 className="mt-5">{this.state.roomPricesConverted[this.state.selectedRoomType] + this.state.transportPricesConverted[this.state.selectedTransportType]} PLN</h5>
                     <p className={(!this.isLogged ?  'mt-5 text-danger' : 'd-none')}> Zaloguj się, aby dokonać rezerwacji</p>
                     <input className={(this.isLogged ?  'mt-5 mx-auto row center-column' : 'd-none')} type="submit" value="Rezerwuj"/>
                     </form>
