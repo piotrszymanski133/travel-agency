@@ -35,8 +35,8 @@ namespace TransportService.Consumer
             
             final_list.Insert(0,new TransportOffer()
             {
-                DepartueCity = command.DepartueCity,
-                DepartueCountry = command.DepartueCountry,
+                DepartureCity = command.DepartueCity,
+                DepartureCountry = command.DepartueCountry,
                 DestinationCity = command.DestinationCity,
                 DestinationCountry = command.DestinationCountry,
                 Persons = command.Places,

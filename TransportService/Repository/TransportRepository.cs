@@ -146,8 +146,8 @@ namespace TripService.Repository
                     finalList.Add(new TransportOffer()
                     {
                         TransportIDFrom =transport.Id,
-                        DepartueCity = transport.DepartueCity,
-                        DepartueCountry = transport.DepartueCountry,
+                        DepartureCity = transport.DepartueCity,
+                        DepartureCountry = transport.DepartueCountry,
                         DestinationCity = transport.DestinationCity,
                         DestinationCountry = transport.DestinationCountry,
                         Persons = Persons,

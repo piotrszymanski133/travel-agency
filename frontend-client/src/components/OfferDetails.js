@@ -36,6 +36,7 @@ export class OfferDetails extends Component {
             selectedTransportType: "",
             transportPrices: [],
             transportPricesConverted: {},
+            transportCitiesConverted: {}
         }
     }
 
@@ -110,6 +111,7 @@ export class OfferDetails extends Component {
         this.state.transportPrices.map(
             transport => {
                 this.state.transportPricesConverted[transport.transportName] = transport.price
+                this.state.transportCitiesConverted[transport.transportName] = transport.departureCity
             })
     }
     
@@ -118,6 +120,7 @@ export class OfferDetails extends Component {
         this.state.transportTypeList = this.state.offer.tripOffer.transportOffers
         this.convertRoomPricesList()
         this.convertTransportPricesList()
+        console.log(this.state.transportPricesConverted)
         return (
             <div className="p-5 mb-4 align-items-center">
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
@@ -156,14 +159,20 @@ export class OfferDetails extends Component {
                             Najważniejsze informacje o wyciecze:
                         </h3>
                         <div className="tripInfo">
+                            <p>Informacje o ofercie</p>
                             <p>Kraj: {this.state.offer.tripOffer.hotelOffer.destinationCountry}</p>
                             <p>Miasto: {this.state.offer.tripOffer.hotelOffer.destinationCity}</p>
                         </div>
                         <div className="hotelInfo">
+                            <p>Informacje o hotelu</p>
                             <p>Nazwa hotelu: {this.state.offer.tripOffer.hotelOffer.name} </p>
                             <p>Średnia z ocen: {this.state.offer.tripOffer.hotelOffer.rating}</p>
                             <p>Liczba gwiazdek: {this.state.offer.tripOffer.hotelOffer.stars}</p>
                             <p>Opis: {this.state.offer.tripOffer.hotelOffer.description}</p>
+                        </div>
+                        <div className="transportInfo">
+                            <p>Informacje o transporcie</p>
+                            <p>Miasto wyjazdu: {this.state.transportCitiesConverted[this.state.selectedTransportType]} </p>
                         </div>
                     </div>
                 </div>
