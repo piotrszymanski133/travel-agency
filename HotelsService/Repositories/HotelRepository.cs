@@ -71,7 +71,7 @@ namespace HotelsService.Repositories
                                      tripParameters.ChildrenUnder18;
                 HotelStateOnDay hotelStateOnDay =
                     findFreeRoomsForReservationTime(hotel, tripParameters.StartDate, tripParameters.EndDate);
-                int hotelCapacity = 0;
+
                 List<HotelRoom> suitableRooms = hotelStateOnDay.FreeRooms.FindAll(room =>
                     room.CapacityPeople == neededCapacity && room.Quantity > 0);
                 if (suitableRooms.Count > 0)

@@ -5,6 +5,7 @@ using ApiGateway.Models;
 using CommonComponents;
 using CommonComponents.Models;
 using MassTransit;
+using TripService.Services;
 
 namespace TripService.Consumers
 {
@@ -30,31 +31,17 @@ namespace TripService.Consumers
                 {
                     TripParameters = tripParameters
                 });
-            
-            var transportResponse =  await _transportclient.GetResponse<GetTransportResponse>(new GetTransportQuery()
-            {
-                Destination = context.Message.TripParameters.Destination,
-                Departue = context.Message.TripParameters.Departure,
-                DepartureDate = context.Message.TripParameters.StartDate,
-                ReturnDate = context.Message.TripParameters.EndDate,
-                Places = context.Message.TripParameters.Adults + context.Message.TripParameters.ChildrenUnder3 + 
-                         context.Message.TripParameters.ChildrenUnder10+context.Message.TripParameters.ChildrenUnder18
-
-            });
 
             List<Hotel> hotelsList = hotelResponse.Message.Hotels;
-            List<Transport> transportsList = transportResponse.Message.Transports;
 
             foreach (var hotel in hotelsList)
             {
-                if (transportsList.Any(x =>
-                    x.DestinationCountry == hotel.DestinationCountry && x.DestinationCity == hotel.DestinationCity))
-                {
-                    trips.Add(new Trip()
+
+                hotel.LowestPrice = PriceCalculator.CalculateLowestPrice(hotel, tripParameters);
+                trips.Add(new Trip()
                     {
                         Hotel = hotel
                     });
-                }
             }
             await context.RespondAsync(new GetTripsResponse {Trips = trips,});
         }
