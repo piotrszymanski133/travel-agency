@@ -124,16 +124,16 @@ if(queryParams.get('adults')){
     adults = queryParams.get('adults');
 }
 var children_under_3 = 0
-if(queryParams.get('children_under_3')){
-    children_under_3 = queryParams.get('children_under_3')
+if(queryParams.get('childrenUnder3')){
+    children_under_3 = queryParams.get('childrenUnder3')
 }
 var children_under_10 = 0
-if(queryParams.get('children_under_10')){
-    children_under_10 = queryParams.get('children_under_10')
+if(queryParams.get('childrenUnder10')){
+    children_under_10 = queryParams.get('childrenUnder10')
 }
 var children_under_18 = 0
-if(queryParams.get('children_under_18')){
-    children_under_18 = queryParams.get('children_under_18')
+if(queryParams.get('childrenUnder18')){
+    children_under_18 = queryParams.get('childrenUnder18')
 }
 const destination = queryParams.get('destination');
 const departure = queryParams.get('departure');
@@ -178,9 +178,9 @@ export class OfferSearchForm extends Component {
             searchParams.append("departure", data.departure);
             searchParams.append("destination", data.destination);
             searchParams.append("adults", data.adults);
-            searchParams.append("children_under_3", data.children_under_3);
-            searchParams.append("children_under_10", data.children_under_10);
-            searchParams.append("children_under_18", data.children_under_18);
+            searchParams.append("childrenUnder3", data.children_under_3);
+            searchParams.append("childrenUnder10", data.children_under_10);
+            searchParams.append("childrenUnder18", data.children_under_18);
             window.location.href = "/offer?" + searchParams;
         })
     }

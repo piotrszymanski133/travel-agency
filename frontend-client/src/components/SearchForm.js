@@ -106,9 +106,9 @@ export class SearchForm extends Component {
         searchParams.append("departure", data.departure);
         searchParams.append("destination", data.destination);
         searchParams.append("adults", data.adults);
-        searchParams.append("children_under_3", data.children_under_3);
-        searchParams.append("children_under_10", data.children_under_10);
-        searchParams.append("children_under_18", data.children_under_18);
+        searchParams.append("childrenUnder3", data.children_under_3);
+        searchParams.append("childrenUnder10", data.children_under_10);
+        searchParams.append("childrenUnder18", data.children_under_18);
         window.location.href = "/offer?" + searchParams;
     }
     

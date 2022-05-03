@@ -4,6 +4,8 @@ import {NavLink} from 'react-router-dom';
 import { ReactComponent as Logo } from '../icons/logo.svg';
 
 export class Navigation extends Component{
+    
+    
 
     render(){
         return(
@@ -21,6 +23,9 @@ export class Navigation extends Component{
                     <Nav>
                         <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/login">
                             Zaloguj
+                        </NavLink>
+                        <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/login">
+                            Wyloguj
                         </NavLink>
                     </Nav>
                 </Navbar.Collapse>

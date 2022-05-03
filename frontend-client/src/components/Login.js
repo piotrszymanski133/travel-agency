@@ -6,18 +6,6 @@ const Login = ()  =>{
     const [password, setPassword] = useState("");
     const [user, setUser] = useState();
 
-    // User Login info
-    const database = [
-        {
-            username: "user1",
-            password: "pass1"
-        },
-        {
-            username: "user2",
-            password: "pass2"
-        }
-    ];
-
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
         if (loggedInUser) {
@@ -32,21 +20,25 @@ const Login = ()  =>{
         setUsername("");
         setPassword("");
         localStorage.clear();
+        window.window.location.href = "/";
     };
 
     // login the user
     const handleSubmit = async e => {
         e.preventDefault();
-        const user = { username, password };
+        const user = { name: "user1", pass: "pass1" };
         // send the username and password to the server
-        const response = await axios.post(
+        /**const response = await axios.post(
             "http://blogservice.herokuapp.com/api/login",
             user
-        );
+        );**/
+            
         // set the state of the user
-        setUser(response.data);
+        setUser(user);
+        //setUser(response.data);
         // store the user in localStorage
-        localStorage.setItem("user", JSON.stringify(response.data));
+        localStorage.setItem("user", JSON.stringify(user));
+        //localStorage.setItem("user", JSON.stringify(response.data));
     };
 
     // if there's a user show the message below
@@ -61,7 +53,7 @@ const Login = ()  =>{
 
     // if there's no user, show the login form
     return (
-        <div>
+        <div className="mt-5">
             <form onSubmit={handleSubmit}>
                 <label htmlFor="username">Username: </label>
                 <input

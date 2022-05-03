@@ -6,9 +6,9 @@ var when = queryParams.get('when');
 var departure = queryParams.get('departure');
 var destination = queryParams.get('destination');
 var adults = queryParams.get('adults');
-var children_under_3 = queryParams.get('children_under_3')
-var children_under_10 = queryParams.get('children_under_10')
-var children_under_18 = queryParams.get('children_under_18')
+var children_under_3 = queryParams.get('childrenUnder3')
+var children_under_10 = queryParams.get('childrenUnder10')
+var children_under_18 = queryParams.get('childrenUnder18')
 
 const convertDate = (inputFormat) => {
     function pad(s) { return (s < 10) ? '0' + s : s; }
@@ -44,9 +44,9 @@ export class OfferDetails extends Component {
         searchParams.append("departure", departure);
         searchParams.append("destination", destination);
         searchParams.append("adults", adults);
-        searchParams.append("children_under_3", children_under_3);
-        searchParams.append("children_under_10", children_under_10);
-        searchParams.append("children_under_18", children_under_18);
+        searchParams.append("childrenUnder3", children_under_3);
+        searchParams.append("childrenUnder10", children_under_10);
+        searchParams.append("childrenUnder18", children_under_18);
 
         createAPIEndpoint(ENDPOINTS.getTrip + '?' + searchParams).fetch().then((res) => {
             this.setState({ offer: res.data});

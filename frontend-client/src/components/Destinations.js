@@ -24,9 +24,9 @@ export class Destinations extends Component {
         searchParams.append("departure", "");
         searchParams.append("destination", "");
         searchParams.append("adults", '1');
-        searchParams.append("children_under_3", '0');
-        searchParams.append("children_under_10", '0');
-        searchParams.append("children_under_18", '0');
+        searchParams.append("childrenUnder3", '0');
+        searchParams.append("childrenUnder10", '0');
+        searchParams.append("childrenUnder18", '0');
         window.location.href = "/offer?" + searchParams;
     }
 
