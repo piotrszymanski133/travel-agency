@@ -34,4 +34,10 @@ namespace CommonComponents
     {
         public List<TransportOffer> TransportOffer { get; set; }
     }
+    
+    public class ReserveTripResponse
+    {
+        
+    }
+
 }

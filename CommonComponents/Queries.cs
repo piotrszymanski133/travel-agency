@@ -42,3 +42,9 @@ public class GetTransportOffersQuery
     public DateTime DepartureDate { get; set; }
     public DateTime ReturnDate { get; set; }
 }
+
+public class ReserveTripQuery
+{
+    public ReserveTripOfferParameters ReserveTripOfferParameters { get; set; }
+    public Guid ReservationId { get; set; }
+}

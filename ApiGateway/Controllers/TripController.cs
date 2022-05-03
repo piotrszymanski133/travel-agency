@@ -17,11 +17,13 @@ namespace ApiGateway.Controllers
     public class TripController : ControllerBase
     {
         private IRequestClient<GetTripsQuery> _tripsClient;
-        private IRequestClient<GetTripOfferQuery> _tripOfferclient;
+        private IRequestClient<GetTripOfferQuery> _tripOfferClient;
+        private IRequestClient<ReserveTripQuery> _tripReservationClient;
 
-        public TripController(IRequestClient<GetTripsQuery> tripsClient, IRequestClient<GetTripOfferQuery> tripOfferclient)
+        public TripController(IRequestClient<GetTripsQuery> tripsClient, IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient)
         {
-            _tripOfferclient = tripOfferclient;
+            _tripOfferClient = tripOfferClient;
+            _tripReservationClient = tripReservationClient;
             _tripsClient = tripsClient;
         }
 
@@ -37,13 +39,24 @@ namespace ApiGateway.Controllers
         [Route("GetTrip")]
         public async Task<GetTripOfferResponse> GetTrip([FromQuery] TripOfferQueryParameters tripOfferQueryParameters)
         {
-            var response = await _tripOfferclient.GetResponse<GetTripOfferResponse>(new GetTripOfferQuery
+            var response = await _tripOfferClient.GetResponse<GetTripOfferResponse>(new GetTripOfferQuery
             {
                 TripOfferQueryParameters = tripOfferQueryParameters
             });
             return response.Message;
         }
-        
+
+        [HttpPost]
+        [Route("ReserveTrip")]
+        public async Task<ReserveTripResponse> ReserveTrip([FromBody] ReserveTripOfferParameters reserveTripOfferParameters)
+        {
+            var response = await _tripReservationClient.GetResponse<ReserveTripResponse>(new ReserveTripQuery()
+            {
+                ReserveTripOfferParameters = reserveTripOfferParameters,
+                ReservationId = Guid.NewGuid()
+            });
+            return response.Message;
+        }
         [HttpGet]
         [Route("GetDestinations")]
         public async Task<List<String>> GetDestinations()

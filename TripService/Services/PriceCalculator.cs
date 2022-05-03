@@ -29,7 +29,7 @@ namespace TripService.Services
 
         public static int CalculateHotelRoomConfigPrice(HotelRoom config, TripOfferQueryParameters parameters, int stars)
         {
-            if (config.Name.EndsWith("Premium"))
+            if (config.RoomtypeId >= 8) //PREMIUM ROOM TYPES HAVE ALWAYS ID >= 8
                 return CalculatePrice(parameters, PREMIUM_PRICE_PER_PERSON, stars);
             else
                 return CalculatePrice(parameters, NORMAL_PRICE_PER_PERSON, stars);
