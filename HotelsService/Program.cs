@@ -4,6 +4,7 @@ using HotelsService.Consumers;
 using HotelsService.Jobs;
 using HotelsService.Models;
 using HotelsService.Repositories;
+using HotelsService.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -22,9 +23,11 @@ builder.Services.AddDbContext<hotelsContext>(
     o => o.UseNpgsql(builder.Configuration.GetConnectionString("HotelsDb"))
 );
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<GetHotelsConsumer>();
+        x.AddConsumer<GetHotelOfferConsumer>();
         x.SetKebabCaseEndpointNameFormatter();
         x.UsingRabbitMq((context, cfg) =>
         {

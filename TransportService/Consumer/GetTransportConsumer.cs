@@ -32,7 +32,7 @@ namespace TransportService.Consumer
             var first = transports.First();
 
 
-            await context.RespondAsync<GetTransportRespond>( new GetTransportRespond(){
+            await context.RespondAsync<GetTransportResponse>( new GetTransportResponse(){
                 Transports = new List<CommonComponents.Models.Transport>()
                 {
                     new CommonComponents.Models.Transport()

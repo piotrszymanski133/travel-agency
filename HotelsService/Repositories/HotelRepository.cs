@@ -18,6 +18,8 @@ namespace HotelsService.Repositories
         public List<HotelWithDescription> GetAllHotels();
         public void CreateReservationEvent(DateTime start, DateTime end);
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters);
+        public HotelWithDescription GetHotelWithDescription(string hotelId);
+        public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end);
     }
     
     public class HotelRepository : IHotelRepository
@@ -47,78 +49,35 @@ namespace HotelsService.Repositories
                 .ToList();
 
             
-            List<CommonComponents.Models.Hotel> hotelOffers = new List<CommonComponents.Models.Hotel>();
+            List<CommonComponents.Models.Hotel> offeredHotels = new List<CommonComponents.Models.Hotel>();
             foreach (Hotel hotel in hotels)
             {
-                int neededCapacity = tripParameters.Adults + tripParameters.ChildrenUnder3 + tripParameters.ChildrenUnder10 +
+                int neededCapacity = tripParameters.Adults + tripParameters.ChildrenUnder3 +
+                                     tripParameters.ChildrenUnder10 +
                                      tripParameters.ChildrenUnder18;
                 HotelStateOnDay hotelStateOnDay =
                     findFreeRoomsForReservationTime(hotel, tripParameters.StartDate, tripParameters.EndDate);
                 int hotelCapacity = 0;
-                hotelStateOnDay.FreeRooms.ForEach(room => hotelCapacity += room.Quantity * room.CapacityPeople);
-
-                if (hotelCapacity >= neededCapacity)
+                if (hotelStateOnDay.FreeRooms.Find(room =>
+                    room.CapacityPeople == neededCapacity && room.Quantity > 0) != null)
                 {
-                    List<HotelRoom> offerRooms = new List<HotelRoom>();
-                    while (neededCapacity > 0)
+                    offeredHotels.Add(new CommonComponents.Models.Hotel()
                     {
-                        int maxCapacity = hotelStateOnDay.FreeRooms.Max(room => room.CapacityPeople);
-                        if (neededCapacity > maxCapacity)
-                        {
-                            HotelRoom biggestRoom =
-                                hotelStateOnDay.FreeRooms.Find(er => er.CapacityPeople == maxCapacity);
-                            HotelRoom selected = biggestRoom.shallowCopy();
-                            selected.Quantity = (short) (neededCapacity / maxCapacity);
-                            offerRooms.Add(selected);
-                            biggestRoom.Quantity--;
-                            if (biggestRoom.Quantity == 0)
-                                hotelStateOnDay.FreeRooms.Remove(biggestRoom);
-                            neededCapacity -= maxCapacity * selected.Quantity;
-                        }
-                        
-                        else if (!hotelStateOnDay.FreeRooms.Find(room => room.CapacityPeople == neededCapacity).Equals(null))
-                        {
-                            HotelRoom foundRoom =
-                                hotelStateOnDay.FreeRooms.Find(room => room.CapacityPeople == neededCapacity);
-                            HotelRoom selected = foundRoom.shallowCopy();
-                            selected.Quantity = 1;
-                            offerRooms.Add(selected);
-                            neededCapacity = 0;
-                        } 
-                        
-                        else if (!hotelStateOnDay.FreeRooms.Find(room => neededCapacity / room.CapacityPeople >= 0.6).Equals(null))
-                        {
-                            HotelRoom foundRoom = hotelStateOnDay.FreeRooms
-                                .FindAll(room => neededCapacity / room.CapacityPeople >= 0.6).First();
-                            HotelRoom selected = foundRoom.shallowCopy();
-                            selected.Quantity = 1;
-                            offerRooms.Add(selected);
-                            foundRoom.Quantity--;
-                            if (foundRoom.Quantity == 0)
-                                hotelStateOnDay.FreeRooms.Remove(foundRoom);
-                            neededCapacity -= foundRoom.CapacityPeople;
-                        }
-
-                    }
-                    HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).First();
-                    hotelOffers.Add(new CommonComponents.Models.Hotel()
-                    {
-                        Description = desc.Description,
+                        Id = hotel.Id,
                         DestinationCity = hotel.Destination.City,
                         DestinationCountry = hotel.Destination.Country,
                         Food = hotel.Food,
-                        Id = hotel.Id,
                         Name = hotel.Name,
                         Rating = hotel.Rating,
-                        Stars = hotel.Stars.GetValueOrDefault(),
-                        Rooms = offerRooms
+                        Stars = hotel.Stars.GetValueOrDefault()
                     });
                 }
             }
-            return hotelOffers;
+            return offeredHotels;
+            
         }
 
-        private HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end)
+        public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end)
         {
             HotelStateOnDay maxHotelState = new HotelStateOnDay();
             hotel.Hotelrooms.ForEach(room => maxHotelState.FreeRooms.Add(new HotelRoom()
@@ -159,7 +118,11 @@ namespace HotelsService.Repositories
         {
             List<HotelWithDescription> hotelsWithDescriptions = new List<HotelWithDescription>();
             using var db = new hotelsContext();
-            List<Hotel> hotels = db.Hotels.Include(h => h.Destination).Include(h => h.Hotelrooms).ThenInclude(r => r.Roomtype).ToList();
+            List<Hotel> hotels = db.Hotels
+                .Include(h => h.Destination)
+                .Include(h => h.Hotelrooms)
+                .ThenInclude(r => r.Roomtype)
+                .ToList();
             foreach (var hotel in hotels)
             {
                 List<Event> events = db.Events.Where(e => e.HotelId == hotel.Id).Include(e => e.Eventrooms).ToList();
@@ -169,8 +132,21 @@ namespace HotelsService.Repositories
                     hotelsWithDescriptions.Add(new HotelWithDescription(hotel, desc));
                 }
             }
-
             return hotelsWithDescriptions;
+        }
+
+        public HotelWithDescription GetHotelWithDescription(string hotelId)
+        {
+            using var db = new hotelsContext();
+            db.Hotels
+                .Include(h => h.Destination)
+                .Include(h => h.Hotelrooms)
+                .ThenInclude(r => r.Roomtype)
+                .ToList();
+            Hotel hotel = db.Hotels.Find(hotelId);
+            HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).FirstOrDefault();
+            return new HotelWithDescription(hotel, desc);
+
         }
 
         public void CreateReservationEvent(DateTime start, DateTime end)

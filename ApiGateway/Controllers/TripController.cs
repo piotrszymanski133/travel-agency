@@ -15,30 +15,39 @@ namespace ApiGateway.Controllers
     [Route("[controller]")]
     public class TripController : ControllerBase
     {
-        private IRequestClient<GetTripsQuery> _client;
+        private IRequestClient<GetTripsQuery> _tripsClient;
+        private IRequestClient<GetTripOfferQuery> _tripOfferclient;
 
-        public TripController(IRequestClient<GetTripsQuery> client)
+        public TripController(IRequestClient<GetTripsQuery> tripsClient, IRequestClient<GetTripOfferQuery> tripOfferclient)
         {
-            _client = client;
+            _tripOfferclient = tripOfferclient;
+            _tripsClient = tripsClient;
         }
 
         [HttpGet]
-        public async Task<GetTripsRespond> Index([FromQuery] TripParameters tripParameters)
+        public async Task<GetTripsResponse> Index([FromQuery] TripParameters tripParameters)
         {
             var response =
-                await _client.GetResponse<GetTripsRespond>(new GetTripsQuery {TripParameters = tripParameters});
+                await _tripsClient.GetResponse<GetTripsResponse>(new GetTripsQuery {TripParameters = tripParameters});
             return response.Message;
         }
         
         [HttpGet]
         [Route("GetTrip")]
-        public async Task<Hotel> GetTrip()
+        public async Task<GetTripOfferResponse> GetTrip([FromQuery] TripOfferQueryParameters tripOfferQueryParameters)
         {
-            return new Hotel
+            var response = await _tripOfferclient.GetResponse<GetTripOfferResponse>(new GetTripOfferQuery
+            {
+                TripOfferQueryParameters = tripOfferQueryParameters
+            });
+            return response.Message;
+            /*
+            return new HotelOffer
             {
                 Id = "123", Description = "Opis", DestinationCity = "Madryt", Rating = 4, Stars = 5,
                 DestinationCountry = "Hiszpania"
             };
+            */
         }
     }
 }

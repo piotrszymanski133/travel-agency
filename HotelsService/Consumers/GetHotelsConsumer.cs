@@ -26,7 +26,7 @@ namespace HotelsService.Consumers
             List<Hotel> matchedHotels = _hotelRepository.GetHotels(tripParameters);
             //_hotelRepository.CreateReservationEvent(tripParameters.StartDate, tripParameters.EndDate);
 
-            await context.RespondAsync(new GetHotelsRespond { Hotels = matchedHotels});
+            await context.RespondAsync(new GetHotelsResponse { Hotels = matchedHotels});
         }
     }
 }

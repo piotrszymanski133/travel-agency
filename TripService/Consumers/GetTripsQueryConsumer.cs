@@ -22,26 +22,29 @@ namespace TripService.Consumers
         public async Task Consume(ConsumeContext<GetTripsQuery> context)
         {
             TripParameters tripParameters = context.Message.TripParameters;
-            
-            var hotelResponse = await _hotelclient.GetResponse<GetHotelsRespond>(
-                new GetHotelsQuery {TripParameters = tripParameters});
             List<Trip> trips = new List<Trip>();
+
+            var hotelResponse = await _hotelclient.GetResponse<GetHotelsResponse>(
+                new GetHotelsQuery
+                {
+                    TripParameters = tripParameters
+                });
+            var transportResponse =  await _transportclient.GetResponse<GetTransportResponse>(
+                new GetTransportQuery
+                {
+                    DestinationCity = "City"
+                });
+
             foreach (Hotel hotel in hotelResponse.Message.Hotels)
             {
                 trips.Add(new Trip {Hotel = hotel});
             }
-            
-            var transportResponse =  await _transportclient.GetResponse<GetTransportRespond>(new GetTransportQuery()
-            {
-                DestinationCity = "City"
-            });
-
             for (var i = 0; i < trips.Count; i++)
             {
                 trips[i].Transport = transportResponse.Message.Transports.First();
             }
             
-            await context.RespondAsync(new GetTripsRespond {Trips = trips,});
+            await context.RespondAsync(new GetTripsResponse {Trips = trips,});
         }
     }
 
