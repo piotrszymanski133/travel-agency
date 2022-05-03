@@ -36,8 +36,7 @@ namespace TripService.Consumers
 
             foreach (var hotel in hotelsList)
             {
-
-                hotel.LowestPrice = PriceCalculator.CalculateLowestPrice(hotel, tripParameters);
+                hotel.LowestPrice = PriceCalculator.CalculateHotelLowestPrice(hotel, tripParameters);
                 trips.Add(new Trip()
                     {
                         Hotel = hotel

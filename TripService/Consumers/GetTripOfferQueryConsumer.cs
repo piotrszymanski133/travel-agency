@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using CommonComponents;
 using CommonComponents.Models;
 using MassTransit;
+using TripService.Services;
 
 namespace TripService.Consumers
 {
@@ -40,7 +41,18 @@ namespace TripService.Consumers
                              tripOfferQueryParameters.ChildrenUnder10+tripOfferQueryParameters.ChildrenUnder18,
                     ReturnDate = tripOfferQueryParameters.EndDate,
                 });
-                
+
+            HotelOffer hotelOffer = hotelResponse.Message.HotelOffer;
+            foreach (var configuration in hotelOffer.RoomsConfigurations)
+            {
+                configuration.Price =
+                    PriceCalculator.CalculateHotelRoomConfigPrice(configuration, tripOfferQueryParameters, hotelOffer.Stars);
+            }
+
+            foreach (var transportOffer in transportResponse.Message.TransportOffer)
+            {
+                transportOffer.Price = PriceCalculator.CalculateTransportOfferPrice(transportOffer);
+            }
             TripOffer tripOffer = new TripOffer
             {
                 StartDate = tripOfferQueryParameters.StartDate,
