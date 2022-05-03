@@ -8,6 +8,11 @@ public class GetTripsQuery
     public TripParameters TripParameters { get; set; }
 }
 
+public class GetTripQuery
+{
+    public TripParameters TripParameters { get; set; }
+}
+
 public class GetHotelsQuery
 {
     public TripParameters TripParameters { get; set; }

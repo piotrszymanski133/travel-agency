@@ -19,7 +19,7 @@ export class Navigation extends Component{
                         </NavLink>
                     </Nav>
                     <Nav>
-                        <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/offer">
+                        <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/login">
                             Zaloguj
                         </NavLink>
                     </Nav>

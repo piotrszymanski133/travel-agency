@@ -1,4 +1,4 @@
-﻿import React,{Component} from 'react';
+﻿import React, {Component} from 'react';
 import {SearchForm} from './SearchForm';
 
 const Aux = props => props.children;

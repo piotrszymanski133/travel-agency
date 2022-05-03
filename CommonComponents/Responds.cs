@@ -7,6 +7,11 @@ namespace CommonComponents
     {
         public List<Trip> Trips { get; set; }
     }
+    
+    public class GetTripRespond
+    {
+        public Trip Trip { get; set; }
+    }
 
 
     public class GetHotelsRespond

@@ -1,6 +1,7 @@
 ﻿import React, {Component} from "react";
 import { Form, Field } from "@progress/kendo-react-form";
-import countries from "./countries";
+import destination_countries from "./destinations_countries";
+import departures_countries from "./departures_countries";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 // a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
@@ -132,13 +133,13 @@ export class SearchForm extends Component {
                             label="Skąd?"
                             name="departure"
                             component={DropDown}
-                            options={countries}/>
+                            options={departures_countries}/>
 
                         <Field
                             label="Dokąd?"
                             name="destination"
                             component={DropDown}
-                            options={countries}/>
+                            options={destination_countries}/>
 
                         <Field
                             label="Ile osób dorosłych?"
