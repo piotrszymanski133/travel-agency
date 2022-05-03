@@ -9,5 +9,7 @@ namespace CommonComponents.Models
         public float Rating { get; set; }
         public string Food { get; set; }
         public short Stars { get; set; }
+        public bool IsOnlyPremiumAvailable { get; set; }
+        public int LowestPrice { get; set; }
     }
 }
