@@ -65,15 +65,24 @@ namespace HotelsService.Repositories
             List<CommonComponents.Models.Hotel> offeredHotels = new List<CommonComponents.Models.Hotel>();
             foreach (Hotel hotel in hotels)
             {
+                bool onlyPremiumRoomsAvailable = true;
                 int neededCapacity = tripParameters.Adults + tripParameters.ChildrenUnder3 +
                                      tripParameters.ChildrenUnder10 +
                                      tripParameters.ChildrenUnder18;
                 HotelStateOnDay hotelStateOnDay =
                     findFreeRoomsForReservationTime(hotel, tripParameters.StartDate, tripParameters.EndDate);
                 int hotelCapacity = 0;
-                if (hotelStateOnDay.FreeRooms.Find(room =>
-                    room.CapacityPeople == neededCapacity && room.Quantity > 0) != null)
+                List<HotelRoom> suitableRooms = hotelStateOnDay.FreeRooms.FindAll(room =>
+                    room.CapacityPeople == neededCapacity && room.Quantity > 0);
+                if (suitableRooms.Count > 0)
                 {
+                    suitableRooms.ForEach(room =>
+                    {
+                        if (!room.Name.EndsWith("Premium"))
+                        {
+                            onlyPremiumRoomsAvailable = false;
+                        }
+                    });
                     offeredHotels.Add(new CommonComponents.Models.Hotel()
                     {
                         Id = hotel.Id,
@@ -82,7 +91,8 @@ namespace HotelsService.Repositories
                         Food = hotel.Food,
                         Name = hotel.Name,
                         Rating = hotel.Rating,
-                        Stars = hotel.Stars.GetValueOrDefault()
+                        Stars = hotel.Stars.GetValueOrDefault(),
+                        IsOnlyPremiumAvailable = onlyPremiumRoomsAvailable
                     });
                 }
             }

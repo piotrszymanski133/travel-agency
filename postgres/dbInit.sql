@@ -79,24 +79,33 @@ VALUES
 	
 INSERT INTO HotelRoomTypes(ID, Name, Capacity_people)
 VALUES 
-    (1, 'Small', 1),
-    (2, 'Medium', 2),
-    (3, 'Large', 3),
+    (1, 'Small Room', 1),
+    (2, 'Medium Room', 2),
+    (3, 'Large Room', 3),
     (4, 'Apartment', 4),
-    (5, 'Studio', 4);
+    (5, 'Family Room', 5),
+    (6, 'Big Apartment', 6),
+    (7, 'Big Family Room', 7),
+    (8, 'Small Room Premium', 1),
+    (9, 'Medium Room Premium', 2),
+    (10, 'Large Room Premium', 3),
+    (11, 'Apartment Premium', 4),
+    (12, 'Family Room Premium', 5);
 
 INSERT INTO HotelRooms(ID, Hotel_ID, RoomType_ID, Quantity)
 VALUES
 	(1, 'abcdefg', 1, 10),
-	(3, 'hijklmn', 1, 50),
-	(4, 'hijklmn', 2, 30),
-	(5, 'hijklmn', 4, 10),
+	(2, 'abcdefg', 8, 10),
+	(3, 'hijklmn', 8, 50),
+	(4, 'hijklmn', 9, 30),
+	(5, 'hijklmn', 11, 10),
     (6, 'qwertyu', 1, 50),
     (7, 'qwertyu', 2, 30),
     (8, 'qwertyu', 4, 10),
     (9, 'zxcvb', 1, 50),
     (10, 'zxcvb', 2, 30),
-    (11, 'zxcvb', 4, 10);
+    (11, 'zxcvb', 4, 10),
+    (12, 'zxcvb', 11, 10);
 
 
 CREATE DATABASE transportsdb;

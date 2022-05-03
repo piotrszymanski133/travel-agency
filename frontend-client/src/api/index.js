@@ -5,6 +5,7 @@ export const BASE_URL = 'http://localhost:8081/';
 export const ENDPOINTS = {
     trip: 'Trip',
     getTrip: 'Trip/GetTrip',
+    getDestinations: 'Trip/GetDestinations',
     login: 'Login'
 }
 

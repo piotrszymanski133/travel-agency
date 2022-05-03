@@ -113,6 +113,14 @@ select{
 }
 
 .logout {
+  margin-top: 250px;
+}
+
+.loginForm {
   margin-top: 200px;
-  margin-left: 400px;
+}
+
+.alreadyLogged{
+  margin-top: 200px;
+  margin-left: 350px
 }
