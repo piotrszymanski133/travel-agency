@@ -39,12 +39,13 @@ const Login = ()  =>{
         // store the user in localStorage
         localStorage.setItem("user", JSON.stringify(user));
         //localStorage.setItem("user", JSON.stringify(response.data));
+        window.location.href = "/";
     };
 
     // if there's a user show the message below
     if (user) {
         return (
-            <div>
+            <div className="mt-5">
                 {user.name} is loggged in
                 <button onClick={handleLogout}>logout</button>
             </div>

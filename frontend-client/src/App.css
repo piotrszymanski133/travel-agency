@@ -111,3 +111,8 @@ select{
   color: red;
   font-size: 12px;
 }
+
+.logout {
+  margin-top: 200px;
+  margin-left: 400px;
+}

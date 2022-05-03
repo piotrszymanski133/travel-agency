@@ -56,8 +56,9 @@ export class Offer extends Component {
         });
     }
 
-    handleClick = () => {
+    handleClick = (hotelId) => {
         const searchParams = new URLSearchParams();
+        searchParams.append("hotelId", hotelId);
         searchParams.append("when", when);
         searchParams.append("departure", departure);
         searchParams.append("destination", destination);
@@ -86,7 +87,7 @@ export class Offer extends Component {
                                         <p> Średnia z ocen: { offer.hotel.rating}</p>
                                         <p> Liczba gwiazdek: { offer.hotel.stars}</p>
                                         <p className="price_par"> Cena: </p>
-                                        <button onClick={this.handleClick} className="check_offer">Sprawdź ofertę</button>
+                                        <button onClick={() => this.handleClick(offer.hotel.id)} className="check_offer">Sprawdź ofertę</button>
                                     </li>
                             )
                         }

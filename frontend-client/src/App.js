@@ -6,6 +6,7 @@ import {Navigation} from './components/Navigation';
 import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
 import Login from "./components/Login"
+import Logout from "./components/Logout"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
                   <Route path="/offer_details" element={<OfferDetails/>}/>
                   <Route path="/destinations" element={<Destinations/>}/>
                   <Route path="/login" element={<Login/>}/>
+                  <Route path="/logout" element={<Logout/>}/>
               </Routes>
           </div>
       </BrowserRouter>
