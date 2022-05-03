@@ -7,43 +7,35 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TransportService.Models;
+using TripService.Repository;
+using Transport = CommonComponents.Models.Transport;
 
 namespace TransportService.Consumer
 {
     public class GetTransportConsumer: IConsumer<GetTransportQuery>
     {
         private readonly ILogger<GetTransportQuery> _logger;
+        private ITransportRepository _repository;
 
-        public GetTransportConsumer(ILogger<GetTransportQuery> logger)
+        public GetTransportConsumer(ILogger<GetTransportQuery> logger, ITransportRepository repository)
         {
-
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _repository = repository;
         }
 
         public async Task Consume(ConsumeContext<GetTransportQuery> context)
         {
             var command = context.Message;
-            var city = command.DestinationCity;
-            using var db = new transportsdbContext();
+            var city = command.Destination;
 
-            //db.Hotels.Include(h => h.Destination).Include(h => h.Hotelrooms).ThenInclude(r => r.Roomtype).ToList();
-            var transports = db.Transports.Include(h =>h.DestinationPlaces).Include(h => h.SourcePlaces).ToList();
-
-            var first = transports.First();
-
-
+            List<Transport> from_matches = _repository.GetGeneralTransport(command.Departue,command.Destination,
+                new DateOnly(command.DepartureDate.Year,command.DepartureDate.Month,command.DepartureDate.Day),command.Places,0);
+            List<Transport> to_matches = _repository.GetGeneralTransport(command.Destination,command.Departue,
+                new DateOnly(command.ReturnDate.Year,command.ReturnDate.Month,command.ReturnDate.Day),command.Places,1);
+            List<Transport> final_list = _repository.MatchTransports(from_matches, to_matches);
+            
             await context.RespondAsync<GetTransportResponse>( new GetTransportResponse(){
-                Transports = new List<CommonComponents.Models.Transport>()
-                {
-                    new CommonComponents.Models.Transport()
-                    {
-                        Id = "1",
-                        DestinationCity = first.DestinationPlaces.City,
-                        DestinationCountry = first.DestinationPlaces.Country,
-                        Name = first.Transporttype
-                    }
-
-                }
+                Transports = final_list
             });
         }
     }

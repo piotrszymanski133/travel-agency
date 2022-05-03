@@ -65,9 +65,9 @@ CREATE TABLE EventRooms(
 
 INSERT INTO Destinations(ID, Country, City)
 VALUES
-	(1, 'Polska', 'Gdansk'),
+	(1, 'Polska', 'Gdańsk'),
 	(2, 'Polska', 'Warszawa'),
-	(3, 'Francja', 'Paryz'),
+	(3, 'Francja', 'Paryż'),
 	(4, 'Włochy', 'Rzym');
 	
 INSERT INTO Hotels(ID, Name, Destination_ID, Rating, Food, Stars)
@@ -135,23 +135,28 @@ CREATE TABLE TransportEvent (
 
 INSERT INTO Places(ID, Country, City)
 VALUES
-    (1, 'Poland', 'Gdansk'),
-    (2, 'Poland', 'Warsaw'),
-    (3, 'Italy', 'Rome'),
-    (4, 'France', 'Paris');
+    (1, 'Polska', 'Gdańsk'),
+    (2, 'Polska', 'Warszawa'),
+    (3, 'Włochy', 'Rzym'),
+    (4, 'Włochy', 'Neapol'),
+    (5, 'Francja', 'Paryż'),
+    (6, 'Francja', 'Nicea');
 
 INSERT INTO Transport(ID, Destination_Places_ID,Source_Places_ID,TransportType,TransportDate,Places)
 VALUES
-    (1, 3, 1,'Plane','2022-05-01',7),
-    (2, 3, 1,'Plane', '2022-05-01',6),
-    (3, 4, 1,'Bus', '2022-05-02',50),
-    (4, 4, 2,'Plane', '2022-05-02',30),
-    (5, 4, 2,'Bus', '2022-05-02',10);
+    (1, 3, 1,'Plane','2022-06-01',7),
+    (2, 1, 3,'Plane', '2022-06-03',7),
+    (3, 4, 2,'Bus','2022-06-01',7),
+    (4, 2, 4,'Plane','2022-06-03',7),
+    (5, 5, 2,'Plane','2022-06-01',7),
+    (6, 2, 6,'Plane','2022-06-03',7);
 
 INSERT INTO TransportEvent(ID, Places, Transport_ID,Type)
 VALUES
-    (1, 3, 5,'Book'),
-    (2, 2, 3,'Book'),
-    (3, 4, 4,'Book'),
-    (4, 3, 2,'Reservation'),
-    (5, 5, 1,'Reservation');
+    (1, 3, 1,'Book'),
+    (2, 4, 2,'Book'),
+    (3, 1, 2,'Book'),
+    (4, 4, 3,'Book'),
+    (5, 4, 4,'Reservation'),
+    (6, 4, 5,'Reservation'),
+    (7, 4, 6,'Reservation');
