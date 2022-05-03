@@ -7,6 +7,7 @@ import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
 import Login from "./components/Login"
 import Logout from "./components/Logout"
+import {Reservation} from "./components/Reservation";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
                   <Route path="/destinations" element={<Destinations/>}/>
                   <Route path="/login" element={<Login/>}/>
                   <Route path="/logout" element={<Logout/>}/>
+                  <Route path="/reservation" element={<Reservation/>}/>
               </Routes>
           </div>
       </BrowserRouter>

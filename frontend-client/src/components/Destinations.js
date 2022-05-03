@@ -6,14 +6,13 @@ export class Destinations extends Component {
         super(props)
 
         this.state = {
-            destinations: { 'trips': []
-            }
+            destinations: []
         }
         
     }
 
     componentDidMount(){
-        createAPIEndpoint(ENDPOINTS.trip).fetch().then((res) => {
+        createAPIEndpoint(ENDPOINTS.getDestinations).fetch().then((res) => {
             this.setState({ destinations: res.data});
         });
     }
@@ -22,7 +21,7 @@ export class Destinations extends Component {
         const searchParams = new URLSearchParams();
         searchParams.append("when", "05/20/2022 - 05/27/2022");
         searchParams.append("departure", "");
-        searchParams.append("destination", "");
+        searchParams.append("destination", data);
         searchParams.append("adults", '1');
         searchParams.append("childrenUnder3", '0');
         searchParams.append("childrenUnder10", '0');
@@ -36,11 +35,11 @@ export class Destinations extends Component {
                 <h3 className="text-center mt-5">Nasze kierunki</h3>
                 <ul className="list-group">
                     {
-                        this.state.destinations.trips.map(
-                            offer =>
-                                <li onClick={this.handleClick.bind(this, offer.hotel.destinationCountry)} key={offer.hotel.id} value={offer.hotel.destinationCountry} className="border list-group-item mt-5 offer">
-                                    { offer.hotel.destinationCountry}
-                                    <button className="check_offer">Wyszukaj ofert</button>
+                        this.state.destinations.map(
+                            destination =>
+                                <li onClick={this.handleClick.bind(this, destination)}  value={destination} className="border list-group-item mt-3 offer h5">
+                                    { destination}
+                                    <button className="check_offer">Wyszukaj oferty</button>
                                 </li>
                         )
                     }

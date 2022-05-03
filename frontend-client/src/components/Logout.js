@@ -26,11 +26,9 @@ const Login = ()  =>{
     // if there's a user show the message below
     if (user) {
         return (
-            <div className="logout">
-                <div className="p-5 mb-4 align-items-center">
-                    {user.name} is loggged in <br/>
-                    <button className="button" onClick={handleLogout}>logout</button>
-                </div>
+            <div className="logout text-center">
+                <h3>Zalogowano jako {user.name}</h3>
+                <button className="button mt-4" onClick={handleLogout}>Wyloguj</button>
             </div>
         );
     }

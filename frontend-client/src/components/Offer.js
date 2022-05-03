@@ -86,7 +86,7 @@ export class Offer extends Component {
                                         <p> { offer.hotel.destinationCountry} / {offer.hotel.destinationCity} </p>
                                         <p> Średnia z ocen: { offer.hotel.rating}</p>
                                         <p> Liczba gwiazdek: { offer.hotel.stars}</p>
-                                        <p className="price_par"> Cena: </p>
+                                        <p className="price_par"> Cena od: </p>
                                         <button onClick={() => this.handleClick(offer.hotel.id)} className="check_offer">Sprawdź ofertę</button>
                                     </li>
                             )

@@ -13,16 +13,7 @@ const Login = ()  =>{
             setUser(foundUser);
         }
     }, []);
-
-    // logout the user
-    const handleLogout = () => {
-        setUser({});
-        setUsername("");
-        setPassword("");
-        localStorage.clear();
-        window.window.location.href = "/";
-    };
-
+    
     // login the user
     const handleSubmit = async e => {
         e.preventDefault();
@@ -46,33 +37,31 @@ const Login = ()  =>{
     if (user) {
         return (
             <div className="mt-5">
-                {user.name} is loggged in
-                <button onClick={handleLogout}>logout</button>
+                <h2 className="alreadyLogged">Jesteś już zalogowany jako {user.name}</h2>
             </div>
         );
     }
 
     // if there's no user, show the login form
     return (
-        <div className="mt-5">
+        <div className="loginForm">
+            <h3 className="text-center mb-5">Zaloguj się</h3>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username: </label>
+                <label htmlFor="username">Nazwa użytkownika: </label>
                 <input
                     type="text"
                     value={username}
-                    placeholder="enter a username"
                     onChange={({ target }) => setUsername(target.value)}
                 />
                 <div>
-                    <label htmlFor="password">password: </label>
+                    <label htmlFor="password">Hasło: </label>
                     <input
                         type="password"
                         value={password}
-                        placeholder="enter a password"
                         onChange={({ target }) => setPassword(target.value)}
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button className="button mt-3" type="submit">Zaloguj</button>
             </form>
         </div>
     );
