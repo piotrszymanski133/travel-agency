@@ -11,6 +11,7 @@ namespace CommonComponents
     public class GetTripOfferResponse
     {
         public TripOffer TripOffer { get; set; }
+   
     }
 
 
@@ -31,6 +32,6 @@ namespace CommonComponents
 
     public class GetTransportOffersResponse
     {
-    
+        public List<TransportOffer> TransportOffer { get; set; }
     }
 }

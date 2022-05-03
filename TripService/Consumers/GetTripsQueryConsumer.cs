@@ -55,7 +55,6 @@ namespace TripService.Consumers
                         Hotel = hotel
                     });
                 }
-                
             }
             await context.RespondAsync(new GetTripsResponse {Trips = trips,});
         }

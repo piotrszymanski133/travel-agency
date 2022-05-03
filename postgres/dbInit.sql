@@ -146,6 +146,8 @@ INSERT INTO Transport(ID, Destination_Places_ID,Source_Places_ID,TransportType,T
 VALUES
     (1, 3, 1,'Plane','2022-06-01',7),
     (2, 1, 3,'Plane', '2022-06-03',7),
+    (7, 3, 1,'Bus','2022-06-01',7),
+    (8, 1, 3,'Bus', '2022-06-03',7),
     (3, 4, 2,'Bus','2022-06-01',7),
     (4, 2, 4,'Plane','2022-06-03',7),
     (5, 5, 2,'Plane','2022-06-01',7),

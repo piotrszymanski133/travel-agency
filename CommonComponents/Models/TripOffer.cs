@@ -8,6 +8,6 @@ namespace CommonComponents.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public HotelOffer HotelOffer { get; set; }
-        public List<Transport> TransportOffers { get; set; }
+        public List<TransportOffer> TransportOffers { get; set; }
     }
 }

@@ -27,23 +27,31 @@ namespace TripService.Consumers
                 {
                     TripOfferQueryParameters = tripOfferQueryParameters
                 });
-            /*
+            
             var transportResponse =  await _transportclient.GetResponse<GetTransportOffersResponse>(
-                new GetTransportOffersQuery
+                new GetTransportOffersQuery()
                 {
-                    TripOfferQueryParameters = tripOfferQueryParameters
+                    DepartueCountry = "Polska",
+                    DepartueCity = tripOfferQueryParameters.Departure,
+                    DepartureDate = tripOfferQueryParameters.StartDate,
+                    DestinationCity = hotelResponse.Message.HotelOffer.DestinationCity,
+                    DestinationCountry = hotelResponse.Message.HotelOffer.DestinationCountry,
+                    Places = tripOfferQueryParameters.Adults + tripOfferQueryParameters.ChildrenUnder3 + 
+                             tripOfferQueryParameters.ChildrenUnder10+tripOfferQueryParameters.ChildrenUnder18,
+                    ReturnDate = tripOfferQueryParameters.EndDate,
                 });
-                */
+                
             TripOffer tripOffer = new TripOffer
             {
                 StartDate = tripOfferQueryParameters.StartDate,
                 EndDate = tripOfferQueryParameters.EndDate,
                 HotelOffer = hotelResponse.Message.HotelOffer,
-                TransportOffers = new List<Transport>()
+                TransportOffers = transportResponse.Message.TransportOffer
             };
             await context.RespondAsync(new GetTripOfferResponse
             {
-                TripOffer = tripOffer
+                TripOffer = tripOffer,
+
             });
         }
     }
