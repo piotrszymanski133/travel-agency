@@ -164,6 +164,8 @@ export class OfferSearchForm extends Component {
         selectDeparture.selectedIndex = indexDeparture;
         selectDestination.selectedIndex = indexDestination;
     }
+    
+    
 
     handleSubmit = (data, event) => {
         event.preventDefault();

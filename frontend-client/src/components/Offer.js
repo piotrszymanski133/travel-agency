@@ -17,7 +17,7 @@ export class Offer extends Component {
 
         this.state = {
             offers: { 'trips': []
-            } 
+            }
         }
     }
 
@@ -36,10 +36,10 @@ export class Offer extends Component {
             endDate = this.convertDate(endDate)
         }
         const searchParams = new URLSearchParams();
-        if(departure === ""){
+        if(departure === "" || departure === "dowolnie"){
             departure = "any"
         }
-        if(destination === ""){
+        if(destination === "" || destination === "dowolnie"){
             destination = "any"
         }
         searchParams.append("startDate", startDate);
@@ -86,7 +86,7 @@ export class Offer extends Component {
                                         <p> { offer.hotel.destinationCountry} / {offer.hotel.destinationCity} </p>
                                         <p> Średnia z ocen: { offer.hotel.rating}</p>
                                         <p> Liczba gwiazdek: { offer.hotel.stars}</p>
-                                        <p className="price_par"> Cena od: </p>
+                                        <p className="price_par"> Cena od: { offer.hotel.lowestPrice} PLN</p>
                                         <button onClick={() => this.handleClick(offer.hotel.id)} className="check_offer">Sprawdź ofertę</button>
                                     </li>
                             )
