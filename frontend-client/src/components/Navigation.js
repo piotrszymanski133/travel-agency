@@ -7,7 +7,7 @@ export class Navigation extends Component{
 
     render(){
         return(
-            <Navbar bg="light" expand="lg" fixed={"top"} >
+            <Navbar bg="light" expand="lg" fixed={"top"}>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="m-auto display-7">
                         <Logo width={64} height={64}/>

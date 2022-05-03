@@ -5,7 +5,7 @@ import {Offer} from './components/Offer';
 import {Navigation} from './components/Navigation';
 import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
-import {Login} from "./components/Login"
+import Login from "./components/Login"
 
 function App() {
   return (

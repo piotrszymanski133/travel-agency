@@ -19,7 +19,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("localhost", 5672, "/", h =>
+        cfg.Host("rabbitmq", 5672, "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
@@ -43,7 +43,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseCors(options =>
-    options.WithOrigins("http://localhost:3000")
+    options.WithOrigins("http://localhost:8080")
         .AllowAnyMethod()
         .AllowAnyHeader());
 
