@@ -43,6 +43,14 @@ services:
             context: .
             dockerfile: TripService.Dockerfile
             
+    payment-service:
+        depends_on:
+            - rabbitmq
+        container_name: payment-service
+        build:
+            context: .
+            dockerfile: TripService.Dockerfile
+            
     rabbitmq:
         container_name: rabbitmq
         image: heidiks/rabbitmq-delayed-message-exchange:3.9.13-management

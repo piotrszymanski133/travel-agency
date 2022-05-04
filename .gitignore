@@ -34,5 +34,11 @@
 /CommonComponents/obj
 /CommonComponents/bin
 
+#TransportService
 /TransportService/obj/*
 /TransportService/bin/*
+
+#PaymentService
+/PaymentService/obj
+/PaymentService/bin
+

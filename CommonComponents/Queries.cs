@@ -75,3 +75,8 @@ public class PaymentQuery
     public Guid ReservationId { get; set; }
 
 }
+
+public class PayForTripQuery
+{
+    public Guid ReservationId { get; set; }
+}
