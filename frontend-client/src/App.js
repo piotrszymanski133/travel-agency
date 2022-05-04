@@ -5,10 +5,13 @@ import {Offer} from './components/Offer';
 import {Navigation} from './components/Navigation';
 import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
+import {Reservation} from "./components/Reservation";
+import {Payment} from "./components/Payment"
 import Login from "./components/Login"
 import Logout from "./components/Logout"
 import LoginError from "./components/LoginError"
-import {Reservation} from "./components/Reservation";
+import ReservationError from "./components/ReservationError"
+
 
 function App() {
   return (
@@ -26,6 +29,8 @@ function App() {
                   <Route path="/logout" element={<Logout/>}/>
                   <Route path="/reservation" element={<Reservation/>}/>
                   <Route path="/loginError" element={<LoginError/>}/>
+                  <Route path="/payment" element={<Payment/>}/>
+                  <Route path="/reservationError" element={<ReservationError/>}/>
               </Routes>
           </div>
       </BrowserRouter>
