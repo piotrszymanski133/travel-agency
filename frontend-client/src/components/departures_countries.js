@@ -1,5 +1,4 @@
 ﻿export default [
-    "dowolnie",
     "Bydgoszcz",
     "Gdańsk",
     "Łódź",

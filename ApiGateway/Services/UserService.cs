@@ -42,6 +42,10 @@ namespace ApiGateway.Services
                 {
                     result = true;
                 }
+                else
+                {
+                    result = false;
+                }
             }
             else
             {
