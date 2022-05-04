@@ -61,5 +61,17 @@ namespace CommonComponents
         public Guid ReservationId { get; set; }
 
     }
+    public class ReserveTransportSuccessResponse
+    {
+        public Guid ReservationId { get; set; }
+
+    }
+
+    public class ReserveTransportFailureResponse
+    {
+        public Guid ReservationId { get; set; }
+
+    }
+
 
 }

@@ -90,10 +90,14 @@ namespace TransportService.Models
                     .HasDefaultValueSql("gen_random_uuid()");
 
                 entity.Property(e => e.Places).HasColumnName("places");
-
+                
                 entity.Property(e => e.TransportId)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("transport_id");
+                
+                entity.Property(e => e.EventID)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("event_id");
                 
                 entity.Property(e => e.Creationtime)
                     .HasColumnName("creationtime")

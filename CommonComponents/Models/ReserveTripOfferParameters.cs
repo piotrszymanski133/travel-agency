@@ -11,5 +11,6 @@ namespace CommonComponents.Models
         public int TransportFromId { get; set; }
         public int TransportToId { get; set; }
         public string Username { get; set; }
+        public int Persons { get; set; }
     }
 }

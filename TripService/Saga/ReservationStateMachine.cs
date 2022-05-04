@@ -21,6 +21,12 @@ namespace TripService.Saga
             
             Event(() => ReserveHotelFailureResponse, x
                 => x.CorrelateById(state => state.CorrelationId, context => context.Message.ReservationId));
+            
+            Event(() => ReserveTransportSuccessResponse, x
+                => x.CorrelateById(state => state.CorrelationId, context => context.Message.ReservationId));
+            
+            Event(() => ReserveTransportFailureResponse, x
+                => x.CorrelateById(state => state.CorrelationId, context => context.Message.ReservationId));
 
             Initially(
                     When(ReserveTrip)
@@ -31,6 +37,8 @@ namespace TripService.Saga
                         })
                         .ThenAsync(async context =>
                         {
+                            context.Saga.ReserveTripOfferParameters = context.Message.ReserveTripOfferParameters;
+                            
                             if (!context.TryGetPayload(out SagaConsumeContext<ReservationState, ReserveTripQuery> payload))
                                 throw new Exception("Unable to retrieve required payload for callback data.");
 
@@ -40,28 +48,49 @@ namespace TripService.Saga
                         }).TransitionTo(WaitingForHotelResponse));
             During(WaitingForHotelResponse,
                 When(ReserveHotelSuccessResponse)
-                    .ThenAsync(ctx =>
+                    .ThenAsync(async ctx =>
                     {
-                        return Console.Out.WriteLineAsync(
-                            $"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
+                        Console.Out.WriteLineAsync( $"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
+                        
+                    })
+                    .Publish(ctx =>new ReserveTransportQuery()
+                    {
+                        ReturnTransportID = ctx.Saga.ReserveTripOfferParameters.TransportToId,
+                        DepartueTransportID = ctx.Saga.ReserveTripOfferParameters.TransportFromId,
+                        Places = ctx.Saga.ReserveTripOfferParameters.Persons,
+                        ReservationId = ctx.Saga.CorrelationId,
+                        ReserveTripOfferParameters = ctx.Saga.ReserveTripOfferParameters
                     })
                     .TransitionTo(HotelReservationSucceded),
-                    When(ReserveHotelFailureResponse)
-                        .ThenAsync(async ctx =>
+                When(ReserveHotelFailureResponse)
+                    .ThenAsync(async ctx =>
+                    {
+                        var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                        await endpoint.Send(new ReserveTripResponse()
                         {
-                            var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
-                            await endpoint.Send(new ReserveTripResponse()
-                            {
-                                Success = false,
-                                ReservationId = Guid.Empty
-                            }, r => r.RequestId = ctx.Saga.RequestId);
-                            await Console.Out.WriteLineAsync($"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
-                        }).Finalize());
+                            Success = false,
+                            ReservationId = Guid.Empty
+                        }, r => r.RequestId = ctx.Saga.RequestId);
+                        await Console.Out.WriteLineAsync($"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
+                    }).Finalize());
+            During(HotelReservationSucceded, 
+                When(ReserveTransportSuccessResponse).ThenAsync(ctx =>
+            {
+                return Console.Out.WriteLineAsync(
+                    $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
+            }), 
+                When(ReserveTransportFailureResponse).ThenAsync(ctx =>
+            {
+                return Console.Out.WriteLineAsync(
+                    $"Błąd rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
+            }).Finalize());
             SetCompletedWhenFinalized();
         }
         
         public Event<ReserveTripQuery> ReserveTrip { get; private set; }
         public Event<ReserveHotelSuccessResponse> ReserveHotelSuccessResponse { get; private set; }
         public Event<ReserveHotelFailureResponse> ReserveHotelFailureResponse { get; private set; }
+        public Event<ReserveTransportSuccessResponse> ReserveTransportSuccessResponse { get; private set; }
+        public Event<ReserveTransportFailureResponse> ReserveTransportFailureResponse { get; private set; }
     }
 }

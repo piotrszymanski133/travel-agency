@@ -14,7 +14,8 @@ namespace TripService.Repository
         List<Transport> GetSpecificTransport(string DepartureCity,string DepartueCountry,string DestinationCity,string DestinationCountry, DateOnly Starttime,int Places); 
         List<Transport> MatchTransports(List<Transport> fromMatches, List<Transport> toMatches);
         List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,int Persons);
-        (Guid,Guid,bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces);
+        (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
+            int commandPlaces, Guid commandReservationId,DateTime StartDate,DateTime EndDate);
     }
 
 
@@ -172,23 +173,36 @@ namespace TripService.Repository
             return finalList;
         }
 
-        public (Guid,Guid,bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces)
+        public (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces,
+            Guid commandReservationId, DateTime StartDate, DateTime EndDate)
         {
             var gui1 = Guid.NewGuid();
             var gui2 = Guid.NewGuid();
             using (var context = new transportsdbContext())
             {
-                //First Some Asserts
+                //Some Asserts
                 var transportDepartue = context.Transports.Where(x => x.Id == commandDepartueTransportId).AsNoTracking()
                     .ToList();
-                var transportReturn = context.Transports.Where(x => x.Id == commandDepartueTransportId).AsNoTracking()
+                var transportReturn = context.Transports.Where(x => x.Id == commandReturnTransportId).AsNoTracking()
                     .ToList();
+                
+                var bookedtransport1 = context.Transportevents
+                    .Where(x => x.TransportId == commandDepartueTransportId)
+                    .Sum(x => x.Places);
+
+                var bookedtransport2 = context.Transportevents
+                    .Where(x => x.TransportId == commandReturnTransportId)
+                    .Sum(x => x.Places);
 
                 if (transportDepartue.Count != 1 || transportReturn.Count != 1 ||
-                    transportDepartue[0].Places < commandPlaces || transportReturn[0].Places < commandPlaces)
+                    transportDepartue[0].Places - bookedtransport1 < commandPlaces || transportReturn[0].Places -bookedtransport2 < commandPlaces ||
+                    transportDepartue[0].Transportdate != new DateOnly(StartDate.Year,StartDate.Month,StartDate.Day) ||
+                    transportReturn[0].Transportdate != new DateOnly(EndDate.Year,EndDate.Month,EndDate.Day))
                 {
                     return (Guid.Empty,Guid.Empty,false);
                 }
+
+               
 
               
 
@@ -199,7 +213,9 @@ namespace TripService.Repository
                     TransportId = commandDepartueTransportId,
                     Places = commandPlaces,
                     Type = "Reservation",
-                    Id =gui1
+                    Id =gui1,
+                    EventID = commandReservationId
+                    
                 };
 
                 var reservation_return = new Transportevent()
@@ -207,16 +223,15 @@ namespace TripService.Repository
                     TransportId = commandReturnTransportId,
                     Places = commandPlaces,
                     Type = "Reservation",
-                    Id = gui2
+                    Id = gui2,
+                    EventID = commandReservationId
                 };
 
                 context.Transportevents.Add(reservation_departue);
                 context.Transportevents.Add(reservation_return);
                 context.SaveChanges();
-
-
+                
             }
-
             return (gui1, gui2, true);
         }
     }

@@ -135,6 +135,7 @@ CREATE TABLE Transport (
 CREATE TABLE TransportEvent (
     ID uuid DEFAULT gen_random_uuid() ,
     Transport_ID bigserial NOT NULL,
+    Event_ID uuid NOT NULL,
     Places int NOT NULL,
     Type character varying(16) NOT NULL,
     CreationTime timestamptz DEFAULT now(),
@@ -163,12 +164,14 @@ VALUES
     (5, 5, 2,'Plane','2022-06-01',7),
     (6, 2, 6,'Plane','2022-06-03',7);
 
-INSERT INTO TransportEvent( Places, Transport_ID,Type)
+/*
+INSERT INTO TransportEvent( Places, Transport_ID,Type,Event_ID)
 VALUES
-    (3, 1,'Book'),
-    (4, 2,'Book'),
-    (1, 2,'Book'),
-    (4, 3,'Book'),
-    (4, 4,'Reservation'),
-    (4, 5,'Reservation'),
-    (4, 6,'Reservation');
+    (3, 1,'Book',),
+    (4, 2,'Book',),
+    (1, 2,'Book',),
+    (4, 3,'Book',),
+    (4, 4,'Reservation',),
+    (4, 5,'Reservation',),
+    (4, 6,'Reservation',);
+ */

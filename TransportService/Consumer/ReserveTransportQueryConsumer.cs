@@ -27,14 +27,31 @@ namespace TransportService.Consumer
         {
             var command = context.Message;
 
-            var ret = _repository.ReserveTransport(command.DepartueTransportID,command.ReturnTransportID,command.Places);
-           
-            
-            await context.RespondAsync<ReserveTransportResponse>( new ReserveTransportResponse(){
-                Created = ret.Item3,
-                DepartueReservationid = ret.Item1,
-                ReturnReservationid = ret.Item2
-            });
+            var ret = _repository.ReserveTransport(command.DepartueTransportID,command.ReturnTransportID,
+                command.Places,command.ReservationId,
+                command.ReserveTripOfferParameters.StartDate,
+                command.ReserveTripOfferParameters.EndDate);
+            var succes = ret.Item3;
+
+            if (succes)
+            {
+                context.Publish(new ReserveTransportSuccessResponse()
+                {
+                    ReservationId = command.ReservationId
+                });
+            }
+            else
+            {
+                context.Publish(new ReserveTransportFailureResponse()
+                {
+                    ReservationId = command.ReservationId
+                });
+            }
+
+            //await context.RespondAsync<ReserveTransportResponse>( new ReserveTransportResponse(){
+             //   Created = ret.Item3,
+              //  DepartueReservationid = ret.Item1,
+               // ReturnReservationid = ret.Item2
         }
     }
 }
