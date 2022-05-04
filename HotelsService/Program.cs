@@ -28,6 +28,7 @@ builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<GetHotelsConsumer>();
         x.AddConsumer<GetHotelOfferConsumer>();
+        x.AddConsumer<ReserveHotelConsumer>();
         x.SetKebabCaseEndpointNameFormatter();
         x.UsingRabbitMq((context, cfg) =>
         {

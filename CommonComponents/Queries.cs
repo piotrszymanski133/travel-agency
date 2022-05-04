@@ -49,6 +49,13 @@ public class ReserveTripQuery
     public Guid ReservationId { get; set; }
 }
 
+public class ReserveHotelQuery
+{
+    public ReserveTripOfferParameters ReserveTripOfferParameters { get; set; }
+
+    public Guid ReservationId { get; set; }
+}
+
 public class ReserveTransportQuery
 {
     public long DepartueTransportID { get; set; }

@@ -53,7 +53,7 @@ namespace ApiGateway.Controllers
             var response = await _tripReservationClient.GetResponse<ReserveTripResponse>(new ReserveTripQuery()
             {
                 ReserveTripOfferParameters = reserveTripOfferParameters,
-                ReservationId = new Guid("00000000-aaaa-aaaa-aaaa-aaaa00000000")
+                ReservationId = Guid.NewGuid()
             });
             return response.Message;
         }

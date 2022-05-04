@@ -49,4 +49,16 @@ namespace CommonComponents
     }
     
 
+    public class ReserveHotelSuccessResponse
+    {
+        public Guid ReservationId { get; set; }
+
+    }
+    
+    public class ReserveHotelFailureResponse
+    {
+        public Guid ReservationId { get; set; }
+
+    }
+
 }
