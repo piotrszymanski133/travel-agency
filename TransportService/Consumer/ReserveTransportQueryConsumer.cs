@@ -7,6 +7,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TransportService.Models;
+using TransportService.Services;
 using TripService.Repository;
 using Transport = CommonComponents.Models.Transport;
 
@@ -35,8 +36,12 @@ namespace TransportService.Consumer
 
             if (succes)
             {
+                var transport = _repository.GetTransport(context.Message.DepartueTransportID);
+                int price = PriceCalculator.CalculateTransportOfferPrice(transport.Transporttype,
+                    context.Message.Places, transport.DestinationPlaces.City);
                 context.Publish(new ReserveTransportSuccessResponse()
                 {
+                    Price = price,
                     ReservationId = command.ReservationId
                 });
             }

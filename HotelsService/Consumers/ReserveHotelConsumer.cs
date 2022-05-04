@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using CommonComponents;
+using HotelsService.Models;
 using HotelsService.Repositories;
 using HotelsService.Services;
 using MassTransit;
@@ -20,8 +21,10 @@ namespace HotelsService.Consumers
             bool success = _hotelService.tryToReserveHotel(context.Message.ReserveTripOfferParameters, context.Message.ReservationId);
             if (success)
             {
+                Hotel hotel = _hotelService.getHotel(context.Message.ReserveTripOfferParameters.HotelId);
                 await context.Publish(new ReserveHotelSuccessResponse() 
                 {
+                    Price = PriceCalculator.CalculateHotelRoomConfigPrice(hotel, context.Message.ReserveTripOfferParameters),
                     ReservationId = context.Message.ReservationId,
                 });
             }

@@ -38,6 +38,7 @@ namespace CommonComponents
     
     public class ReserveTripResponse
     {
+        public int Price { get; set; }
         public bool Success { get; set; }
         public Guid ReservationId { get; set; }
     }
@@ -53,6 +54,7 @@ namespace CommonComponents
     public class ReserveHotelSuccessResponse
     {
         public Guid ReservationId { get; set; }
+        public int Price { get; set; }
 
     }
     
@@ -64,6 +66,7 @@ namespace CommonComponents
     public class ReserveTransportSuccessResponse
     {
         public Guid ReservationId { get; set; }
+        public int Price { get; set; }
 
     }
 

@@ -50,14 +50,18 @@ namespace TripService.Saga
                 When(ReserveHotelSuccessResponse)
                     .ThenAsync(async ctx =>
                     {
-                        Console.Out.WriteLineAsync( $"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
+                        ctx.Saga.hotelPrice = ctx.Message.Price;
+                        Console.Out.WriteLineAsync( $"Sukces rezerwacji hotelu dla id: {ctx.Saga.ReserveTripOfferParameters.Adults}");
                         
                     })
                     .Publish(ctx =>new ReserveTransportQuery()
                     {
                         ReturnTransportID = ctx.Saga.ReserveTripOfferParameters.TransportToId,
                         DepartueTransportID = ctx.Saga.ReserveTripOfferParameters.TransportFromId,
-                        Places = ctx.Saga.ReserveTripOfferParameters.Persons,
+                        Places = ctx.Saga.ReserveTripOfferParameters.Adults +
+                                 ctx.Saga.ReserveTripOfferParameters.ChildrenUnder3 +
+                                 ctx.Saga.ReserveTripOfferParameters.ChildrenUnder10 +
+                                 ctx.Saga.ReserveTripOfferParameters.ChildrenUnder18,
                         ReservationId = ctx.Saga.CorrelationId,
                         ReserveTripOfferParameters = ctx.Saga.ReserveTripOfferParameters
                     })
@@ -76,6 +80,7 @@ namespace TripService.Saga
             During(HotelReservationSucceded, 
                 When(ReserveTransportSuccessResponse).ThenAsync(ctx =>
             {
+                ctx.Saga.transportPrice = ctx.Message.Price;
                 return Console.Out.WriteLineAsync(
                     $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
             }).ThenAsync(async ctx => 
@@ -84,6 +89,7 @@ namespace TripService.Saga
                     await endpoint.Send(new ReserveTripResponse()
                     {
                         Success = true,
+                        Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice,
                         ReservationId = ctx.Saga.CorrelationId
                     }, r => r.RequestId = ctx.Saga.RequestId);
                 }),

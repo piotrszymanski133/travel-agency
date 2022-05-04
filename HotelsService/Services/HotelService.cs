@@ -12,6 +12,7 @@ namespace HotelsService.Services
         HotelOffer createHotelOffer(TripOfferQueryParameters tripOfferQueryParameters, HotelWithDescription selectedHotel);
         bool tryToReserveHotel(ReserveTripOfferParameters parameters, Guid reservationId);
         void rollbackReservation(Guid messageTripReservationId);
+        public HotelWithDescription getHotel(string hotelId);
     }
     public class HotelService : IHotelService
     {
@@ -75,6 +76,11 @@ namespace HotelsService.Services
             {
                 return false;
             }
+        }
+
+        public HotelWithDescription getHotel(string hotelId)
+        {
+            return _hotelRepository.GetHotelWithDescription(hotelId);
         }
 
         public void rollbackReservation(Guid messageTripReservationId)

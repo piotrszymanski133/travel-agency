@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CommonComponents.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using TransportService.Models;
 using Transport = CommonComponents.Models.Transport;
 
@@ -14,6 +15,7 @@ namespace TripService.Repository
         List<Transport> GetSpecificTransport(string DepartureCity,string DepartueCountry,string DestinationCity,string DestinationCountry, DateOnly Starttime,int Places); 
         List<Transport> MatchTransports(List<Transport> fromMatches, List<Transport> toMatches);
         List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,int Persons);
+        TransportService.Models.Transport GetTransport(long id);
         (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
             int commandPlaces, Guid commandReservationId,DateTime StartDate,DateTime EndDate);
     }
@@ -171,6 +173,14 @@ namespace TripService.Repository
             }
 
             return finalList;
+        }
+
+        public TransportService.Models.Transport GetTransport(long id)
+        {
+            using var db = new transportsdbContext();
+            return db.Transports
+                .Include(transport => transport.DestinationPlaces)
+                .First(transport => transport.Id == id);
         }
 
         public (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces,
