@@ -14,6 +14,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<GetTransportConsumer>();
     x.AddConsumer<GetTransportOfferConsumer>();
+    x.AddConsumer<ReserveTransportQueryConsumer>();
     builder.Services.AddTransient<ITransportRepository, TransportRepository>();
     x.UsingRabbitMq((context,cfg) =>
     {
