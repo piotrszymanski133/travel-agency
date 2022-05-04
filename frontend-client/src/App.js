@@ -7,6 +7,7 @@ import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
 import Login from "./components/Login"
 import Logout from "./components/Logout"
+import LoginError from "./components/LoginError"
 import {Reservation} from "./components/Reservation";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                   <Route path="/login" element={<Login/>}/>
                   <Route path="/logout" element={<Logout/>}/>
                   <Route path="/reservation" element={<Reservation/>}/>
+                  <Route path="/loginError" element={<LoginError/>}/>
               </Routes>
           </div>
       </BrowserRouter>
