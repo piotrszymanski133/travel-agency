@@ -25,6 +25,12 @@ namespace HotelsService.Consumers
             TripOfferQueryParameters tripOfferQueryParameters = context.Message.TripOfferQueryParameters;
             HotelWithDescription selectedHotel = _hotelRepository.GetHotelWithDescription(tripOfferQueryParameters.HotelId);
             HotelOffer hotelOffer = _hotelService.createHotelOffer(tripOfferQueryParameters, selectedHotel);
+            foreach (HotelRoom hotelOfferRoomsConfiguration in hotelOffer.RoomsConfigurations)
+            {
+                hotelOfferRoomsConfiguration.Price =
+                    PriceCalculator.CalculateHotelRoomConfigPrice(hotelOfferRoomsConfiguration,
+                        tripOfferQueryParameters, hotelOffer.Stars);
+            }
             await context.RespondAsync(new GetHotelOfferResponse()
             {
                 HotelOffer = hotelOffer
