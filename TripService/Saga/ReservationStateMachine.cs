@@ -78,12 +78,34 @@ namespace TripService.Saga
             {
                 return Console.Out.WriteLineAsync(
                     $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
-            }), 
-                When(ReserveTransportFailureResponse).ThenAsync(ctx =>
-            {
-                return Console.Out.WriteLineAsync(
-                    $"Błąd rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
-            }).Finalize());
+            }).ThenAsync(async ctx => 
+                { 
+                    var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
+                    await endpoint.Send(new ReserveTripResponse()
+                    {
+                        Success = true,
+                        ReservationId = ctx.Saga.CorrelationId
+                    }, r => r.RequestId = ctx.Saga.RequestId);
+                }),
+                When(ReserveTransportFailureResponse)
+                    .ThenAsync(ctx => 
+                    { 
+                        return Console.Out.WriteLineAsync($"Błąd rezerwacji Transportu dla id: {ctx.Message.ReservationId}"); 
+                    })
+                    .Publish(ctx => new RollbackHotelReservationQuery()
+                    {
+                        TripReservationId = ctx.Saga.CorrelationId
+                    })
+                    .ThenAsync(async ctx =>
+                    { 
+                        var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
+                        await endpoint.Send(new ReserveTripResponse()
+                        {
+                            Success = false,
+                            ReservationId = Guid.Empty
+                        }, r => r.RequestId = ctx.Saga.RequestId);
+                    })
+                    .Finalize());
             SetCompletedWhenFinalized();
         }
         
