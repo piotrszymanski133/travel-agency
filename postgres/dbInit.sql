@@ -45,6 +45,7 @@ CREATE TABLE Tours (
 
 CREATE TABLE Events (
     ID uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+    TripReservation_Id uuid NOT NULL UNIQUE, 
     Type character varying(16) NOT NULL,
     Hotel_ID character varying(36) NOT NULL,
     StartDate date NOT NULL,

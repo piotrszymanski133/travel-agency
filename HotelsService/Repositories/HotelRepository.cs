@@ -16,7 +16,7 @@ namespace HotelsService.Repositories
     public interface IHotelRepository
     {
         public List<HotelWithDescription> GetAllHotels();
-        public void CreateReservationEvent(DateTime start, DateTime end);
+        public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start, DateTime end);
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters);
         public HotelWithDescription GetHotelWithDescription(string hotelId);
         public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end);
@@ -165,23 +165,29 @@ namespace HotelsService.Repositories
                 .Include(h => h.Destination)
                 .Include(h => h.Hotelrooms)
                 .ThenInclude(r => r.Roomtype)
+                .Include(h => h.Events)
+                .ThenInclude(e => e.Eventrooms)
                 .ToList();
             Hotel hotel = db.Hotels.Find(hotelId);
+            if (hotel == null)
+            {
+                throw new Exception($"Hotel with id {hotelId} does not exist!");
+            }
             HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).FirstOrDefault();
             return new HotelWithDescription(hotel, desc);
 
         }
 
-        public void CreateReservationEvent(DateTime start, DateTime end)
+        public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start, DateTime end)
         {
             using (var db = new hotelsContext())
             {
-                Hotel h = GetAllHotels().First();
                 Event e = new Event()
                 {
+                    TripReservationId = tripReservationId,
                     StartDate = start.AddHours(4).ToUniversalTime().Date,
                     EndDate = end.AddHours(4).ToUniversalTime().Date,
-                    HotelId = h.Id,
+                    HotelId = hotel.Id,
                     Type = "Reservation",
                     Id = Guid.NewGuid()
                 };
@@ -190,7 +196,7 @@ namespace HotelsService.Repositories
                 {
                     Id = Guid.NewGuid(),
                     Quantity = 2,
-                    RoomtypeId = h.Hotelrooms.First().RoomtypeId,
+                    RoomtypeId = (short)roomTypeId,
                     Event = e,
                 };
                 e.Eventrooms = new List<Eventroom>()

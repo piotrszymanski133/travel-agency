@@ -62,6 +62,9 @@ namespace HotelsService
                     .HasColumnName("id")
                     .HasDefaultValueSql("gen_random_uuid()");
 
+                entity.Property(e => e.TripReservationId)
+                    .HasColumnName("tripreservation_id");
+
                 entity.Property(e => e.Creationtime)
                     .HasColumnName("creationtime")
                     .HasDefaultValueSql("now()");

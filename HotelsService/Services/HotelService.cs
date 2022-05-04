@@ -1,17 +1,21 @@
+using System;
 using System.Collections.Generic;
 using CommonComponents.Models;
 using HotelsService.Models;
 using HotelsService.Repositories;
+using Hotel = HotelsService.Models.Hotel;
 
 namespace HotelsService.Services
 {
     public interface IHotelService
     {
         HotelOffer createHotelOffer(TripOfferQueryParameters tripOfferQueryParameters, HotelWithDescription selectedHotel);
+        bool tryToReserveHotel(ReserveTripOfferParameters parameters, Guid reservationId);
     }
     public class HotelService : IHotelService
     {
         private IHotelRepository _hotelRepository;
+        private IHotelService _hotelServiceImplementation;
 
         public HotelService(IHotelRepository hotelRepository)
         {
@@ -48,6 +52,28 @@ namespace HotelsService.Services
             }
 
             return offer;
+        }
+
+        public bool tryToReserveHotel(ReserveTripOfferParameters parameters, Guid tripReservationId)
+        {
+            try
+            {
+                Hotel hotel = _hotelRepository.GetHotelWithDescription(parameters.HotelId);
+                HotelStateOnDay hotelStateOnDay = _hotelRepository.findFreeRoomsForReservationTime(hotel,
+                    parameters.StartDate, parameters.EndDate);
+                HotelRoom roomToReserve =
+                    hotelStateOnDay.FreeRooms.Find(room => room.RoomtypeId == parameters.RoomTypeId && room.Quantity > 0);
+                if (roomToReserve == null)
+                {
+                    return false;
+                }
+                _hotelRepository.CreateReservationEvent(hotel, tripReservationId, parameters.RoomTypeId, parameters.StartDate, parameters.EndDate);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -15,6 +15,7 @@ namespace HotelsService.Models
             Stars = hotel.Stars;
             Description = hotelDescription.Description;
             Hotelrooms = hotel.Hotelrooms;
+            Events = hotel.Events;
         }
     }
 }
