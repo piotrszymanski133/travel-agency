@@ -49,7 +49,7 @@ services:
         container_name: payment-service
         build:
             context: .
-            dockerfile: TripService.Dockerfile
+            dockerfile: PaymentService.Dockerfile
             
     rabbitmq:
         container_name: rabbitmq

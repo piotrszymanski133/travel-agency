@@ -19,11 +19,13 @@ namespace ApiGateway.Controllers
         private IRequestClient<GetTripsQuery> _tripsClient;
         private IRequestClient<GetTripOfferQuery> _tripOfferClient;
         private IRequestClient<ReserveTripQuery> _tripReservationClient;
+        private IRequestClient<PaymentQuery> _tripPaymentClient;
 
-        public TripController(IRequestClient<GetTripsQuery> tripsClient, IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient)
+        public TripController(IRequestClient<GetTripsQuery> tripsClient, IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient, IRequestClient<PaymentQuery> tripPaymentClient)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
+            _tripPaymentClient = tripPaymentClient;
             _tripsClient = tripsClient;
         }
 
@@ -53,6 +55,17 @@ namespace ApiGateway.Controllers
             var response = await _tripReservationClient.GetResponse<ReserveTripResponse>(new ReserveTripQuery()
             {
                 ReserveTripOfferParameters = reserveTripOfferParameters,
+                ReservationId = Guid.NewGuid()
+            });
+            return response.Message;
+        }
+        
+        [HttpPost]
+        [Route("Payment")]
+        public async Task<PaymentResponse> PayForTrip()
+        {
+            var response = await _tripPaymentClient.GetResponse<PaymentResponse>(new PaymentQuery()
+            {
                 ReservationId = Guid.NewGuid()
             });
             return response.Message;

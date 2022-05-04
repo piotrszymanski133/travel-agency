@@ -80,6 +80,11 @@ namespace CommonComponents
     {
         public Guid ReservationId { get; set; }
     }
+    
+    public class PaymentResponse
+    {
+        public Guid ReservationId { get; set; }
+    }
 
     public class PaymentForTripAccepted
     {

@@ -133,6 +133,10 @@ namespace TripService.Saga
             
             During(WaitingForPayment,
                 When(PaymentQuery)
+                    .Respond(ctx =>new PaymentResponse
+                    {
+                        ReservationId = ctx.Saga.CorrelationId
+                    })
                     .Unschedule(PaymentTimeout)
                     .Finalize(),
                 When(PaymentExpired)
