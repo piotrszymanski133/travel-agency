@@ -1,5 +1,5 @@
-﻿import React, { Component } from 'react'
-import {createAPIEndpoint, ENDPOINTS} from "../api";
+﻿import React, {Component, useState} from 'react'
+import {BASE_URL, createAPIEndpoint, ENDPOINTS} from "../api";
 
 const queryParams = new URLSearchParams(window.location.search);
 var hotelID = queryParams.get('hotelID');
@@ -17,13 +17,14 @@ const convertDate = (inputFormat) => {
     return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate()].join('-')
 }
 
+
 export class OfferDetails extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             offer: {'tripOffer': {
-                'startDate': {},
-                'endDate': {},
+                'startDate': "",
+                'endDate': "",
                 'hotelOffer': {
                     'roomsConfigurations': []
                 },
@@ -33,10 +34,13 @@ export class OfferDetails extends Component {
             selectedRoomType: "",
             roomPrices: [],
             roomPricesConverted: {},
+            roomPricesConvertedWithId: {},
             selectedTransportType: "",
             transportPrices: [],
             transportPricesConverted: {},
-            transportCitiesConverted: {}
+            transportCitiesConverted: {},
+            transportFromIdConverted: {},
+            transportToIdConverted: {}
         }
     }
 
@@ -67,6 +71,9 @@ export class OfferDetails extends Component {
 
         createAPIEndpoint(ENDPOINTS.getTrip + '?' + searchParams).fetch().then((res) => {
             this.setState({ offer: res.data});
+            this.setState({ hotelID: res.data.tripOffer.hotelOffer.id});
+            this.setState({ startDate: res.data.tripOffer.startDate});
+            this.setState({ endDate: res.data.tripOffer.endDate});
             this.setState({ roomPrices: res.data.tripOffer.hotelOffer.roomsConfigurations});
             this.setState({ selectedRoomType: res.data.tripOffer.hotelOffer.roomsConfigurations[0].name});
             this.setState({ transportPrices: res.data.tripOffer.transportOffers});
@@ -81,7 +88,7 @@ export class OfferDetails extends Component {
         }
         else{
             this.isLogged = true
-            this.state.user = user
+            this.setState({user: user})
         }
     }
 
@@ -95,15 +102,50 @@ export class OfferDetails extends Component {
         this.setState({ selectedTransportType: optionsTransportType[selectTransportType.selectedIndex].value});
     }
 
-    handleSubmit(event) {
+    handleReserve(event) {
+        const key = Object.keys(localStorage)
+        const userFromStorage = localStorage.getItem(key)
+        const parsedUser = JSON.parse(userFromStorage);
         event.preventDefault();
-        window.location.href = "/reservation";
+        var reservationObject = {
+            'hotelId': this.state.hotelID,
+            'startDate': this.state.startDate,
+            'endDate': this.state.endDate,
+            "roomTypeId": this.state.roomPricesConvertedWithId[this.state.selectedRoomType],
+            "transportFromId": this.state.transportFromIdConverted[this.state.selectedTransportType],
+            "transportToId": this.state.transportToIdConverted[this.state.selectedTransportType],
+            "username": parsedUser.username,
+            "persons": parseInt(adults) + parseInt(children_under_3) + parseInt(children_under_10) + parseInt(children_under_18)
+        }
+        fetch(BASE_URL + ENDPOINTS.reserve, {
+            method: 'POST',
+            body: JSON.stringify(reservationObject),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(
+            response => {
+                response.json()
+                    .then(
+                        resp => {
+                            console.log(resp.success)
+                            if (resp.success === true){
+                                window.location.href = "/payment";
+                            }
+                            else{
+                                window.location.href = "/reservationError";
+                            }
+                        }
+                        
+                    )
+        })
     }
     
     convertRoomPricesList = () =>{
         this.state.roomPrices.map(
             room => {
                 this.state.roomPricesConverted[room.name] = room.price
+                this.state.roomPricesConvertedWithId[room.name] = room.roomtypeId
             })
     }
 
@@ -112,6 +154,8 @@ export class OfferDetails extends Component {
             transport => {
                 this.state.transportPricesConverted[transport.transportName] = transport.price
                 this.state.transportCitiesConverted[transport.transportName] = transport.departureCity
+                this.state.transportFromIdConverted[transport.transportName] = transport.transportIDFrom
+                this.state.transportToIdConverted[transport.transportName] = transport.transportIDTo
             })
     }
     
@@ -120,7 +164,6 @@ export class OfferDetails extends Component {
         this.state.transportTypeList = this.state.offer.tripOffer.transportOffers
         this.convertRoomPricesList()
         this.convertTransportPricesList()
-        console.log(this.state.transportPricesConverted)
         return (
             <div className="p-5 mb-4 align-items-center">
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
@@ -146,7 +189,7 @@ export class OfferDetails extends Component {
                         <button onClick={this.handleTypesChange} className="mt-5 mx-auto row center-column">Przelicz</button>
                         
                     </div>
-                    <form className="col border border-dark list-group-item text-center reservationForm" onSubmit={this.handleSubmit}>
+                    <form className="col border border-dark list-group-item text-center reservationForm" onSubmit={this.handleReserve.bind(this)}>
                     <h5 className="mt-5">Cena: </h5>
                     <h5 className="mt-5">{this.state.roomPricesConverted[this.state.selectedRoomType] + this.state.transportPricesConverted[this.state.selectedTransportType]} PLN</h5>
                     <p className={(!this.isLogged ?  'mt-5 text-danger' : 'd-none')}> Zaloguj się, aby dokonać rezerwacji</p>
