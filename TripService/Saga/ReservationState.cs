@@ -7,5 +7,6 @@ namespace TripService.Saga
     {
         public Guid CorrelationId { get; set; }
         public int CurrentState { get; set; }
+        public string Username { get; set; }
     }
 }
