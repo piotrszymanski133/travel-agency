@@ -13,6 +13,7 @@ namespace TripService.Saga
         public int transportPrice { get; set; }
         public string Username { get; set; }
         public Guid? RequestId { get; set; }
+        public Guid? TimeoutId { get; set; }
         public Uri? ResponseAddress { get; set; }
         public ReserveTripOfferParameters ReserveTripOfferParameters { get; set; }
     }

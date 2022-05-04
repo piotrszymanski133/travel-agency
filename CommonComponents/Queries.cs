@@ -69,3 +69,9 @@ public class RollbackHotelReservationQuery
 {
     public Guid TripReservationId { get; set; }
 }
+
+public class PaymentQuery
+{
+    public Guid ReservationId { get; set; }
+
+}

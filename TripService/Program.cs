@@ -20,9 +20,11 @@ builder.Services.AddMassTransit(x =>
         .InMemoryRepository();
     x.AddConsumer<GetTripsQueryConsumer>();
     x.AddConsumer<GetTripOfferQueryConsumer>();
+    x.AddDelayedMessageScheduler();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>
     {
+        cfg.UseDelayedMessageScheduler();
         cfg.Host("rabbitmq", 5672, "/", h =>
         {
             h.Username("guest");

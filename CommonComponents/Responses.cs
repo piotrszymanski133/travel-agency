@@ -76,5 +76,10 @@ namespace CommonComponents
 
     }
 
+    public class PaymentExpired
+    {
+        public Guid ReservationId { get; set; }
+    }
+
 
 }
