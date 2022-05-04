@@ -5,7 +5,7 @@ namespace TransportService.Models
 {
     public partial class Transportevent
     {
-        public long Id { get; set; }
+        public Guid Id { get; set; }
         public long TransportId { get; set; }
         public int Places { get; set; }
         public string Type { get; set; } = null!;

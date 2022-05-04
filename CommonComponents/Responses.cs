@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using CommonComponents.Models;
 
@@ -39,5 +40,13 @@ namespace CommonComponents
     {
         
     }
+    public class ReserveTransportResponse
+    {
+        public bool Created { get; set; }
+        public Guid DepartueReservationid { get; set;}
+        public Guid ReturnReservationid { get; set;}
+
+    }
+    
 
 }

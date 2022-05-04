@@ -14,23 +14,25 @@ namespace TripService.Repository
         List<Transport> GetSpecificTransport(string DepartureCity,string DepartueCountry,string DestinationCity,string DestinationCountry, DateOnly Starttime,int Places); 
         List<Transport> MatchTransports(List<Transport> fromMatches, List<Transport> toMatches);
         List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,int Persons);
+        (Guid,Guid,bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces);
     }
 
- 
+
 
     public class TransportRepository : ITransportRepository
     {
-        public List<Transport> GetGeneralTransport(string Departure, string Destination, DateOnly Starttime, int Places,int direction)
+        public List<Transport> GetGeneralTransport(string Departure, string Destination, DateOnly Starttime, int Places,
+            int direction)
         {
             List<Transport> newlist = new();
-            using(var context = new transportsdbContext())
+            using (var context = new transportsdbContext())
             {
                 List<TransportService.Models.Transport> transportList;
                 if (direction == 0)
                 {
-                     transportList = context.Transports.AsNoTracking()
+                    transportList = context.Transports.AsNoTracking()
                         .Include(s => s.DestinationPlaces)
-                        .Include(s=>s.SourcePlaces)
+                        .Include(s => s.SourcePlaces)
                         .Where(s => s.DestinationPlaces.Country == Destination)
                         .Where(s => s.SourcePlaces.City == Departure)
                         .Where(s => s.SourcePlaces.Country == "Polska")
@@ -39,24 +41,24 @@ namespace TripService.Repository
                 }
                 else
                 {
-                     transportList = context.Transports.AsNoTracking()
+                    transportList = context.Transports.AsNoTracking()
                         .Include(s => s.DestinationPlaces)
-                        .Include(s=>s.SourcePlaces)
+                        .Include(s => s.SourcePlaces)
                         .Where(s => s.DestinationPlaces.City == Destination)
                         .Where(s => s.DestinationPlaces.Country == "Polska")
                         .Where(s => s.SourcePlaces.Country == Departure)
                         .Where(s => s.Transportdate == Starttime)
                         .Where(s => s.Places >= Places).ToList();
                 }
-                
+
                 foreach (var transport in transportList)
                 {
                     var eventReserved = context.Transportevents.AsNoTracking().Where(s => s.TransportId == transport.Id)
-                         .Sum(s=> s.Places);
+                        .Sum(s => s.Places);
 
-                      //var sum = eventReserved.Sum(xx => xx.Places);
+                    //var sum = eventReserved.Sum(xx => xx.Places);
 
-                      if (transport.Places - eventReserved >= Places)
+                    if (transport.Places - eventReserved >= Places)
                     {
                         newlist.Add(new Transport()
                         {
@@ -67,18 +69,20 @@ namespace TripService.Repository
                             Name = transport.Transporttype
                         });
                     }
-                    
+
                 }
-                
+
             }
+
             return newlist;
         }
 
-        public List<Transport> GetSpecificTransport(string DepartureCity, string DepartueCountry, string DestinationCity,
+        public List<Transport> GetSpecificTransport(string DepartureCity, string DepartueCountry,
+            string DestinationCity,
             string DestinationCountry, DateOnly Starttime, int Places)
         {
-           List<Transport> newlist = new();
-            using(var context = new transportsdbContext())
+            List<Transport> newlist = new();
+            using (var context = new transportsdbContext())
             {
                 var transportList = context.Transports.AsNoTracking()
                     .Where(s => s.Transportdate == Starttime)
@@ -88,13 +92,13 @@ namespace TripService.Repository
                     .Where(s => s.SourcePlaces.City == DepartureCity)
                     .Where(s => s.SourcePlaces.Country == DepartueCountry)
                     .Include(s => s.DestinationPlaces)
-                    .Include(s=>s.SourcePlaces).ToList();
-                    
+                    .Include(s => s.SourcePlaces).ToList();
+
                 foreach (var transport in transportList)
-                { 
+                {
                     var eventReserved = context.Transportevents.AsNoTracking().Where(s => s.TransportId == transport.Id)
-                         .Sum(s=> s.Places);
-                    
+                        .Sum(s => s.Places);
+
                     if (transport.Places - eventReserved >= Places)
                     {
                         newlist.Add(new Transport()
@@ -107,10 +111,11 @@ namespace TripService.Repository
                             Id = transport.Id
                         });
                     }
-                    
+
                 }
-                
+
             }
+
             return newlist;
         }
 
@@ -120,32 +125,39 @@ namespace TripService.Repository
 
             foreach (var transport in fromMatches)
             {
-                var x = toMatches.Any(s => s.Name == transport.Name && s.DepartueCountry == transport.DestinationCountry &&
-                s.DepartueCity == transport.DestinationCity && s.DestinationCity == transport.DepartueCity && s.DestinationCountry == transport.DepartueCountry);
-             
-              if (x){
-                  finalList.Add(transport);
-              }
+                var x = toMatches.Any(s => s.Name == transport.Name &&
+                                           s.DepartueCountry == transport.DestinationCountry &&
+                                           s.DepartueCity == transport.DestinationCity &&
+                                           s.DestinationCity == transport.DepartueCity &&
+                                           s.DestinationCountry == transport.DepartueCountry);
+
+                if (x)
+                {
+                    finalList.Add(transport);
+                }
             }
+
             return finalList;
         }
 
-        public List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,int Persons)
+        public List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,
+            int Persons)
         {
             List<TransportOffer> finalList = new();
 
             foreach (var transport in fromMatches)
             {
-                var xx = toMatches.Find(s => s.Name == transport.Name 
-                                             && s.DepartueCountry == transport.DestinationCountry 
-                                             &&s.DepartueCity == transport.DestinationCity 
-                                             && s.DestinationCity == transport.DepartueCity 
+                var xx = toMatches.Find(s => s.Name == transport.Name
+                                             && s.DepartueCountry == transport.DestinationCountry
+                                             && s.DepartueCity == transport.DestinationCity
+                                             && s.DestinationCity == transport.DepartueCity
                                              && s.DestinationCountry == transport.DepartueCountry);
-                
-                if (xx != null){
+
+                if (xx != null)
+                {
                     finalList.Add(new TransportOffer()
                     {
-                        TransportIDFrom =transport.Id,
+                        TransportIDFrom = transport.Id,
                         DepartureCity = transport.DepartueCity,
                         DepartureCountry = transport.DepartueCountry,
                         DestinationCity = transport.DestinationCity,
@@ -156,7 +168,56 @@ namespace TripService.Repository
                     });
                 }
             }
+
             return finalList;
+        }
+
+        public (Guid,Guid,bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces)
+        {
+            var gui1 = Guid.NewGuid();
+            var gui2 = Guid.NewGuid();
+            using (var context = new transportsdbContext())
+            {
+                //First Some Asserts
+                var transportDepartue = context.Transports.Where(x => x.Id == commandDepartueTransportId).AsNoTracking()
+                    .ToList();
+                var transportReturn = context.Transports.Where(x => x.Id == commandDepartueTransportId).AsNoTracking()
+                    .ToList();
+
+                if (transportDepartue.Count != 1 || transportReturn.Count != 1 ||
+                    transportDepartue[0].Places < commandPlaces || transportReturn[0].Places < commandPlaces)
+                {
+                    return (Guid.Empty,Guid.Empty,false);
+                }
+
+              
+
+                // Console.Out.WriteLine($"R1: {gui1}, R2: {gui2}");
+
+                var reservation_departue = new Transportevent()
+                {
+                    TransportId = commandDepartueTransportId,
+                    Places = commandPlaces,
+                    Type = "Reservation",
+                    Id =gui1
+                };
+
+                var reservation_return = new Transportevent()
+                {
+                    TransportId = commandReturnTransportId,
+                    Places = commandPlaces,
+                    Type = "Reservation",
+                    Id = gui2
+                };
+
+                context.Transportevents.Add(reservation_departue);
+                context.Transportevents.Add(reservation_return);
+                context.SaveChanges();
+
+
+            }
+
+            return (gui1, gui2, true);
         }
     }
 }

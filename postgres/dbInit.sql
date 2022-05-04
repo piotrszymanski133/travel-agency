@@ -130,9 +130,9 @@ CREATE TABLE Transport (
     CONSTRAINT Destination_Places_ID FOREIGN KEY(Destination_Places_ID) REFERENCES Places(ID),
     CONSTRAINT Source_Places_ID FOREIGN KEY(Source_Places_ID) REFERENCES Places(ID)
 );
-
+-- ID bigserial NOT NULL,
 CREATE TABLE TransportEvent (
-    ID bigserial NOT NULL,
+    ID uuid DEFAULT gen_random_uuid() ,
     Transport_ID bigserial NOT NULL,
     Places int NOT NULL,
     Type character varying(16) NOT NULL,
@@ -162,12 +162,12 @@ VALUES
     (5, 5, 2,'Plane','2022-06-01',7),
     (6, 2, 6,'Plane','2022-06-03',7);
 
-INSERT INTO TransportEvent(ID, Places, Transport_ID,Type)
+INSERT INTO TransportEvent( Places, Transport_ID,Type)
 VALUES
-    (1, 3, 1,'Book'),
-    (2, 4, 2,'Book'),
-    (3, 1, 2,'Book'),
-    (4, 4, 3,'Book'),
-    (5, 4, 4,'Reservation'),
-    (6, 4, 5,'Reservation'),
-    (7, 4, 6,'Reservation');
+    (3, 1,'Book'),
+    (4, 2,'Book'),
+    (1, 2,'Book'),
+    (4, 3,'Book'),
+    (4, 4,'Reservation'),
+    (4, 5,'Reservation'),
+    (4, 6,'Reservation');

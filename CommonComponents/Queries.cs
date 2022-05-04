@@ -48,3 +48,10 @@ public class ReserveTripQuery
     public ReserveTripOfferParameters ReserveTripOfferParameters { get; set; }
     public Guid ReservationId { get; set; }
 }
+
+public class ReserveTransportQuery
+{
+    public long DepartueTransportID { get; set; }
+    public long ReturnTransportID { get; set; }
+    public int Places { get; set; }
+}

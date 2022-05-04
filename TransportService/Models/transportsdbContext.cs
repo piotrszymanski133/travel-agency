@@ -85,7 +85,9 @@ namespace TransportService.Models
             {
                 entity.ToTable("transportevent");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id)
+                    .HasColumnName("id")
+                    .HasDefaultValueSql("gen_random_uuid()");
 
                 entity.Property(e => e.Places).HasColumnName("places");
 
