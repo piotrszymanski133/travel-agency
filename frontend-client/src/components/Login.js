@@ -1,10 +1,12 @@
 ﻿import React, {useState, useEffect, Component} from "react";
 import axios from "axios";
+import {BASE_URL, createAPIEndpoint, ENDPOINTS} from "../api";
 
 const Login = ()  =>{
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [user, setUser] = useState();
+    const [loginResponse, setLoginResponse] = useState();
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
@@ -17,31 +19,42 @@ const Login = ()  =>{
     // login the user
     const handleSubmit = async e => {
         e.preventDefault();
-        const user = { name: "user1", pass: "pass1" };
-        // send the username and password to the server
-        /**const response = await axios.post(
-            "http://blogservice.herokuapp.com/api/login",
-            user
-        );**/
-            
-        // set the state of the user
-        setUser(user);
-        //setUser(response.data);
-        // store the user in localStorage
-        localStorage.setItem("user", JSON.stringify(user));
-        //localStorage.setItem("user", JSON.stringify(response.data));
-        window.location.href = "/";
+        const user = { username: username, password: password };
+
+        fetch(BASE_URL + ENDPOINTS.login, {
+            method: 'POST',
+            body: JSON.stringify(user),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        }).then(response => {
+            console.log(response.status)
+            console.log("Data was sent")
+            setLoginResponse(response.status)
+            if(response.status === 200){
+                setUser(user);
+                localStorage.setItem("user", JSON.stringify(user));
+                window.setTimeout(function() {
+                    window.location.href = '/';
+                }, 1000);
+            }
+            else {
+                window.setTimeout(function() {
+                    window.location.href = '/loginError';
+                }, 1000);
+            }
+        })
     };
 
     // if there's a user show the message below
     if (user) {
         return (
             <div className="mt-5">
-                <h2 className="alreadyLogged">Jesteś już zalogowany jako {user.name}</h2>
+                <h2 className="alreadyLogged">Zalogowano jako {user.username}</h2>
             </div>
         );
     }
-
+    
     // if there's no user, show the login form
     return (
         <div className="loginForm">

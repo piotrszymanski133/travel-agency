@@ -15,20 +15,16 @@ const Logout = ()  =>{
     }, []);
 
     // logout the user
-    const handleLogout = () => {
-        setUser({});
-        setUsername("");
-        setPassword("");
-        localStorage.clear();
-        window.window.location.href = "/";
+    const handleRetry = () => {
+        window.window.location.href = "/login";
     };
-    
+
     // if there's a user show the message below
-    if (user) {
+    if (!user) {
         return (
             <div className="logout text-center">
-                <h3>Zalogowano jako {user.username}</h3>
-                <button className="button mt-4" onClick={handleLogout}>Wyloguj</button>
+                <h3>Nie udało się poprawnie zalogować. Spróbuj ponownie</h3>
+                <button className="button mt-4" onClick={handleRetry}>Spróbuj ponownie</button>
             </div>
         );
     }
