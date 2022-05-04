@@ -38,7 +38,8 @@ namespace CommonComponents
     
     public class ReserveTripResponse
     {
-        public int XD { get; set; }
+        public bool Success { get; set; }
+        public Guid ReservationId { get; set; }
     }
     public class ReserveTransportResponse
     {

@@ -8,6 +8,7 @@ namespace TripService.Saga
     public class ReservationStateMachine: MassTransitStateMachine<ReservationState>
     {
         public State WaitingForHotelResponse { get; private set; }
+        public State HotelReservationSucceded { get; private set; }
         public ReservationStateMachine()
         {
             InstanceState(x => x.CurrentState);
@@ -43,14 +44,16 @@ namespace TripService.Saga
                     {
                         return Console.Out.WriteLineAsync(
                             $"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
-                    }).Finalize(),
+                    })
+                    .TransitionTo(HotelReservationSucceded),
                     When(ReserveHotelFailureResponse)
                         .ThenAsync(async ctx =>
                         {
                             var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
                             await endpoint.Send(new ReserveTripResponse()
                             {
-                                XD = 33
+                                Success = false,
+                                ReservationId = Guid.Empty
                             }, r => r.RequestId = ctx.Saga.RequestId);
                             await Console.Out.WriteLineAsync($"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
                         }).Finalize());
