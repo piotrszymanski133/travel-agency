@@ -7,6 +7,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TransportService.Models;
+using TransportService.Services;
 using TripService.Repository;
 using Transport = CommonComponents.Models.Transport;
 
@@ -42,9 +43,10 @@ namespace TransportService.Consumer
                 Persons = command.Places,
                 TransportIDFrom = -1,
                 TransportIDTo = -1,
-                TransportName = "Own"
+                TransportName = "Own",
+                
             });
-            
+            final_list.ForEach( transport => transport.Price = PriceCalculator.CalculateTransportOfferPrice(transport));
             await context.RespondAsync<GetTransportOffersResponse>( new GetTransportOffersResponse(){
                 TransportOffer = final_list
             });

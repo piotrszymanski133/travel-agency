@@ -5,7 +5,6 @@ using ApiGateway.Models;
 using CommonComponents;
 using CommonComponents.Models;
 using MassTransit;
-using TripService.Services;
 
 namespace TripService.Consumers
 {
@@ -36,7 +35,6 @@ namespace TripService.Consumers
 
             foreach (var hotel in hotelsList)
             {
-                hotel.LowestPrice = PriceCalculator.CalculateHotelLowestPrice(hotel, tripParameters);
                 trips.Add(new Trip()
                     {
                         Hotel = hotel

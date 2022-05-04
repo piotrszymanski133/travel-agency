@@ -4,6 +4,7 @@ using System.Linq;
 using ApiGateway.Models;
 using CommonComponents.Models;
 using HotelsService.Models;
+using HotelsService.Services;
 using MassTransit.Logging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -84,7 +85,7 @@ namespace HotelsService.Repositories
                             onlyPremiumRoomsAvailable = false;
                         }
                     });
-                    offeredHotels.Add(new CommonComponents.Models.Hotel()
+                    CommonComponents.Models.Hotel offered = new CommonComponents.Models.Hotel()
                     {
                         Id = hotel.Id,
                         DestinationCity = hotel.Destination.City,
@@ -94,7 +95,9 @@ namespace HotelsService.Repositories
                         Rating = hotel.Rating,
                         Stars = hotel.Stars.GetValueOrDefault(),
                         IsOnlyPremiumAvailable = onlyPremiumRoomsAvailable
-                    });
+                    };
+                    offered.LowestPrice = PriceCalculator.CalculateHotelLowestPrice(offered, tripParameters, onlyPremiumRoomsAvailable);
+                    offeredHotels.Add(offered);
                 }
             }
             return offeredHotels;

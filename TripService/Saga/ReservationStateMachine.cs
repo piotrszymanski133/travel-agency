@@ -79,7 +79,7 @@ namespace TripService.Saga
                 return Console.Out.WriteLineAsync(
                     $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
             }).ThenAsync(async ctx => 
-                { 
+                {
                     var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
                     await endpoint.Send(new ReserveTripResponse()
                     {
