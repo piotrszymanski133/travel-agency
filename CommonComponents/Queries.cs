@@ -62,3 +62,8 @@ public class ReserveTransportQuery
     public long ReturnTransportID { get; set; }
     public int Places { get; set; }
 }
+
+public class RollbackHotelReservationQuery
+{
+    public Guid TripReservationId { get; set; }
+}

@@ -20,6 +20,7 @@ namespace HotelsService.Repositories
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters);
         public HotelWithDescription GetHotelWithDescription(string hotelId);
         public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end);
+        void rollbackReservation(Guid messageTripReservationId);
     }
     
     public class HotelRepository : IHotelRepository
@@ -137,6 +138,15 @@ namespace HotelsService.Repositories
             }
             return maxHotelState;
         }
+
+        public void rollbackReservation(Guid tripReservationId)
+        {
+            using var db = new hotelsContext();
+            Event e = db.Events.First(e => e.TripReservationId == tripReservationId);
+            db.Remove(e);
+            db.SaveChanges();
+        }
+
         public List<HotelWithDescription> GetAllHotels()
         {
             List<HotelWithDescription> hotelsWithDescriptions = new List<HotelWithDescription>();

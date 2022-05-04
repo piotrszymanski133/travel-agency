@@ -9,12 +9,10 @@ namespace HotelsService.Consumers
 {
     public class ReserveHotelConsumer : IConsumer<ReserveHotelQuery>
     {
-        private IHotelRepository _hotelRepository;
         private IHotelService _hotelService;
 
-        public ReserveHotelConsumer(IHotelRepository hotelRepository, IHotelService hotelService)
+        public ReserveHotelConsumer(IHotelService hotelService)
         {
-            _hotelRepository = hotelRepository;
             _hotelService = hotelService;
         }
         public async Task Consume(ConsumeContext<ReserveHotelQuery> context)
