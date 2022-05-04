@@ -1,6 +1,7 @@
 using System;
 using MassTransit;
 
+
 namespace TripService.Saga
 {
     public class ReservationState : SagaStateMachineInstance
@@ -8,5 +9,7 @@ namespace TripService.Saga
         public Guid CorrelationId { get; set; }
         public int CurrentState { get; set; }
         public string Username { get; set; }
+        public Guid? RequestId { get; set; }
+        public Uri? ResponseAddress { get; set; }
     }
 }

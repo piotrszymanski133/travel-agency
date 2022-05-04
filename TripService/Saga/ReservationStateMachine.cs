@@ -28,7 +28,15 @@ namespace TripService.Saga
                             ReservationId = ctx.Saga.CorrelationId,
                             ReserveTripOfferParameters = ctx.Message.ReserveTripOfferParameters
                         })
-                        .TransitionTo(WaitingForHotelResponse));
+                        .ThenAsync(async context =>
+                        {
+                            if (!context.TryGetPayload(out SagaConsumeContext<ReservationState, ReserveTripQuery> payload))
+                                throw new Exception("Unable to retrieve required payload for callback data.");
+
+                            context.Saga.RequestId = payload.RequestId;
+                            context.Saga.ResponseAddress = payload.ResponseAddress;
+                            
+                        }).TransitionTo(WaitingForHotelResponse));
             During(WaitingForHotelResponse,
                 When(ReserveHotelSuccessResponse)
                     .ThenAsync(ctx =>
@@ -37,12 +45,15 @@ namespace TripService.Saga
                             $"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
                     }).Finalize(),
                     When(ReserveHotelFailureResponse)
-                        .ThenAsync(ctx =>
+                        .ThenAsync(async ctx =>
                         {
-                            return Console.Out.WriteLineAsync(
-                                $"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
-                        })
-                        .Finalize());
+                            var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                            await endpoint.Send(new ReserveTripResponse()
+                            {
+                                XD = 33
+                            }, r => r.RequestId = ctx.Saga.RequestId);
+                            await Console.Out.WriteLineAsync($"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
+                        }).Finalize());
             SetCompletedWhenFinalized();
         }
         

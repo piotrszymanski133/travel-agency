@@ -38,7 +38,7 @@ namespace CommonComponents
     
     public class ReserveTripResponse
     {
-        
+        public int XD { get; set; }
     }
     public class ReserveTransportResponse
     {
