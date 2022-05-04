@@ -1,3 +1,4 @@
+using System;
 using ApiGateway.Models;
 using CommonComponents.Models;
 
@@ -24,7 +25,7 @@ namespace TripService.Services
                 transpotrTypeFactor = 1;
             else
                 transpotrTypeFactor = 3;
-            return transportOffer.Persons * transpotrTypeFactor * (transportOffer.DestinationCity.GetHashCode() % 200);
+            return transportOffer.Persons * transpotrTypeFactor * (Math.Abs(transportOffer.DestinationCity.GetHashCode())% 200);
         }
 
         public static int CalculateHotelRoomConfigPrice(HotelRoom config, TripOfferQueryParameters parameters, int stars)
