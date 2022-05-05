@@ -30,6 +30,7 @@ builder.Services.AddMassTransit(x =>
         x.AddConsumer<ReserveHotelConsumer>();
         x.AddConsumer<RollbackHotelReservationConsumer>();
         x.AddConsumer<ConfirmHotelOrderConsumer>();
+        x.AddConsumer<GetDestinationsConsumer>();
         x.SetKebabCaseEndpointNameFormatter();
         x.UsingRabbitMq((context, cfg) =>
         {
@@ -45,21 +46,6 @@ builder.Services.AddMassTransit(x =>
 builder.Services.Configure<HotelDescriptionDbSettings>(
     builder.Configuration.GetSection("DescriptionDb")
 );
-/*
-builder.Services.AddQuartz(q =>
-    {
-        q.UseMicrosoftDependencyInjectionJobFactory();
-        JobKey jobKey = new JobKey("RemoveOverdueReservationsJob");
-        q.AddJob<RemoveOverduedReservationsJob>(opts => opts.WithIdentity(jobKey));
-        q.AddTrigger(opts => opts
-            .ForJob(jobKey)
-            .WithIdentity("RemoveOverdueReservationsJob-trigger")
-            .WithCronSchedule("0/2 * * ? * * *"));
-    });
-builder.Services.AddQuartzHostedService(
-    q => q.WaitForJobsToComplete = true
-    );
-*/
 var app = builder.Build();
 
 app.MapControllers();

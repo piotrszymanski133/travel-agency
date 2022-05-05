@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommonComponents.Models;
 using HotelsService.Models;
 using HotelsService.Repositories;
+using MassTransit.Util;
 using Hotel = HotelsService.Models.Hotel;
 
 namespace HotelsService.Services
@@ -16,6 +18,7 @@ namespace HotelsService.Services
         void rollbackReservation(Guid messageTripReservationId);
         public HotelWithDescription getHotel(string hotelId);
         void confirmOrder(Guid messageReservationId);
+        List<string> GetAllDestinations();
     }
 
     public class HotelService : IHotelService
@@ -94,6 +97,15 @@ namespace HotelsService.Services
         public void confirmOrder(Guid messageReservationId)
         {
             _hotelRepository.confirmOrder(messageReservationId);
+        }
+
+        public List<string> GetAllDestinations()
+        {
+            return _hotelRepository.GetAllHotels()
+                .GroupBy(h => h.Destination.Country)
+                .Select(x => x.FirstOrDefault())
+                .Select(x => x.Destination.Country)
+                .ToList();
         }
 
         public void rollbackReservation(Guid messageTripReservationId)
