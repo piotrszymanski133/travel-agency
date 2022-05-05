@@ -265,8 +265,12 @@ namespace TripService.Repository
         {
             using (var context = new transportsdbContext())
             {
-                var e = context.Transportevents.First(e => e.EventID == commandReservationId);
-                e.Type = "Ordered";
+                var result = context.Transportevents.Where(e => e.EventID == commandReservationId).ToList();
+
+                foreach (var transportEvent in result)
+                {
+                    transportEvent.Type = "Ordered";
+                }
                 context.SaveChanges();
             }
             
