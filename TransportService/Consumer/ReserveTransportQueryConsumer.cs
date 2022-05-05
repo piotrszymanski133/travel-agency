@@ -28,6 +28,16 @@ namespace TransportService.Consumer
         {
             var command = context.Message;
 
+            if (command.DepartueTransportID == -1 || command.ReturnTransportID == -1)
+            {
+                context.Publish(new ReserveTransportSuccessResponse()
+                {
+                    Price = 0,
+                    ReservationId = command.ReservationId
+                });
+            }
+
+
             var ret = _repository.ReserveTransport(command.DepartueTransportID,command.ReturnTransportID,
                 command.Places,command.ReservationId,
                 command.ReserveTripOfferParameters.StartDate,
