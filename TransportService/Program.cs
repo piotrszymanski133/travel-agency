@@ -12,7 +12,6 @@ builder.Services.AddControllers();
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<GetTransportConsumer>();
     x.AddConsumer<GetTransportOfferConsumer>();
     x.AddConsumer<ReserveTransportQueryConsumer>();
     x.AddConsumer<RollbackReserveTransportQueryConsumer>();

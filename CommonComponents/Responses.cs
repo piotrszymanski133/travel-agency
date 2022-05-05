@@ -20,11 +20,6 @@ namespace CommonComponents
         public List<Hotel> Hotels { get; set; }
     }
 
-    public class GetTransportResponse
-    {
-        public List<Transport> Transports { get; set; }
-    }
-
     public class GetHotelOfferResponse
     {
         public HotelOffer HotelOffer { get; set; }
@@ -41,15 +36,7 @@ namespace CommonComponents
         public bool Success { get; set; }
         public Guid ReservationId { get; set; }
     }
-
-    public class ReserveTransportResponse
-    {
-        public bool Created { get; set; }
-        public Guid DepartueReservationid { get; set; }
-        public Guid ReturnReservationid { get; set; }
-    }
-
-
+    
     public class ReserveHotelSuccessResponse
     {
         public Guid ReservationId { get; set; }

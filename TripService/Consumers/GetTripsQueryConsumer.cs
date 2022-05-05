@@ -11,13 +11,10 @@ namespace TripService.Consumers
     public class GetTripsQueryConsumer : IConsumer<GetTripsQuery>
     {
         private IRequestClient<GetHotelsQuery> _hotelclient;
-        private IRequestClient<GetTransportQuery> _transportclient;
 
-        public GetTripsQueryConsumer(IRequestClient<GetHotelsQuery> client,
-            IRequestClient<GetTransportQuery> transportclient)
+        public GetTripsQueryConsumer(IRequestClient<GetHotelsQuery> client)
         {
             _hotelclient = client;
-            _transportclient = transportclient;
         }
 
         public async Task Consume(ConsumeContext<GetTripsQuery> context)
