@@ -50,7 +50,6 @@ CREATE TABLE Events (
     Hotel_ID character varying(36) NOT NULL,
     StartDate date NOT NULL,
     EndDate date NOT NULL,
-    CreationTime timestamptz DEFAULT now(),
     CONSTRAINT Hotel_ID FOREIGN KEY(Hotel_ID) REFERENCES Hotels(ID)
 );
 

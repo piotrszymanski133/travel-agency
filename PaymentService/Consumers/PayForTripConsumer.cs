@@ -11,14 +11,14 @@ namespace PaymentService.Consumers
         {
             if (new Random().Next() % 10 == 0)
             {
-                context.Publish(new PaymentForTripRejected()
+                context.Publish(new PaymentForTripRejectedResponse()
                 {
                     ReservationId = context.Message.ReservationId
                 });
             }
             else
             {
-                context.Publish(new PaymentForTripAccepted()
+                context.Publish(new PaymentForTripAcceptedResponse()
                 {
                     ReservationId = context.Message.ReservationId
                 });

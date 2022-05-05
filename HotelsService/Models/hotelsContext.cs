@@ -64,10 +64,6 @@ namespace HotelsService
                 entity.Property(e => e.TripReservationId)
                     .HasColumnName("tripreservation_id");
 
-                entity.Property(e => e.Creationtime)
-                    .HasColumnName("creationtime")
-                    .HasDefaultValueSql("now()");
-
                 entity.Property(e => e.StartDate)
                     .HasColumnName("startdate");
 

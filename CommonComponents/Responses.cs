@@ -80,14 +80,15 @@ namespace CommonComponents
     public class PaymentResponse
     {
         public Guid ReservationId { get; set; }
+        public bool Success { get; set; }
     }
 
-    public class PaymentForTripAccepted
+    public class PaymentForTripAcceptedResponse
     {
         public Guid ReservationId { get; set; }
     }
 
-    public class PaymentForTripRejected
+    public class PaymentForTripRejectedResponse
     {
         public Guid ReservationId { get; set; }
     }

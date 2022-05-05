@@ -17,7 +17,6 @@ namespace HotelsService
         public string HotelId { get; set; } = null!;
 
         public virtual Hotel Hotel { get; set; } = null!;
-        public DateTime? Creationtime { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 

@@ -65,11 +65,12 @@ namespace ApiGateway.Controllers
 
         [HttpPost]
         [Route("Payment")]
-        public async Task<PaymentResponse> PayForTrip()
+        public async Task<PaymentResponse> PayForTrip([FromBody] PaymentParameters paymentParameters)
         {
             var response = await _tripPaymentClient.GetResponse<PaymentResponse>(new PaymentQuery()
             {
-                ReservationId = Guid.NewGuid()
+                ReservationId = paymentParameters.ReservationId,
+                Username = paymentParameters.Username
             });
             return response.Message;
         }

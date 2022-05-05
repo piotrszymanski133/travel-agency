@@ -25,6 +25,7 @@ namespace HotelsService.Repositories
         public HotelWithDescription GetHotelWithDescription(string hotelId);
         public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end);
         void rollbackReservation(Guid messageTripReservationId);
+        void confirmOrder(Guid messageReservationId);
     }
 
     public class HotelRepository : IHotelRepository
@@ -154,6 +155,14 @@ namespace HotelsService.Repositories
             using var db = new hotelsContext();
             Event e = db.Events.First(e => e.TripReservationId == tripReservationId);
             db.Remove(e);
+            db.SaveChanges();
+        }
+
+        public void confirmOrder(Guid tripReservationId)
+        {
+            using var db = new hotelsContext();
+            Event e = db.Events.First(e => e.TripReservationId == tripReservationId);
+            e.Type = "Ordered";
             db.SaveChanges();
         }
 

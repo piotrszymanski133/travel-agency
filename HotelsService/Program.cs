@@ -1,7 +1,6 @@
 using System;
 using HotelsService;
 using HotelsService.Consumers;
-using HotelsService.Jobs;
 using HotelsService.Models;
 using HotelsService.Repositories;
 using HotelsService.Services;
@@ -25,22 +24,23 @@ builder.Services.AddDbContext<hotelsContext>(
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddMassTransit(x =>
-{
-    x.AddConsumer<GetHotelsConsumer>();
-    x.AddConsumer<GetHotelOfferConsumer>();
-    x.AddConsumer<ReserveHotelConsumer>();
-    x.AddConsumer<RollbackHotelReservationConsumer>();
-    x.SetKebabCaseEndpointNameFormatter();
-    x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq", 5672, "/", h =>
+        x.AddConsumer<GetHotelsConsumer>();
+        x.AddConsumer<GetHotelOfferConsumer>();
+        x.AddConsumer<ReserveHotelConsumer>();
+        x.AddConsumer<RollbackHotelReservationConsumer>();
+        x.AddConsumer<ConfirmHotelOrderConsumer>();
+        x.SetKebabCaseEndpointNameFormatter();
+        x.UsingRabbitMq((context, cfg) =>
         {
-            h.Username("guest");
-            h.Password("guest");
+            cfg.Host("rabbitmq", 5672, "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+            cfg.ConfigureEndpoints(context);
         });
-        cfg.ConfigureEndpoints(context);
     });
-});
 
 builder.Services.Configure<HotelDescriptionDbSettings>(
     builder.Configuration.GetSection("DescriptionDb")
@@ -71,3 +71,4 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 app.Run();
+
