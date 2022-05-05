@@ -20,14 +20,16 @@ namespace ApiGateway.Controllers
         private IRequestClient<GetTripOfferQuery> _tripOfferClient;
         private IRequestClient<ReserveTripQuery> _tripReservationClient;
         private IRequestClient<PaymentQuery> _tripPaymentClient;
+        private IRequestClient<GetDestinationsQuery> _destinationsClient;
 
         public TripController(IRequestClient<GetTripsQuery> tripsClient,
             IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
-            IRequestClient<PaymentQuery> tripPaymentClient)
+            IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
             _tripPaymentClient = tripPaymentClient;
+            _destinationsClient = destinationsClient;
             _tripsClient = tripsClient;
         }
 
@@ -79,81 +81,8 @@ namespace ApiGateway.Controllers
         [Route("GetDestinations")]
         public async Task<List<String>> GetDestinations()
         {
-            List<String> response = new List<String>
-            {
-                "Albania",
-                "Armenia",
-                "Australia",
-                "Austria",
-                "Azerbejdżan",
-                "Bali",
-                "Bośnia i Hercegowina",
-                "Bułgaria",
-                "Chiny",
-                "Chorwacja",
-                "Cypr",
-                "Czarnogóra",
-                "Czechy",
-                "Dania",
-                "Dominikana",
-                "Egipt",
-                "Ekwador",
-                "Etiopia",
-                "Francja",
-                "Grecja",
-                "Gwadelupa",
-                "Hiszpania",
-                "Holandia",
-                "Indie",
-                "Indonezja",
-                "Irlandia",
-                "Islandia",
-                "Izrael",
-                "Kambodża",
-                "Kanada",
-                "Kostaryka",
-                "Kuba",
-                "Liechtenstein",
-                "Luksemburg",
-                "Madagaskar",
-                "Malediwy",
-                "Malezja",
-                "Malta",
-                "Maroko",
-                "Martynika",
-                "Mauritius",
-                "Meksyk",
-                "Mołdawia",
-                "Monako",
-                "Nepal",
-                "Niemcy",
-                "Norwegia",
-                "Nowa Zelandia",
-                "Panama",
-                "Peru",
-                "Polska",
-                "Portoryko",
-                "Portugalia",
-                "Rumunia",
-                "Seszele",
-                "Słowacja",
-                "Słowenia",
-                "Somalia",
-                "Sri Lanka",
-                "Stany Zjednoczone",
-                "Szwajcaria",
-                "Szwecja",
-                "Tajlandia",
-                "Tunezja",
-                "Turcja",
-                "Wielka Brytania",
-                "Wietnam",
-                "Włochy",
-                "Zimbabwe",
-                "Zjednoczone Emiraty Arabskie"
-            };
-
-            return response;
+            var response = await _destinationsClient.GetResponse<GetDestinationsResponse>(new GetDestinationsQuery());
+            return response.Message.Destinations;
         }
     }
 }

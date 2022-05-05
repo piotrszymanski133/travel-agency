@@ -92,4 +92,9 @@ namespace CommonComponents
     {
         public Guid ReservationId { get; set; }
     }
+
+    public class GetDestinationsResponse
+    {
+        public List<string> Destinations { get; set; }
+    }
 }

@@ -97,3 +97,8 @@ public class ConfirmTransportOrderQuery
 {
     public Guid ReservationId { get; set; }
 }
+
+public class GetDestinationsQuery
+{
+    
+}
