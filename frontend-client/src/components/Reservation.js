@@ -3,6 +3,7 @@ import {Nav, Navbar} from "react-bootstrap";
 import {ReactComponent as Logo} from "../icons/logo.svg";
 import {NavLink} from "react-router-dom";
 
+
 export class Reservation extends Component{
 
     constructor(props) {
