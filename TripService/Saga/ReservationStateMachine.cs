@@ -11,9 +11,31 @@ namespace TripService.Saga
         public State HotelReservationSucceded { get; private set; }
         public State WaitingForUserPayment { get; private set; }
         public State WaitingForPaymentServiceResponse { get; private set; }
-        public ReservationStateMachine()
+
+        public ReservationStateMachine() 
         {
+            
             InstanceState(x => x.CurrentState);
+            ConfigureEvents();
+            Initially(SubmitOrderHandler());
+            
+            Schedule(() => PaymentTimeout,
+                x => x.TimeoutId,
+                x => x.Delay = TimeSpan.FromSeconds(60));
+            
+            During(WaitingForHotelResponse,WaitingForHotelResponseSuccessHandler(),
+                WaitingForHotelResponseFailureHandler());
+            During(HotelReservationSucceded,HotelReservationSucceedReserveTransportSuccessResponseHandler(),
+                HotelReservationSucceedReserveTransportFailureResponse());
+
+            During(WaitingForUserPayment,WaitingForUserPaymentPaymentQuery(),WaitingForUserPaymentPaymentExpired());
+            
+            During(WaitingForPaymentServiceResponse,WaitingForPaymentServiceResponsePaymentRejected(),
+                WaitingForPaymentServiceResponsePaymentAccepted());
+            SetCompletedWhenFinalized();
+        } 
+        private void ConfigureEvents()
+        {
             Event(() => ReserveTrip, x
                 => x.CorrelateById(state => state.CorrelationId,context=>context.Message.ReservationId)
                     .SelectId(ctx => ctx.Message.ReservationId));
@@ -41,214 +63,218 @@ namespace TripService.Saga
             
             Event(() => PaymentForTripRejectedResponse, x
                 => x.CorrelateById(state => state.CorrelationId, context => context.Message.ReservationId));
-
-            Initially(
-                    When(ReserveTrip)
-                        .Publish(ctx =>new ReserveHotelQuery()
-                        {
-                            ReservationId = ctx.Saga.CorrelationId,
-                            ReserveTripOfferParameters = ctx.Message.ReserveTripOfferParameters
-                        })
-                        .ThenAsync(async context =>
-                        {
-                            context.Saga.ReserveTripOfferParameters = context.Message.ReserveTripOfferParameters;
-                            context.Saga.Username = context.Message.ReserveTripOfferParameters.Username;
-                            if (!context.TryGetPayload(out SagaConsumeContext<ReservationState, ReserveTripQuery> payload))
-                                throw new Exception("Unable to retrieve required payload for callback data.");
-                            
-                            context.Saga.RequestId = payload.RequestId;
-                            context.Saga.ResponseAddress = payload.ResponseAddress;
-                            
-                        }).TransitionTo(WaitingForHotelResponse));
-            
-            Schedule(() => PaymentTimeout,
-                x => x.TimeoutId,
-                x => x.Delay = TimeSpan.FromSeconds(60));
-            
-            During(WaitingForHotelResponse,
-                When(ReserveHotelSuccessResponse)
-                    .ThenAsync(async ctx =>
-                    {
-                        ctx.Saga.hotelPrice = ctx.Message.Price;
-                        Console.Out.WriteLineAsync( $"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
-                        
-                    })
-                    .Publish(ctx =>new ReserveTransportQuery()
-                    {
-                        ReturnTransportID = ctx.Saga.ReserveTripOfferParameters.TransportToId,
-                        DepartueTransportID = ctx.Saga.ReserveTripOfferParameters.TransportFromId,
-                        Places = ctx.Saga.ReserveTripOfferParameters.Adults +
-                                 ctx.Saga.ReserveTripOfferParameters.ChildrenUnder3 +
-                                 ctx.Saga.ReserveTripOfferParameters.ChildrenUnder10 +
-                                 ctx.Saga.ReserveTripOfferParameters.ChildrenUnder18,
-                        ReservationId = ctx.Saga.CorrelationId,
-                        ReserveTripOfferParameters = ctx.Saga.ReserveTripOfferParameters
-                    })
-                    .TransitionTo(HotelReservationSucceded),
-                When(ReserveHotelFailureResponse)
-                    .ThenAsync(async ctx =>
-                    {
-                        var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
-                        await endpoint.Send(new ReserveTripResponse()
-                        {
-                            Success = false,
-                            ReservationId = Guid.Empty
-                        }, r => r.RequestId = ctx.Saga.RequestId);
-                        await Console.Out.WriteLineAsync($"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
-                    }).Finalize());
-            During(HotelReservationSucceded, 
-                When(ReserveTransportSuccessResponse).ThenAsync(ctx => 
-                    {
-                        ctx.Saga.transportPrice = ctx.Message.Price; 
-                        return Console.Out.WriteLineAsync(
-                            $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}"); 
-                    })
-                    .ThenAsync(async ctx => 
-                    { 
-                        var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
-                        await endpoint.Send(new ReserveTripResponse()
-                        {
-                            Success = true,
-                            Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice,
-                            ReservationId = ctx.Saga.CorrelationId
-                        }, r => r.RequestId = ctx.Saga.RequestId);
-                    })
-                    .Schedule( PaymentTimeout, ctx => new PaymentExpired()
-                    {
-                        ReservationId = ctx.Saga.CorrelationId
-                    })
-                    .TransitionTo(WaitingForUserPayment),
-                When(ReserveTransportFailureResponse)
-                    .ThenAsync(ctx => 
-                    { 
-                        return Console.Out.WriteLineAsync($"Błąd rezerwacji Transportu dla id: {ctx.Message.ReservationId}"); 
-                    })
-                    .Publish(ctx => new RollbackHotelReservationQuery()
-                    {
-                        TripReservationId = ctx.Saga.CorrelationId
-                    })
-                    .ThenAsync(async ctx =>
-                    { 
-                        var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
-                        await endpoint.Send(new ReserveTripResponse()
-                        {
-                            Success = false,
-                            ReservationId = Guid.Empty
-                        }, r => r.RequestId = ctx.Saga.RequestId);
-                    })
-                    .Finalize());
-
-            During(WaitingForUserPayment,
-                When(PaymentQuery)
-                    .Unschedule(PaymentTimeout)
-                    .ThenAsync(ctx =>
-                    {
-                        if (!ctx.TryGetPayload(
-                            out SagaConsumeContext<ReservationState, PaymentQuery> payload))
-                            throw new Exception("Unable to retrieve required payload for callback data.");
-
-                        ctx.Saga.RequestId = payload.RequestId;
-                        ctx.Saga.ResponseAddress = payload.ResponseAddress;
-                        return Console.Out.WriteLineAsync(
-                            $"Otrzymano żądanie płatności dla id: {ctx.Message.ReservationId}");
-                    })
-                    .IfElse(ctx => ctx.Saga.Username == ctx.Message.Username,
-                        x =>
-                            x.ThenAsync(async context =>
-                            {
-                                Console.Out.WriteLineAsync(
-                                    $"Username poprawny dla rezerwacji {context.Message.ReservationId}");
-
-                            }).Publish(ctx => new PayForTripQuery()
-                            {
-                                ReservationId = ctx.Saga.CorrelationId,
-                                Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice
-                            }).TransitionTo(WaitingForPaymentServiceResponse),
-                        x =>
-                            x.ThenAsync(async ctx =>
-                            {
-                                Console.Out.WriteLineAsync(
-                                    $"Username niepoprawny dla rezerwacji {ctx.Message.ReservationId}");
-                                var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
-                                await endpoint.Send(new PaymentResponse()
-                                {
-                                    Success = false,
-                                    ReservationId = ctx.Saga.CorrelationId
-                                }, r => r.RequestId = ctx.Saga.RequestId);
-                            }).Publish(ctx => new RollbackHotelReservationQuery()
-                                {
-                                    TripReservationId = ctx.Saga.CorrelationId
-                                }).Finalize()),
-
-
-            When(PaymentExpired)
-                    .ThenAsync(ctx =>
-                    {
-                        return Console.Out.WriteLineAsync(
-                            $"Czas na płatnosc minal dla id: {ctx.Message.ReservationId}");
-                    })
-                    .Publish(ctx => new RollbackTransportReservationQuery()
-                    {
-                        TripReservationId = ctx.Saga.CorrelationId
-                    })
-                    .Publish(ctx => new RollbackHotelReservationQuery()
-                    {
-                        TripReservationId = ctx.Saga.CorrelationId
-                    })
-                    .Finalize());
-            
-            During(WaitingForPaymentServiceResponse,
-                When(PaymentForTripRejectedResponse)
-                    .ThenAsync(ctx =>
-                    {
-                        return Console.Out.WriteLineAsync(
-                            $"Błąd płatności dla id: {ctx.Message.ReservationId}");
-                    })
-                    .Publish(ctx => new RollbackHotelReservationQuery()
-                    {
-                        TripReservationId = ctx.Saga.CorrelationId
-                    })
-                    .Publish(ctx => new RollbackTransportReservationQuery()
-                    {
-                        TripReservationId = ctx.Saga.CorrelationId
-                    })
-                    .ThenAsync(async ctx =>
-                    { 
-                        var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
-                        await endpoint.Send(new PaymentResponse()
-                        {
-                            Success = false,
-                            ReservationId = ctx.Saga.CorrelationId
-                        }, r => r.RequestId = ctx.Saga.RequestId);
-                    })
-                    .Finalize(), 
-                When(PaymentForTripAcceptedResponse)
-                    .ThenAsync(ctx =>
-                    {
-                        return Console.Out.WriteLineAsync(
-                            $"Sukces płatności dla id: {ctx.Message.ReservationId}");
-                    })
-                    .Publish(ctx => new ConfirmHotelOrderQuery()
-                    {
-                        ReservationId = ctx.Saga.CorrelationId
-                    })
-                    .Publish(ctx => new ConfirmTransportOrderQuery()
-                        {
-                            ReservationId = ctx.Saga.CorrelationId
-                        }
-                    )
-                    .ThenAsync(async ctx =>
-                    { 
-                        var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
-                        await endpoint.Send(new PaymentResponse()
-                        {
-                            Success = true,
-                            ReservationId = ctx.Saga.CorrelationId
-                        }, r => r.RequestId = ctx.Saga.RequestId);
-                    })
-                    .Finalize());
-                SetCompletedWhenFinalized();
         }
+
+        private EventActivityBinder<ReservationState,ReserveTripQuery> SubmitOrderHandler() =>
+            When(ReserveTrip)
+                .Publish(ctx => new ReserveHotelQuery()
+                {
+                    ReservationId = ctx.Saga.CorrelationId,
+                    ReserveTripOfferParameters = ctx.Message.ReserveTripOfferParameters
+                })
+                .ThenAsync(async context =>
+                {
+                    context.Saga.ReserveTripOfferParameters = context.Message.ReserveTripOfferParameters;
+                    context.Saga.Username = context.Message.ReserveTripOfferParameters.Username;
+                    if (!context.TryGetPayload(out SagaConsumeContext<ReservationState, ReserveTripQuery> payload))
+                        throw new Exception("Unable to retrieve required payload for callback data.");
+
+                    context.Saga.RequestId = payload.RequestId;
+                    context.Saga.ResponseAddress = payload.ResponseAddress;
+
+                }).TransitionTo(WaitingForHotelResponse);
+
+        private EventActivityBinder<ReservationState,ReserveHotelSuccessResponse>  WaitingForHotelResponseSuccessHandler() =>
+
+            When(ReserveHotelSuccessResponse)
+                .ThenAsync(async ctx =>
+                {
+                    ctx.Saga.hotelPrice = ctx.Message.Price;
+                    await Console.Out.WriteLineAsync($"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
+
+                })
+                .Publish(ctx => new ReserveTransportQuery()
+                {
+                    ReturnTransportID = ctx.Saga.ReserveTripOfferParameters.TransportToId,
+                    DepartueTransportID = ctx.Saga.ReserveTripOfferParameters.TransportFromId,
+                    Places = ctx.Saga.ReserveTripOfferParameters.Adults +
+                             ctx.Saga.ReserveTripOfferParameters.ChildrenUnder3 +
+                             ctx.Saga.ReserveTripOfferParameters.ChildrenUnder10 +
+                             ctx.Saga.ReserveTripOfferParameters.ChildrenUnder18,
+                    ReservationId = ctx.Saga.CorrelationId,
+                    ReserveTripOfferParameters = ctx.Saga.ReserveTripOfferParameters
+                })
+                .TransitionTo(HotelReservationSucceded);
+       private EventActivityBinder<ReservationState,ReserveHotelFailureResponse> WaitingForHotelResponseFailureHandler() => 
+           When(ReserveHotelFailureResponse)
+            .ThenAsync(async ctx => 
+            { 
+                var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 
+                await endpoint.Send(new ReserveTripResponse() 
+                {
+                    Success = false, 
+                    ReservationId = Guid.Empty
+                    
+                }, r => r.RequestId = ctx.Saga.RequestId); 
+                await Console.Out.WriteLineAsync($"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}"); 
+            }).Finalize();
+       
+       private EventActivityBinder<ReservationState, ReserveTransportSuccessResponse>
+           HotelReservationSucceedReserveTransportSuccessResponseHandler() =>
+           When(ReserveTransportSuccessResponse).ThenAsync(ctx =>
+               {
+                   ctx.Saga.transportPrice = ctx.Message.Price;
+                   return Console.Out.WriteLineAsync(
+                       $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
+               })
+               .ThenAsync(async ctx =>
+               {
+                   var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                   await endpoint.Send(new ReserveTripResponse()
+                   {
+                       Success = true,
+                       Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice,
+                       ReservationId = ctx.Saga.CorrelationId
+                   }, r => r.RequestId = ctx.Saga.RequestId);
+               })
+               .Schedule(PaymentTimeout, ctx => new PaymentExpired()
+               {
+                   ReservationId = ctx.Saga.CorrelationId
+               })
+               .TransitionTo(WaitingForUserPayment);
+       
+       private EventActivityBinder<ReservationState, ReserveTransportFailureResponse>
+           HotelReservationSucceedReserveTransportFailureResponse() =>
+           When(ReserveTransportFailureResponse)
+               .ThenAsync(ctx =>
+                   Console.Out.WriteLineAsync($"Błąd rezerwacji Transportu dla id: {ctx.Message.ReservationId}"))
+               .Publish(ctx => new RollbackHotelReservationQuery()
+               {
+                   TripReservationId = ctx.Saga.CorrelationId
+               })
+               .ThenAsync(async ctx =>
+               {
+                   var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                   await endpoint.Send(new ReserveTripResponse()
+                   {
+                       Success = false,
+                       ReservationId = Guid.Empty
+                   }, r => r.RequestId = ctx.Saga.RequestId);
+               })
+               .Finalize();
+
+       private EventActivityBinder<ReservationState,PaymentQuery> WaitingForUserPaymentPaymentQuery() =>
+           When(PaymentQuery)
+               .Unschedule(PaymentTimeout)
+               .ThenAsync(ctx =>
+               {
+                   if (!ctx.TryGetPayload(
+                       out SagaConsumeContext<ReservationState, PaymentQuery> payload))
+                       throw new Exception("Unable to retrieve required payload for callback data.");
+
+                   ctx.Saga.RequestId = payload.RequestId;
+                   ctx.Saga.ResponseAddress = payload.ResponseAddress;
+                   return Console.Out.WriteLineAsync(
+                       $"Otrzymano żądanie płatności dla id: {ctx.Message.ReservationId}");
+               })
+               .IfElse(ctx => ctx.Saga.Username == ctx.Message.Username,
+                   x =>
+                       x.ThenAsync(async context =>
+                       {
+                           Console.Out.WriteLineAsync(
+                               $"Username poprawny dla rezerwacji {context.Message.ReservationId}");
+
+                       }).Publish(ctx => new PayForTripQuery()
+                       {
+                           ReservationId = ctx.Saga.CorrelationId,
+                           Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice
+                       }).TransitionTo(WaitingForPaymentServiceResponse),
+                   x =>
+                       x.ThenAsync(async ctx =>
+                       {
+                           Console.Out.WriteLineAsync(
+                               $"Username niepoprawny dla rezerwacji {ctx.Message.ReservationId}");
+                           var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                           await endpoint.Send(new PaymentResponse()
+                           {
+                               Success = false,
+                               ReservationId = ctx.Saga.CorrelationId
+                           }, r => r.RequestId = ctx.Saga.RequestId);
+                       }).Publish(ctx => new RollbackHotelReservationQuery()
+                       {
+                           TripReservationId = ctx.Saga.CorrelationId
+                       }).Finalize());
+
+       private EventActivityBinder<ReservationState, PaymentExpired> WaitingForUserPaymentPaymentExpired() =>
+           When(PaymentExpired)
+               .ThenAsync(ctx =>
+               {
+                   return Console.Out.WriteLineAsync(
+                       $"Czas na płatnosc minal dla id: {ctx.Message.ReservationId}");
+               })
+               .Publish(ctx => new RollbackTransportReservationQuery()
+               {
+                   TripReservationId = ctx.Saga.CorrelationId
+               })
+               .Publish(ctx => new RollbackHotelReservationQuery()
+               {
+                   TripReservationId = ctx.Saga.CorrelationId
+               })
+               .Finalize();
+
+       private EventActivityBinder<ReservationState,PaymentForTripRejectedResponse> WaitingForPaymentServiceResponsePaymentRejected() =>
+           When(PaymentForTripRejectedResponse)
+               .ThenAsync(ctx =>
+               {
+                   return Console.Out.WriteLineAsync(
+                       $"Błąd płatności dla id: {ctx.Message.ReservationId}");
+               })
+               .Publish(ctx => new RollbackHotelReservationQuery()
+               {
+                   TripReservationId = ctx.Saga.CorrelationId
+               })
+               .Publish(ctx => new RollbackTransportReservationQuery()
+               {
+                   TripReservationId = ctx.Saga.CorrelationId
+               })
+               .ThenAsync(async ctx =>
+               {
+                   var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                   await endpoint.Send(new PaymentResponse()
+                   {
+                       Success = false,
+                       ReservationId = ctx.Saga.CorrelationId
+                   }, r => r.RequestId = ctx.Saga.RequestId);
+               })
+               .Finalize();
+       
+       private EventActivityBinder<ReservationState,PaymentForTripAcceptedResponse> WaitingForPaymentServiceResponsePaymentAccepted() =>
+           When(PaymentForTripAcceptedResponse)
+               .ThenAsync(ctx =>
+               {
+                   return Console.Out.WriteLineAsync(
+                       $"Sukces płatności dla id: {ctx.Message.ReservationId}");
+               })
+               .Publish(ctx => new ConfirmHotelOrderQuery()
+               {
+                   ReservationId = ctx.Saga.CorrelationId
+               })
+               .Publish(ctx => new ConfirmTransportOrderQuery()
+                   {
+                       ReservationId = ctx.Saga.CorrelationId
+                   }
+               )
+               .ThenAsync(async ctx =>
+               {
+                   var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                   await endpoint.Send(new PaymentResponse()
+                   {
+                       Success = true,
+                       ReservationId = ctx.Saga.CorrelationId
+                   }, r => r.RequestId = ctx.Saga.RequestId);
+               })
+               .Finalize();
+    
         
         public Schedule<ReservationState, PaymentExpired> PaymentTimeout { get; set; }
         public Event<PaymentExpired> PaymentExpired { get; set; }
