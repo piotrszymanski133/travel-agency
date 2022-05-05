@@ -16,26 +16,28 @@ namespace HotelsService.Consumers
         {
             _hotelService = hotelService;
         }
+
         public async Task Consume(ConsumeContext<ReserveHotelQuery> context)
         {
-            bool success = _hotelService.tryToReserveHotel(context.Message.ReserveTripOfferParameters, context.Message.ReservationId);
+            bool success = _hotelService.tryToReserveHotel(context.Message.ReserveTripOfferParameters,
+                context.Message.ReservationId);
             if (success)
             {
                 Hotel hotel = _hotelService.getHotel(context.Message.ReserveTripOfferParameters.HotelId);
-                await context.Publish(new ReserveHotelSuccessResponse() 
+                await context.Publish(new ReserveHotelSuccessResponse()
                 {
-                    Price = PriceCalculator.CalculateHotelRoomConfigPrice(hotel, context.Message.ReserveTripOfferParameters),
+                    Price = PriceCalculator.CalculateHotelRoomConfigPrice(hotel,
+                        context.Message.ReserveTripOfferParameters),
                     ReservationId = context.Message.ReservationId,
                 });
             }
             else
             {
-                await context.Publish(new ReserveHotelFailureResponse() 
+                await context.Publish(new ReserveHotelFailureResponse()
                 {
                     ReservationId = context.Message.ReservationId,
                 });
             }
-
         }
     }
 }

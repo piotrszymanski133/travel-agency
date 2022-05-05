@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace CommonComponents.Models
 {
-    
     public class HotelOffer
     {
         public string Id { get; set; }
@@ -16,6 +15,4 @@ namespace CommonComponents.Models
         public string Description { get; set; }
         public List<HotelRoom> RoomsConfigurations { get; set; }
     }
-    
-
 }

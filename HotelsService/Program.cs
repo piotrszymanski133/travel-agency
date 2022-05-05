@@ -25,22 +25,22 @@ builder.Services.AddDbContext<hotelsContext>(
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<GetHotelsConsumer>();
+    x.AddConsumer<GetHotelOfferConsumer>();
+    x.AddConsumer<ReserveHotelConsumer>();
+    x.AddConsumer<RollbackHotelReservationConsumer>();
+    x.SetKebabCaseEndpointNameFormatter();
+    x.UsingRabbitMq((context, cfg) =>
     {
-        x.AddConsumer<GetHotelsConsumer>();
-        x.AddConsumer<GetHotelOfferConsumer>();
-        x.AddConsumer<ReserveHotelConsumer>();
-        x.AddConsumer<RollbackHotelReservationConsumer>();
-        x.SetKebabCaseEndpointNameFormatter();
-        x.UsingRabbitMq((context, cfg) =>
+        cfg.Host("rabbitmq", 5672, "/", h =>
         {
-            cfg.Host("rabbitmq", 5672, "/", h =>
-            {
-                h.Username("guest");
-                h.Password("guest");
-            });
-            cfg.ConfigureEndpoints(context);
+            h.Username("guest");
+            h.Password("guest");
         });
+        cfg.ConfigureEndpoints(context);
     });
+});
 
 builder.Services.Configure<HotelDescriptionDbSettings>(
     builder.Configuration.GetSection("DescriptionDb")
@@ -71,4 +71,3 @@ app.UseEndpoints(endpoints =>
         pattern: "{controller=Home}/{action=Index}/{id?}");
 });
 app.Run();
-

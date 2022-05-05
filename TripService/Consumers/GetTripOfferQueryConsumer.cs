@@ -10,25 +10,26 @@ namespace TripService.Consumers
     {
         private IRequestClient<GetHotelOfferQuery> _hotelclient;
         private IRequestClient<GetTransportOffersQuery> _transportclient;
-        
-        public GetTripOfferQueryConsumer(IRequestClient<GetHotelOfferQuery> client, IRequestClient<GetTransportOffersQuery> transportclient)
+
+        public GetTripOfferQueryConsumer(IRequestClient<GetHotelOfferQuery> client,
+            IRequestClient<GetTransportOffersQuery> transportclient)
         {
             _hotelclient = client;
             _transportclient = transportclient;
         }
-        
-        
+
+
         public async Task Consume(ConsumeContext<GetTripOfferQuery> context)
         {
             TripOfferQueryParameters tripOfferQueryParameters = context.Message.TripOfferQueryParameters;
-            
+
             var hotelResponse = await _hotelclient.GetResponse<GetHotelOfferResponse>(
                 new GetHotelOfferQuery()
                 {
                     TripOfferQueryParameters = tripOfferQueryParameters
                 });
-            
-            var transportResponse =  await _transportclient.GetResponse<GetTransportOffersResponse>(
+
+            var transportResponse = await _transportclient.GetResponse<GetTransportOffersResponse>(
                 new GetTransportOffersQuery()
                 {
                     DepartueCountry = "Polska",
@@ -36,8 +37,8 @@ namespace TripService.Consumers
                     DepartureDate = tripOfferQueryParameters.StartDate,
                     DestinationCity = hotelResponse.Message.HotelOffer.DestinationCity,
                     DestinationCountry = hotelResponse.Message.HotelOffer.DestinationCountry,
-                    Places = tripOfferQueryParameters.Adults + tripOfferQueryParameters.ChildrenUnder3 + 
-                             tripOfferQueryParameters.ChildrenUnder10+tripOfferQueryParameters.ChildrenUnder18,
+                    Places = tripOfferQueryParameters.Adults + tripOfferQueryParameters.ChildrenUnder3 +
+                             tripOfferQueryParameters.ChildrenUnder10 + tripOfferQueryParameters.ChildrenUnder18,
                     ReturnDate = tripOfferQueryParameters.EndDate,
                 });
             TripOffer tripOffer = new TripOffer

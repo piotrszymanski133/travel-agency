@@ -9,11 +9,14 @@ namespace HotelsService.Services
 {
     public interface IHotelService
     {
-        HotelOffer createHotelOffer(TripOfferQueryParameters tripOfferQueryParameters, HotelWithDescription selectedHotel);
+        HotelOffer createHotelOffer(TripOfferQueryParameters tripOfferQueryParameters,
+            HotelWithDescription selectedHotel);
+
         bool tryToReserveHotel(ReserveTripOfferParameters parameters, Guid reservationId);
         void rollbackReservation(Guid messageTripReservationId);
         public HotelWithDescription getHotel(string hotelId);
     }
+
     public class HotelService : IHotelService
     {
         private IHotelRepository _hotelRepository;
@@ -24,7 +27,8 @@ namespace HotelsService.Services
             _hotelRepository = hotelRepository;
         }
 
-        public HotelOffer createHotelOffer(TripOfferQueryParameters tripOfferQueryParameters, HotelWithDescription selectedHotel)
+        public HotelOffer createHotelOffer(TripOfferQueryParameters tripOfferQueryParameters,
+            HotelWithDescription selectedHotel)
         {
             HotelOffer offer = new HotelOffer
             {
@@ -37,14 +41,14 @@ namespace HotelsService.Services
                 Stars = selectedHotel.Stars.GetValueOrDefault(),
                 Description = selectedHotel.Description
             };
-            
+
             int neededCapacity = tripOfferQueryParameters.Adults + tripOfferQueryParameters.ChildrenUnder3 +
                                  tripOfferQueryParameters.ChildrenUnder10 +
                                  tripOfferQueryParameters.ChildrenUnder18;
-            
+
             HotelStateOnDay hotelStateOnDay = _hotelRepository.findFreeRoomsForReservationTime(selectedHotel,
                 tripOfferQueryParameters.StartDate, tripOfferQueryParameters.EndDate);
-            
+
             List<HotelRoom> roomConfigurations = hotelStateOnDay.FreeRooms.FindAll(room =>
                 room.CapacityPeople == neededCapacity && room.Quantity > 0);
             if (roomConfigurations.Count != 0)
@@ -64,12 +68,15 @@ namespace HotelsService.Services
                 HotelStateOnDay hotelStateOnDay = _hotelRepository.findFreeRoomsForReservationTime(hotel,
                     parameters.StartDate, parameters.EndDate);
                 HotelRoom roomToReserve =
-                    hotelStateOnDay.FreeRooms.Find(room => room.RoomtypeId == parameters.RoomTypeId && room.Quantity > 0);
+                    hotelStateOnDay.FreeRooms.Find(
+                        room => room.RoomtypeId == parameters.RoomTypeId && room.Quantity > 0);
                 if (roomToReserve == null)
                 {
                     return false;
                 }
-                _hotelRepository.CreateReservationEvent(hotel, tripReservationId, parameters.RoomTypeId, parameters.StartDate, parameters.EndDate);
+
+                _hotelRepository.CreateReservationEvent(hotel, tripReservationId, parameters.RoomTypeId,
+                    parameters.StartDate, parameters.EndDate);
                 return true;
             }
             catch

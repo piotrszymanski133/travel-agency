@@ -27,6 +27,7 @@ public class GetTransportQuery
     public DateTime DepartureDate { get; set; }
     public DateTime ReturnDate { get; set; }
 }
+
 public class GetHotelOfferQuery
 {
     public TripOfferQueryParameters TripOfferQueryParameters { get; set; }
@@ -73,7 +74,6 @@ public class RollbackHotelReservationQuery
 public class PaymentQuery
 {
     public Guid ReservationId { get; set; }
-
 }
 
 public class PayForTripQuery

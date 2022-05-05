@@ -13,7 +13,7 @@ namespace HotelsService.Consumers
         {
             _hotelService = hotelService;
         }
-        
+
         public Task Consume(ConsumeContext<RollbackHotelReservationQuery> context)
         {
             _hotelService.rollbackReservation(context.Message.TripReservationId);

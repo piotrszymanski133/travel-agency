@@ -13,7 +13,7 @@ using Transport = CommonComponents.Models.Transport;
 
 namespace TransportService.Consumer
 {
-    public class GetTransportOfferConsumer: IConsumer<GetTransportOffersQuery>
+    public class GetTransportOfferConsumer : IConsumer<GetTransportOffersQuery>
     {
         private readonly ILogger<GetTransportOffersQuery> _logger;
         private ITransportRepository _repository;
@@ -28,13 +28,18 @@ namespace TransportService.Consumer
         {
             var command = context.Message;
 
-            List<Transport> from_matches = _repository.GetSpecificTransport(command.DepartueCity,command.DepartueCountry,command.DestinationCity,command.DestinationCountry,
-                new DateOnly(command.DepartureDate.Year,command.DepartureDate.Month,command.DepartureDate.Day),command.Places);
-            List<Transport> to_matches = _repository.GetSpecificTransport(command.DestinationCity,command.DestinationCountry,command.DepartueCity,command.DepartueCountry,
-                new DateOnly(command.ReturnDate.Year,command.ReturnDate.Month,command.ReturnDate.Day),command.Places);
-            List<TransportOffer> final_list = _repository.MatchSpecyficTransports(from_matches, to_matches,command.Places);
-            
-            final_list.Insert(0,new TransportOffer()
+            List<Transport> from_matches = _repository.GetSpecificTransport(command.DepartueCity,
+                command.DepartueCountry, command.DestinationCity, command.DestinationCountry,
+                new DateOnly(command.DepartureDate.Year, command.DepartureDate.Month, command.DepartureDate.Day),
+                command.Places);
+            List<Transport> to_matches = _repository.GetSpecificTransport(command.DestinationCity,
+                command.DestinationCountry, command.DepartueCity, command.DepartueCountry,
+                new DateOnly(command.ReturnDate.Year, command.ReturnDate.Month, command.ReturnDate.Day),
+                command.Places);
+            List<TransportOffer> final_list =
+                _repository.MatchSpecyficTransports(from_matches, to_matches, command.Places);
+
+            final_list.Insert(0, new TransportOffer()
             {
                 DepartureCity = command.DepartueCity,
                 DepartureCountry = command.DepartueCountry,
@@ -44,10 +49,10 @@ namespace TransportService.Consumer
                 TransportIDFrom = -1,
                 TransportIDTo = -1,
                 TransportName = "Own",
-                
             });
-            final_list.ForEach( transport => transport.Price = PriceCalculator.CalculateTransportOfferPrice(transport));
-            await context.RespondAsync<GetTransportOffersResponse>( new GetTransportOffersResponse(){
+            final_list.ForEach(transport => transport.Price = PriceCalculator.CalculateTransportOfferPrice(transport));
+            await context.RespondAsync<GetTransportOffersResponse>(new GetTransportOffersResponse()
+            {
                 TransportOffer = final_list
             });
         }

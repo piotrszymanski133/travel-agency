@@ -7,6 +7,7 @@ namespace CommonComponents.Models
         public short RoomtypeId { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
+
         public HotelRoom shallowCopy()
         {
             return MemberwiseClone() as HotelRoom;

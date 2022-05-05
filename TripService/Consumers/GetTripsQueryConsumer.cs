@@ -12,8 +12,9 @@ namespace TripService.Consumers
     {
         private IRequestClient<GetHotelsQuery> _hotelclient;
         private IRequestClient<GetTransportQuery> _transportclient;
-        
-        public GetTripsQueryConsumer(IRequestClient<GetHotelsQuery> client, IRequestClient<GetTransportQuery> transportclient)
+
+        public GetTripsQueryConsumer(IRequestClient<GetHotelsQuery> client,
+            IRequestClient<GetTransportQuery> transportclient)
         {
             _hotelclient = client;
             _transportclient = transportclient;
@@ -22,7 +23,7 @@ namespace TripService.Consumers
         public async Task Consume(ConsumeContext<GetTripsQuery> context)
         {
             TripParameters tripParameters = context.Message.TripParameters;
-            
+
             List<Trip> trips = new List<Trip>();
 
             var hotelResponse = await _hotelclient.GetResponse<GetHotelsResponse>(
@@ -36,12 +37,12 @@ namespace TripService.Consumers
             foreach (var hotel in hotelsList)
             {
                 trips.Add(new Trip()
-                    {
-                        Hotel = hotel
-                    });
+                {
+                    Hotel = hotel
+                });
             }
-            await context.RespondAsync(new GetTripsResponse {Trips = trips,});
+
+            await context.RespondAsync(new GetTripsResponse { Trips = trips, });
         }
     }
-
 }

@@ -23,6 +23,7 @@ namespace PaymentService.Consumers
                     ReservationId = context.Message.ReservationId
                 });
             }
+
             return Task.CompletedTask;
         }
     }

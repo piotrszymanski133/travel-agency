@@ -24,7 +24,7 @@ namespace TransportService.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
                 optionsBuilder.UseNpgsql("Host=postgres;Database=transportsdb;Username=user;Password=example");
             }
         }
@@ -90,19 +90,19 @@ namespace TransportService.Models
                     .HasDefaultValueSql("gen_random_uuid()");
 
                 entity.Property(e => e.Places).HasColumnName("places");
-                
+
                 entity.Property(e => e.TransportId)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("transport_id");
-                
+
                 entity.Property(e => e.EventID)
                     .ValueGeneratedOnAdd()
                     .HasColumnName("event_id");
-                
+
                 entity.Property(e => e.Creationtime)
                     .HasColumnName("creationtime")
                     .HasDefaultValueSql("now()");
-                
+
                 entity.Property(e => e.Type)
                     .HasMaxLength(16)
                     .HasColumnName("type");

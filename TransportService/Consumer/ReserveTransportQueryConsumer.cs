@@ -13,7 +13,7 @@ using Transport = CommonComponents.Models.Transport;
 
 namespace TransportService.Consumer
 {
-    public class ReserveTransportQueryConsumer: IConsumer<ReserveTransportQuery>
+    public class ReserveTransportQueryConsumer : IConsumer<ReserveTransportQuery>
     {
         private readonly ILogger<GetTransportOffersQuery> _logger;
         private ITransportRepository _repository;
@@ -38,8 +38,8 @@ namespace TransportService.Consumer
             }
 
 
-            var ret = _repository.ReserveTransport(command.DepartueTransportID,command.ReturnTransportID,
-                command.Places,command.ReservationId,
+            var ret = _repository.ReserveTransport(command.DepartueTransportID, command.ReturnTransportID,
+                command.Places, command.ReservationId,
                 command.ReserveTripOfferParameters.StartDate,
                 command.ReserveTripOfferParameters.EndDate);
             var succes = ret.Item3;
@@ -64,9 +64,9 @@ namespace TransportService.Consumer
             }
 
             //await context.RespondAsync<ReserveTransportResponse>( new ReserveTransportResponse(){
-             //   Created = ret.Item3,
-              //  DepartueReservationid = ret.Item1,
-               // ReturnReservationid = ret.Item2
+            //   Created = ret.Item3,
+            //  DepartueReservationid = ret.Item1,
+            // ReturnReservationid = ret.Item2
         }
     }
 }

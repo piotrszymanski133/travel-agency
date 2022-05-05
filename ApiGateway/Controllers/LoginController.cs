@@ -15,11 +15,11 @@ namespace ApiGateway.Controllers
         {
             _userService = userService;
         }
-        
+
         [HttpPost]
         public IActionResult Index([FromBody] LoginUser loginUser)
         {
-            if(_userService.checkIfUserExisted(loginUser))
+            if (_userService.checkIfUserExisted(loginUser))
             {
                 return new OkResult();
             }

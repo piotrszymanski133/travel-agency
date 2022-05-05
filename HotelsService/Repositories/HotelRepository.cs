@@ -17,13 +17,16 @@ namespace HotelsService.Repositories
     public interface IHotelRepository
     {
         public List<HotelWithDescription> GetAllHotels();
-        public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start, DateTime end);
+
+        public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start,
+            DateTime end);
+
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters);
         public HotelWithDescription GetHotelWithDescription(string hotelId);
         public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end);
         void rollbackReservation(Guid messageTripReservationId);
     }
-    
+
     public class HotelRepository : IHotelRepository
     {
         private MongoClient _mongoClient;
@@ -34,7 +37,8 @@ namespace HotelsService.Repositories
         {
             _mongoClient = new MongoClient(hotelDescriptionDbSettings.Value.ConnectionString);
             _mongoDatabase = _mongoClient.GetDatabase(hotelDescriptionDbSettings.Value.DatabaseName);
-            _descriptions = _mongoDatabase.GetCollection<HotelDescription>(hotelDescriptionDbSettings.Value.CollectionName);
+            _descriptions =
+                _mongoDatabase.GetCollection<HotelDescription>(hotelDescriptionDbSettings.Value.CollectionName);
         }
 
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters)
@@ -96,12 +100,13 @@ namespace HotelsService.Repositories
                         Stars = hotel.Stars.GetValueOrDefault(),
                         IsOnlyPremiumAvailable = onlyPremiumRoomsAvailable
                     };
-                    offered.LowestPrice = PriceCalculator.CalculateHotelLowestPrice(offered, tripParameters, onlyPremiumRoomsAvailable);
+                    offered.LowestPrice =
+                        PriceCalculator.CalculateHotelLowestPrice(offered, tripParameters, onlyPremiumRoomsAvailable);
                     offeredHotels.Add(offered);
                 }
             }
+
             return offeredHotels;
-            
         }
 
         public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end)
@@ -118,7 +123,7 @@ namespace HotelsService.Repositories
             short[] maxReserved = new short[5];
             for (int i = 0; i < 5; i++)
                 maxReserved[i] = 0;
-            
+
             for (DateTime date = start; date <= end; date = date.AddDays(1))
             {
                 var reservations = hotel.Events.Where(e => e.StartDate <= date && e.EndDate >= date)
@@ -135,10 +140,12 @@ namespace HotelsService.Repositories
                         maxReserved[i] = (short)reservations[i];
                 }
             }
+
             for (int i = 0; i < maxHotelState.FreeRooms.Count; i++)
             {
                 maxHotelState.FreeRooms[i].Quantity -= maxReserved[i];
             }
+
             return maxHotelState;
         }
 
@@ -168,6 +175,7 @@ namespace HotelsService.Repositories
                     hotelsWithDescriptions.Add(new HotelWithDescription(hotel, desc));
                 }
             }
+
             return hotelsWithDescriptions;
         }
 
@@ -186,12 +194,13 @@ namespace HotelsService.Repositories
             {
                 throw new Exception($"Hotel with id {hotelId} does not exist!");
             }
+
             HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).FirstOrDefault();
             return new HotelWithDescription(hotel, desc);
-
         }
 
-        public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start, DateTime end)
+        public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start,
+            DateTime end)
         {
             using (var db = new hotelsContext())
             {

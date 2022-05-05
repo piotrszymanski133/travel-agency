@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace CommonComponents.Models
 {
-    
     public class TransportOffer
     {
         public long TransportIDFrom { get; set; }
@@ -16,6 +15,4 @@ namespace CommonComponents.Models
         public int Persons { get; set; }
         public int Price { get; set; }
     }
-    
-
 }

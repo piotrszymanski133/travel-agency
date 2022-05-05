@@ -19,14 +19,15 @@ namespace HotelsService.Consumers
         {
             _hotelRepository = hotelRepository;
         }
+
         public async Task Consume(ConsumeContext<GetHotelsQuery> context)
         {
             TripParameters tripParameters = context.Message.TripParameters;
-            
+
             List<Hotel> matchedHotels = _hotelRepository.GetHotels(tripParameters);
             //_hotelRepository.CreateReservationEvent(tripParameters.StartDate, tripParameters.EndDate);
 
-            await context.RespondAsync(new GetHotelsResponse { Hotels = matchedHotels});
+            await context.RespondAsync(new GetHotelsResponse { Hotels = matchedHotels });
         }
     }
 }

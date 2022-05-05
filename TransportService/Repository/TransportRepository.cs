@@ -11,15 +11,22 @@ namespace TripService.Repository
 {
     public interface ITransportRepository
     {
-        List<Transport> GetGeneralTransport(string Departure,string Destination, DateOnly Starttime,int Places, int direction); 
-        List<Transport> GetSpecificTransport(string DepartureCity,string DepartueCountry,string DestinationCity,string DestinationCountry, DateOnly Starttime,int Places); 
-        List<Transport> MatchTransports(List<Transport> fromMatches, List<Transport> toMatches);
-        List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,int Persons);
-        TransportService.Models.Transport GetTransport(long id);
-        (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
-            int commandPlaces, Guid commandReservationId,DateTime StartDate,DateTime EndDate);
-    }
+        List<Transport> GetGeneralTransport(string Departure, string Destination, DateOnly Starttime, int Places,
+            int direction);
 
+        List<Transport> GetSpecificTransport(string DepartureCity, string DepartueCountry, string DestinationCity,
+            string DestinationCountry, DateOnly Starttime, int Places);
+
+        List<Transport> MatchTransports(List<Transport> fromMatches, List<Transport> toMatches);
+
+        List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,
+            int Persons);
+
+        TransportService.Models.Transport GetTransport(long id);
+
+        (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
+            int commandPlaces, Guid commandReservationId, DateTime StartDate, DateTime EndDate);
+    }
 
 
     public class TransportRepository : ITransportRepository
@@ -72,9 +79,7 @@ namespace TripService.Repository
                             Name = transport.Transporttype
                         });
                     }
-
                 }
-
             }
 
             return newlist;
@@ -114,9 +119,7 @@ namespace TripService.Repository
                             Id = transport.Id
                         });
                     }
-
                 }
-
             }
 
             return newlist;
@@ -183,7 +186,8 @@ namespace TripService.Repository
                 .First(transport => transport.Id == id);
         }
 
-        public (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces,
+        public (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
+            int commandPlaces,
             Guid commandReservationId, DateTime StartDate, DateTime EndDate)
         {
             var gui1 = Guid.NewGuid();
@@ -195,7 +199,7 @@ namespace TripService.Repository
                     .ToList();
                 var transportReturn = context.Transports.Where(x => x.Id == commandReturnTransportId).AsNoTracking()
                     .ToList();
-                
+
                 var bookedtransport1 = context.Transportevents
                     .Where(x => x.TransportId == commandDepartueTransportId)
                     .Sum(x => x.Places);
@@ -205,16 +209,15 @@ namespace TripService.Repository
                     .Sum(x => x.Places);
 
                 if (transportDepartue.Count != 1 || transportReturn.Count != 1 ||
-                    transportDepartue[0].Places - bookedtransport1 < commandPlaces || transportReturn[0].Places -bookedtransport2 < commandPlaces ||
-                    transportDepartue[0].Transportdate != new DateOnly(StartDate.Year,StartDate.Month,StartDate.Day) ||
-                    transportReturn[0].Transportdate != new DateOnly(EndDate.Year,EndDate.Month,EndDate.Day))
+                    transportDepartue[0].Places - bookedtransport1 < commandPlaces ||
+                    transportReturn[0].Places - bookedtransport2 < commandPlaces ||
+                    transportDepartue[0].Transportdate !=
+                    new DateOnly(StartDate.Year, StartDate.Month, StartDate.Day) ||
+                    transportReturn[0].Transportdate != new DateOnly(EndDate.Year, EndDate.Month, EndDate.Day))
                 {
-                    return (Guid.Empty,Guid.Empty,false);
+                    return (Guid.Empty, Guid.Empty, false);
                 }
 
-               
-
-              
 
                 // Console.Out.WriteLine($"R1: {gui1}, R2: {gui2}");
 
@@ -223,9 +226,8 @@ namespace TripService.Repository
                     TransportId = commandDepartueTransportId,
                     Places = commandPlaces,
                     Type = "Reservation",
-                    Id =gui1,
+                    Id = gui1,
                     EventID = commandReservationId
-                    
                 };
 
                 var reservation_return = new Transportevent()
@@ -240,8 +242,8 @@ namespace TripService.Repository
                 context.Transportevents.Add(reservation_departue);
                 context.Transportevents.Add(reservation_return);
                 context.SaveChanges();
-                
             }
+
             return (gui1, gui2, true);
         }
     }

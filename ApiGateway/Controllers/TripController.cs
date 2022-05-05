@@ -21,7 +21,9 @@ namespace ApiGateway.Controllers
         private IRequestClient<ReserveTripQuery> _tripReservationClient;
         private IRequestClient<PaymentQuery> _tripPaymentClient;
 
-        public TripController(IRequestClient<GetTripsQuery> tripsClient, IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient, IRequestClient<PaymentQuery> tripPaymentClient)
+        public TripController(IRequestClient<GetTripsQuery> tripsClient,
+            IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
+            IRequestClient<PaymentQuery> tripPaymentClient)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
@@ -33,10 +35,10 @@ namespace ApiGateway.Controllers
         public async Task<GetTripsResponse> Index([FromQuery] TripParameters tripParameters)
         {
             var response =
-                await _tripsClient.GetResponse<GetTripsResponse>(new GetTripsQuery {TripParameters = tripParameters});
+                await _tripsClient.GetResponse<GetTripsResponse>(new GetTripsQuery { TripParameters = tripParameters });
             return response.Message;
         }
-        
+
         [HttpGet]
         [Route("GetTrip")]
         public async Task<GetTripOfferResponse> GetTrip([FromQuery] TripOfferQueryParameters tripOfferQueryParameters)
@@ -50,7 +52,8 @@ namespace ApiGateway.Controllers
 
         [HttpPost]
         [Route("ReserveTrip")]
-        public async Task<ReserveTripResponse> ReserveTrip([FromBody] ReserveTripOfferParameters reserveTripOfferParameters)
+        public async Task<ReserveTripResponse> ReserveTrip(
+            [FromBody] ReserveTripOfferParameters reserveTripOfferParameters)
         {
             var response = await _tripReservationClient.GetResponse<ReserveTripResponse>(new ReserveTripQuery()
             {
@@ -59,7 +62,7 @@ namespace ApiGateway.Controllers
             });
             return response.Message;
         }
-        
+
         [HttpPost]
         [Route("Payment")]
         public async Task<PaymentResponse> PayForTrip()
@@ -70,82 +73,85 @@ namespace ApiGateway.Controllers
             });
             return response.Message;
         }
+
         [HttpGet]
         [Route("GetDestinations")]
         public async Task<List<String>> GetDestinations()
         {
-            List<String> response = new List<String> { 
+            List<String> response = new List<String>
+            {
                 "Albania",
                 "Armenia",
                 "Australia",
-                "Austria", 
-                "Azerbejdżan", 
+                "Austria",
+                "Azerbejdżan",
                 "Bali",
                 "Bośnia i Hercegowina",
                 "Bułgaria",
-                "Chiny", 
+                "Chiny",
                 "Chorwacja",
                 "Cypr",
-                "Czarnogóra", 
+                "Czarnogóra",
                 "Czechy",
                 "Dania",
                 "Dominikana",
-                "Egipt", 
+                "Egipt",
                 "Ekwador",
                 "Etiopia",
                 "Francja",
                 "Grecja",
                 "Gwadelupa",
-                "Hiszpania", 
+                "Hiszpania",
                 "Holandia",
-                "Indie", 
+                "Indie",
                 "Indonezja",
-                "Irlandia", 
+                "Irlandia",
                 "Islandia",
                 "Izrael",
                 "Kambodża",
                 "Kanada",
-                "Kostaryka", 
+                "Kostaryka",
                 "Kuba",
                 "Liechtenstein",
                 "Luksemburg",
                 "Madagaskar",
-                "Malediwy", 
+                "Malediwy",
                 "Malezja",
                 "Malta",
-                "Maroko", 
+                "Maroko",
                 "Martynika",
-                "Mauritius", 
+                "Mauritius",
                 "Meksyk",
-                "Mołdawia", 
+                "Mołdawia",
                 "Monako",
-                "Nepal", 
+                "Nepal",
                 "Niemcy",
                 "Norwegia",
                 "Nowa Zelandia",
                 "Panama",
                 "Peru",
-                "Polska", 
-                "Portoryko", 
+                "Polska",
+                "Portoryko",
                 "Portugalia",
                 "Rumunia",
                 "Seszele",
-                "Słowacja", 
-                "Słowenia", 
-                "Somalia", 
-                "Sri Lanka", 
+                "Słowacja",
+                "Słowenia",
+                "Somalia",
+                "Sri Lanka",
                 "Stany Zjednoczone",
-                "Szwajcaria", 
+                "Szwajcaria",
                 "Szwecja",
                 "Tajlandia",
                 "Tunezja",
                 "Turcja",
-                "Wielka Brytania", 
-                "Wietnam", 
+                "Wielka Brytania",
+                "Wietnam",
                 "Włochy",
-                "Zimbabwe", 
-                "Zjednoczone Emiraty Arabskie"};
-            
+                "Zimbabwe",
+                "Zjednoczone Emiraty Arabskie"
+            };
+
             return response;
         }
     }

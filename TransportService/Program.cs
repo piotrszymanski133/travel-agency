@@ -16,16 +16,16 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<GetTransportOfferConsumer>();
     x.AddConsumer<ReserveTransportQueryConsumer>();
     builder.Services.AddTransient<ITransportRepository, TransportRepository>();
-    x.UsingRabbitMq((context,cfg) =>
+    x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq", "/", h => {
+        cfg.Host("rabbitmq", "/", h =>
+        {
             h.Username("guest");
             h.Password("guest");
         });
 
         cfg.ConfigureEndpoints(context);
     });
-    
 });
 
 
