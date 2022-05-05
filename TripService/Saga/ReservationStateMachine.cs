@@ -232,7 +232,11 @@ namespace TripService.Saga
                     {
                         ReservationId = ctx.Saga.CorrelationId
                     })
-                    //TODO Send confirmation to and transportservice
+                    .Publish(ctx => new ConfirmTransportOrderQuery()
+                        {
+                            ReservationId = ctx.Saga.CorrelationId
+                        }
+                    )
                     .ThenAsync(async ctx =>
                     { 
                         var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 

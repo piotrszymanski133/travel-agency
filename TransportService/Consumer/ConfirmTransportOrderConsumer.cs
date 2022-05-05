@@ -12,12 +12,12 @@ using Transport = CommonComponents.Models.Transport;
 
 namespace TransportService.Consumer
 {
-    public class ConfirmHotelOrderConsumer: IConsumer<ConfirmTransportOrderQuery>
+    public class ConfirmTransportOrderConsumer: IConsumer<ConfirmTransportOrderQuery>
     {
         private readonly ILogger<GetTransportOffersQuery> _logger;
         private ITransportRepository _repository;
 
-        public ConfirmHotelOrderConsumer(ILogger<GetTransportOffersQuery> logger, ITransportRepository repository)
+        public ConfirmTransportOrderConsumer(ILogger<GetTransportOffersQuery> logger, ITransportRepository repository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = repository;
