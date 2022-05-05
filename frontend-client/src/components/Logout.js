@@ -1,5 +1,4 @@
 ﻿import React, {useState, useEffect, Component} from "react";
-import axios from "axios";
 
 const Logout = ()  =>{
     const [username, setUsername] = useState("");
