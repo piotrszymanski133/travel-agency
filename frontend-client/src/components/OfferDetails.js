@@ -115,7 +115,10 @@ export class OfferDetails extends Component {
             "transportFromId": this.state.transportFromIdConverted[this.state.selectedTransportType],
             "transportToId": this.state.transportToIdConverted[this.state.selectedTransportType],
             "username": parsedUser.username,
-            "persons": parseInt(adults) + parseInt(children_under_3) + parseInt(children_under_10) + parseInt(children_under_18)
+            "adults": parseInt(adults),
+            "childrenUnder3": parseInt(children_under_3),
+            "childrenUnder10": parseInt(children_under_10), 
+            "childrenUnder18": parseInt(children_under_18)
         }
         fetch(BASE_URL + ENDPOINTS.reserve, {
             method: 'POST',
@@ -130,7 +133,10 @@ export class OfferDetails extends Component {
                         resp => {
                             console.log(resp.success)
                             if (resp.success === true){
-                                window.location.href = "/payment";
+                                const searchParams = new URLSearchParams();
+                                searchParams.append("price", resp.price);
+                                searchParams.append("username", parsedUser.username);
+                                window.location.href = "/payment?" + searchParams;
                             }
                             else{
                                 window.location.href = "/reservationError";
