@@ -13,6 +13,7 @@ namespace HotelsService
 
         public Guid Id { get; set; }
         public Guid TripReservationId { get; set; }
+        public string Username { get; set; }
         public string Type { get; set; } = null!;
         public string HotelId { get; set; } = null!;
 

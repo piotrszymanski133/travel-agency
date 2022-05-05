@@ -77,7 +77,7 @@ namespace HotelsService.Services
                 }
 
                 _hotelRepository.CreateReservationEvent(hotel, tripReservationId, parameters.RoomTypeId,
-                    parameters.StartDate, parameters.EndDate);
+                    parameters.StartDate, parameters.EndDate, parameters.Username);
                 return true;
             }
             catch

@@ -19,7 +19,7 @@ namespace HotelsService.Repositories
         public List<HotelWithDescription> GetAllHotels();
 
         public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start,
-            DateTime end);
+            DateTime end, string username);
 
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters);
         public HotelWithDescription GetHotelWithDescription(string hotelId);
@@ -209,12 +209,13 @@ namespace HotelsService.Repositories
         }
 
         public void CreateReservationEvent(Hotel hotel, Guid tripReservationId, int roomTypeId, DateTime start,
-            DateTime end)
+            DateTime end, string username)
         {
             using (var db = new hotelsContext())
             {
                 Event e = new Event()
                 {
+                    Username = username,
                     TripReservationId = tripReservationId,
                     StartDate = start.AddHours(4).ToUniversalTime().Date,
                     EndDate = end.AddHours(4).ToUniversalTime().Date,

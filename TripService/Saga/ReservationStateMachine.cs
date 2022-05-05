@@ -52,10 +52,10 @@ namespace TripService.Saga
                         .ThenAsync(async context =>
                         {
                             context.Saga.ReserveTripOfferParameters = context.Message.ReserveTripOfferParameters;
-                            
+                            context.Saga.Username = context.Message.ReserveTripOfferParameters.Username;
                             if (!context.TryGetPayload(out SagaConsumeContext<ReservationState, ReserveTripQuery> payload))
                                 throw new Exception("Unable to retrieve required payload for callback data.");
-
+                            
                             context.Saga.RequestId = payload.RequestId;
                             context.Saga.ResponseAddress = payload.ResponseAddress;
                             
@@ -137,31 +137,51 @@ namespace TripService.Saga
                         }, r => r.RequestId = ctx.Saga.RequestId);
                     })
                     .Finalize());
-            
+
             During(WaitingForUserPayment,
                 When(PaymentQuery)
                     .Unschedule(PaymentTimeout)
                     .ThenAsync(ctx =>
                     {
+                        if (!ctx.TryGetPayload(
+                            out SagaConsumeContext<ReservationState, PaymentQuery> payload))
+                            throw new Exception("Unable to retrieve required payload for callback data.");
+
+                        ctx.Saga.RequestId = payload.RequestId;
+                        ctx.Saga.ResponseAddress = payload.ResponseAddress;
                         return Console.Out.WriteLineAsync(
                             $"Otrzymano żądanie płatności dla id: {ctx.Message.ReservationId}");
                     })
-                    .ThenAsync(async context =>
-                    {
-                        if (!context.TryGetPayload(out SagaConsumeContext<ReservationState, PaymentQuery> payload))
-                            throw new Exception("Unable to retrieve required payload for callback data.");
+                    .IfElse(ctx => ctx.Saga.Username == ctx.Message.Username,
+                        x =>
+                            x.ThenAsync(async context =>
+                            {
+                                Console.Out.WriteLineAsync(
+                                    $"Username poprawny dla rezerwacji {context.Message.ReservationId}");
 
-                        context.Saga.RequestId = payload.RequestId;
-                        context.Saga.ResponseAddress = payload.ResponseAddress;
-                            
-                    })
-                    .Publish(ctx => new PayForTripQuery()
-                    {
-                        ReservationId = ctx.Saga.CorrelationId,
-                        Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice
-                    })
-                    .TransitionTo(WaitingForPaymentServiceResponse),
-                When(PaymentExpired)
+                            }).Publish(ctx => new PayForTripQuery()
+                            {
+                                ReservationId = ctx.Saga.CorrelationId,
+                                Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice
+                            }).TransitionTo(WaitingForPaymentServiceResponse),
+                        x =>
+                            x.ThenAsync(async ctx =>
+                            {
+                                Console.Out.WriteLineAsync(
+                                    $"Username niepoprawny dla rezerwacji {ctx.Message.ReservationId}");
+                                var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
+                                await endpoint.Send(new PaymentResponse()
+                                {
+                                    Success = false,
+                                    ReservationId = ctx.Saga.CorrelationId
+                                }, r => r.RequestId = ctx.Saga.RequestId);
+                            }).Publish(ctx => new RollbackHotelReservationQuery()
+                                {
+                                    TripReservationId = ctx.Saga.CorrelationId
+                                }).Finalize()),
+
+
+            When(PaymentExpired)
                     //TODO Add transport rollback
                     .Publish(ctx => new RollbackHotelReservationQuery()
                     {

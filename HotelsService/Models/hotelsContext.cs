@@ -57,6 +57,9 @@ namespace HotelsService
             {
                 entity.ToTable("events");
 
+                entity.Property(e => e.Username)
+                    .HasColumnName("username");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("id")
                     .HasDefaultValueSql("gen_random_uuid()");
