@@ -177,7 +177,7 @@ export class OfferDetails extends Component {
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
                 <div className="row mt-3">
                     <div className="col-sm offerDetails">
-                        <img src="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" alt="new"/>
+                        <img className="offerDetailsImg" src="https://i.content4travel.com/cms/img/u/desktop/prodsliderphoto/fuepaja_0.jpg?version=2.6.19" alt="new"/>
                     </div>
 
                     <div className="col border border-dark list-group-item text-center">
