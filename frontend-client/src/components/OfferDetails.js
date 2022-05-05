@@ -44,6 +44,7 @@ export class OfferDetails extends Component {
         }
     }
 
+
     componentWillMount(){
         if(when !== null) {
             var date = when.split("-");
@@ -136,6 +137,7 @@ export class OfferDetails extends Component {
                                 const searchParams = new URLSearchParams();
                                 searchParams.append("price", resp.price);
                                 searchParams.append("username", parsedUser.username);
+                                searchParams.append("reservationId", resp.reservationId);
                                 window.location.href = "/payment?" + searchParams;
                             }
                             else{
