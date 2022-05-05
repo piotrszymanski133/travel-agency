@@ -19,14 +19,6 @@ public class GetHotelsQuery
     public TripParameters TripParameters { get; set; }
 }
 
-public class GetTransportQuery
-{
-    public string Departue { get; set; }
-    public string Destination { get; set; }
-    public int Places { get; set; }
-    public DateTime DepartureDate { get; set; }
-    public DateTime ReturnDate { get; set; }
-}
 public class GetHotelOfferQuery
 {
     public TripOfferQueryParameters TripOfferQueryParameters { get; set; }
@@ -78,6 +70,7 @@ public class RollbackTransportReservationQuery
 public class PaymentQuery
 {
     public Guid ReservationId { get; set; }
+    public string CardNumber { get; set; }
     public string Username { get; set; }
 
 }
@@ -85,6 +78,7 @@ public class PaymentQuery
 public class PayForTripQuery
 {
     public Guid ReservationId { get; set; }
+    public string CardNumber { get; set; }
     public int Price { get; set; }
 }
 

@@ -72,6 +72,7 @@ namespace ApiGateway.Controllers
             var response = await _tripPaymentClient.GetResponse<PaymentResponse>(new PaymentQuery()
             {
                 ReservationId = paymentParameters.ReservationId,
+                CardNumber = paymentParameters.CardNumber,
                 Username = paymentParameters.Username
             });
             return response.Message;
