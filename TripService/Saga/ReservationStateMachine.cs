@@ -203,6 +203,10 @@ namespace TripService.Saga
                        }).Publish(ctx => new RollbackHotelReservationQuery()
                        {
                            TripReservationId = ctx.Saga.CorrelationId
+                       }).Publish(ctx => new RollbackTransportReservationQuery()
+                       {
+                           TripReservationId = ctx.Saga.CorrelationId
+                           
                        }).Finalize());
 
        private EventActivityBinder<ReservationState, PaymentExpired> WaitingForUserPaymentPaymentExpired() =>
