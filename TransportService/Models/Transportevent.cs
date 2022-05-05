@@ -10,7 +10,7 @@ namespace TransportService.Models
         public long TransportId { get; set; }
         public int Places { get; set; }
         public string Type { get; set; } = null!;
-        public DateTime? Creationtime { get; set; }
+        public string Username { get; set; }
 
         public virtual Transport Transport { get; set; } = null!;
     }

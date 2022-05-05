@@ -182,7 +182,15 @@ namespace TripService.Saga
 
 
             When(PaymentExpired)
-                    //TODO Add transport rollback
+                    .ThenAsync(ctx =>
+                    {
+                        return Console.Out.WriteLineAsync(
+                            $"Czas na płatnosc minal dla id: {ctx.Message.ReservationId}");
+                    })
+                    .Publish(ctx => new RollbackTransportReservationQuery()
+                    {
+                        TripReservationId = ctx.Saga.CorrelationId
+                    })
                     .Publish(ctx => new RollbackHotelReservationQuery()
                     {
                         TripReservationId = ctx.Saga.CorrelationId
@@ -200,7 +208,10 @@ namespace TripService.Saga
                     {
                         TripReservationId = ctx.Saga.CorrelationId
                     })
-                    //TODO Add transport rollback
+                    .Publish(ctx => new RollbackTransportReservationQuery()
+                    {
+                        TripReservationId = ctx.Saga.CorrelationId
+                    })
                     .ThenAsync(async ctx =>
                     { 
                         var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress); 

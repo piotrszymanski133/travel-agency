@@ -138,7 +138,7 @@ CREATE TABLE TransportEvent (
     Event_ID uuid NOT NULL,
     Places int NOT NULL,
     Type character varying(16) NOT NULL,
-    CreationTime timestamptz DEFAULT now(),
+    Username character varying(32) NOT NULL,
     PRIMARY KEY (ID),
     CONSTRAINT Transport_ID FOREIGN KEY(Transport_ID) REFERENCES Transport(ID)
 );

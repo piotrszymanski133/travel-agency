@@ -36,37 +36,33 @@ namespace TransportService.Consumer
                     ReservationId = command.ReservationId
                 });
             }
-
-
-            var ret = _repository.ReserveTransport(command.DepartueTransportID, command.ReturnTransportID,
-                command.Places, command.ReservationId,
-                command.ReserveTripOfferParameters.StartDate,
-                command.ReserveTripOfferParameters.EndDate);
-            var succes = ret.Item3;
-
-            if (succes)
-            {
-                var transport = _repository.GetTransport(context.Message.DepartueTransportID);
-                int price = PriceCalculator.CalculateTransportOfferPrice(transport.Transporttype,
-                    context.Message.Places, transport.DestinationPlaces.City);
-                context.Publish(new ReserveTransportSuccessResponse()
-                {
-                    Price = price,
-                    ReservationId = command.ReservationId
-                });
-            }
             else
             {
-                context.Publish(new ReserveTransportFailureResponse()
-                {
-                    ReservationId = command.ReservationId
-                });
-            }
+                var ret = _repository.ReserveTransport(command.DepartueTransportID, command.ReturnTransportID,
+                    command.Places, command.ReservationId,
+                    command.ReserveTripOfferParameters.StartDate,
+                    command.ReserveTripOfferParameters.EndDate,command.ReserveTripOfferParameters.Username);
+                var succes = ret.Item3;
 
-            //await context.RespondAsync<ReserveTransportResponse>( new ReserveTransportResponse(){
-            //   Created = ret.Item3,
-            //  DepartueReservationid = ret.Item1,
-            // ReturnReservationid = ret.Item2
+                if (succes)
+                {
+                    var transport = _repository.GetTransport(context.Message.DepartueTransportID);
+                    int price = PriceCalculator.CalculateTransportOfferPrice(transport.Transporttype,
+                        context.Message.Places, transport.DestinationPlaces.City);
+                    context.Publish(new ReserveTransportSuccessResponse()
+                    {
+                        Price = price,
+                        ReservationId = command.ReservationId
+                    });
+                }
+                else
+                {
+                    context.Publish(new ReserveTransportFailureResponse()
+                    {
+                        ReservationId = command.ReservationId
+                    });
+                }
+            }
         }
     }
 }

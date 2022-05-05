@@ -99,9 +99,9 @@ namespace TransportService.Models
                     .ValueGeneratedOnAdd()
                     .HasColumnName("event_id");
 
-                entity.Property(e => e.Creationtime)
-                    .HasColumnName("creationtime")
-                    .HasDefaultValueSql("now()");
+                entity.Property(e => e.Username)
+                    .HasMaxLength(32)
+                    .HasColumnName("username");
 
                 entity.Property(e => e.Type)
                     .HasMaxLength(16)
