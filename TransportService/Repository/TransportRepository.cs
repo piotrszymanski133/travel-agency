@@ -21,6 +21,7 @@ namespace TripService.Repository
 
         void RollbackReserveTransport(Guid commandReservationId);
         void ConfirmTransport(Guid commandReservationId);
+        List<UserTransports> getUserTransportsInfo(string msgUsername);
     }
 
 
@@ -276,6 +277,29 @@ namespace TripService.Repository
                 context.SaveChanges();
             }
             
+        }
+
+        public List<UserTransports> getUserTransportsInfo(string msgUsername)
+        {
+            HashSet<UserTransports> xx = new();
+            using (var context = new transportsdbContext())
+            {
+                var result = context.Transportevents.Where(key => key.Username==msgUsername).ToList();
+
+                foreach (var transportevent in result)
+                {
+                    xx.Add(new UserTransports()
+                    {
+                        Persons = transportevent.Places,
+                        TransportTypeName = transportevent.Type,
+                        EventID = transportevent.EventID
+                    });
+                }
+            }
+
+            List <UserTransports>  returnList = xx.ToList();
+
+            return returnList;
         }
     }
 }

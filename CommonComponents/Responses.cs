@@ -89,4 +89,10 @@ namespace CommonComponents
     {
         public List<UserTripHotel> OrderedHotels { get; set; }
     }
+    
+    public class GetUserTripsTransporResponse
+    {
+        public string Username { get; set; }
+        public List<UserTransports> UserTransportsList { get; set; }
+    }
 }

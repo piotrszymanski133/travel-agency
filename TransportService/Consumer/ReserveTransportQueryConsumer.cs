@@ -30,7 +30,7 @@ namespace TransportService.Consumer
 
             if (command.DepartueTransportID == -1 || command.ReturnTransportID == -1)
             {
-                context.Publish(new ReserveTransportSuccessResponse()
+                await context.Publish(new ReserveTransportSuccessResponse()
                 {
                     Price = 0,
                     ReservationId = command.ReservationId
@@ -49,7 +49,7 @@ namespace TransportService.Consumer
                     var transport = _repository.GetTransport(context.Message.DepartueTransportID);
                     int price = PriceCalculator.CalculateTransportOfferPrice(transport.Transporttype,
                         context.Message.Places, transport.DestinationPlaces.City);
-                    context.Publish(new ReserveTransportSuccessResponse()
+                    await context.Publish(new ReserveTransportSuccessResponse()
                     {
                         Price = price,
                         ReservationId = command.ReservationId
@@ -57,7 +57,7 @@ namespace TransportService.Consumer
                 }
                 else
                 {
-                    context.Publish(new ReserveTransportFailureResponse()
+                    await context.Publish(new ReserveTransportFailureResponse()
                     {
                         ReservationId = command.ReservationId
                     });
