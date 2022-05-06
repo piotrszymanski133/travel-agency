@@ -20,6 +20,7 @@ builder.Services.AddMassTransit(x =>
         .InMemoryRepository();
     x.AddConsumer<GetTripsQueryConsumer>();
     x.AddConsumer<GetTripOfferQueryConsumer>();
+    x.AddConsumer<GetUserTripsQueryConsumer>();
     x.AddDelayedMessageScheduler();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>
