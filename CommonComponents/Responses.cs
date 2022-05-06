@@ -40,6 +40,7 @@ namespace CommonComponents
     public class ReserveHotelSuccessResponse
     {
         public Guid ReservationId { get; set; }
+        public string ReservedRoomName { get; set; }
         public int Price { get; set; }
     }
 

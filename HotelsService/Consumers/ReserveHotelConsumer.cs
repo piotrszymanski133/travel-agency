@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CommonComponents;
 using HotelsService.Models;
@@ -24,10 +25,15 @@ namespace HotelsService.Consumers
             if (success)
             {
                 Hotel hotel = _hotelService.getHotel(context.Message.ReserveTripOfferParameters.HotelId);
+                string roomName = hotel.Hotelrooms
+                    .Find(r => r.Id == context.Message.ReserveTripOfferParameters.RoomTypeId)
+                    .Roomtype
+                    .Name;
                 await context.Publish(new ReserveHotelSuccessResponse()
                 {
                     Price = PriceCalculator.CalculateHotelRoomConfigPrice(hotel,
                         context.Message.ReserveTripOfferParameters),
+                    ReservedRoomName = roomName,
                     ReservationId = context.Message.ReservationId,
                 });
             }
