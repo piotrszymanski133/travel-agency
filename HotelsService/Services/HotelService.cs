@@ -19,6 +19,7 @@ namespace HotelsService.Services
         public HotelWithDescription getHotel(string hotelId);
         void confirmOrder(Guid messageReservationId);
         List<string> GetAllDestinations();
+        List<UserTripHotel> GetUserOrders(string messageUsername);
     }
 
     public class HotelService : IHotelService
@@ -105,6 +106,26 @@ namespace HotelsService.Services
                 .Select(x => x.FirstOrDefault())
                 .Select(x => x.Destination.Country)
                 .ToList();
+        }
+
+        public List<UserTripHotel> GetUserOrders(string messageUsername)
+        {
+            List<Event> events = _hotelRepository.GetUserOrders(messageUsername);
+            List<UserTripHotel> orders = new List<UserTripHotel>();
+            events.ForEach(e =>
+            {
+                orders.Add(new UserTripHotel()
+                {
+                    HotelId = e.HotelId,
+                    HotelName = e.Hotel.Name,
+                    City = e.Hotel.Destination.City,
+                    Country = e.Hotel.Destination.Country,
+                    StartDate = e.StartDate,
+                    EndDate = e.EndDate,
+                    FoodType = e.Hotel.Food
+                });
+            });
+            return orders;
         }
 
         public void rollbackReservation(Guid messageTripReservationId)

@@ -84,4 +84,9 @@ namespace CommonComponents
     {
         public List<string> Destinations { get; set; }
     }
+
+    public class GetUserTripsHotelsResponse
+    {
+        public List<UserTripHotel> OrderedHotels { get; set; }
+    }
 }

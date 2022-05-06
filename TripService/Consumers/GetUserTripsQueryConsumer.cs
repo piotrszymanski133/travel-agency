@@ -8,10 +8,10 @@ namespace TripService.Consumers
 {
     public class GetUserTripsQueryConsumer : IConsumer<GetUserTripsQuery>
     {
-        private IRequestClient<GetHotelOfferQuery> _hotelclient;
+        private IRequestClient<GetUserTripsHotelsQuery> _hotelclient;
         private IRequestClient<GetTransportOffersQuery> _transportclient;
 
-        public GetUserTripsQueryConsumer(IRequestClient<GetHotelOfferQuery> hotelclient, IRequestClient<GetTransportOffersQuery> transportclient)
+        public GetUserTripsQueryConsumer(IRequestClient<GetUserTripsHotelsQuery> hotelclient, IRequestClient<GetTransportOffersQuery> transportclient)
         {
             _hotelclient = hotelclient;
             _transportclient = transportclient;
@@ -20,8 +20,11 @@ namespace TripService.Consumers
         public async Task Consume(ConsumeContext<GetUserTripsQuery> context)
         {
             var msg = context.Message;
-          
-           //TODO Call Hotel Service for --RESERVATIONS-- for a specific msg.Username
+
+            var hotelResponse = _hotelclient.GetResponse<GetUserTripsHotelsResponse>(new GetUserTripsHotelsQuery()
+            {
+                Username = msg.Username
+            });
            
            //TODO Call for Transport Service
            

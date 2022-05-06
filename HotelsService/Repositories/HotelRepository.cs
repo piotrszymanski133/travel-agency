@@ -26,6 +26,7 @@ namespace HotelsService.Repositories
         public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end);
         void rollbackReservation(Guid messageTripReservationId);
         void confirmOrder(Guid messageReservationId);
+        List<Event> GetUserOrders(string messageUsername);
     }
 
     public class HotelRepository : IHotelRepository
@@ -160,6 +161,16 @@ namespace HotelsService.Repositories
             Event e = db.Events.First(e => e.TripReservationId == tripReservationId);
             e.Type = "Ordered";
             db.SaveChanges();
+        }
+
+        public List<Event> GetUserOrders(string messageUsername)
+        {
+            using var db = new hotelsContext();
+            return db.Events
+                .Include(e => e.Hotel)
+                .ThenInclude(h => h.Destination)
+                .Where(e => e.Username == messageUsername && e.Type == "Order")
+                .ToList();
         }
 
         public List<HotelWithDescription> GetAllHotels()
