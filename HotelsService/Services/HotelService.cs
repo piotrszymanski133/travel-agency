@@ -116,6 +116,7 @@ namespace HotelsService.Services
             {
                 orders.Add(new UserTripHotel()
                 {
+                    ReservationId = e.TripReservationId,
                     HotelId = e.HotelId,
                     HotelName = e.Hotel.Name,
                     City = e.Hotel.Destination.City,
