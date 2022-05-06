@@ -81,7 +81,7 @@ export class Offer extends Component {
                             this.state.offers.trips.map(
                                 offer =>
                                     <li key={offer.hotel.id} className="border list-group-item mt-5 offer">
-                                        <img src="https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350" alt="new"/>
+                                        <img src="https://i.content4travel.com/cms/img/u/desktop/prodsliderphoto/fuepaja_0.jpg?version=2.6.19" alt="new"/>
                                         <h5> { offer.hotel.name} </h5>
                                         <p> { offer.hotel.destinationCountry} / {offer.hotel.destinationCity} </p>
                                         <p> Średnia z ocen: { offer.hotel.rating}</p>

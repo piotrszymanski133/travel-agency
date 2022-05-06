@@ -1,18 +1,15 @@
 ﻿import React, {Component} from "react";
 import { Form, Field } from "@progress/kendo-react-form";
-import destination_countries from "./destinations_countries";
-import departures_countries from "./departures_countries";
+import departures from "./departures";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 // a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
 // you will also need the css that comes with bootstrap-daterangepicker
 import 'bootstrap-daterangepicker/daterangepicker.css';
+import {createAPIEndpoint, ENDPOINTS} from "../api";
 
 const current = new Date();
-//var startDate = new Date();
-//var endDate = new Date();
-//startDate.setDate(current.getDay() + 7)
-//endDate.setDate(current.getDay() + 14)
+
 
 const DateInput = (fieldProps) => {
     const {
@@ -99,6 +96,22 @@ const handleDateCancel = (event, picker) => {
 }
 
 export class SearchForm extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            destinations: []
+        }
+
+    }
+
+    componentDidMount(){
+        createAPIEndpoint(ENDPOINTS.getDestinations).fetch().then((res) => {
+            this.setState({ destinations: res.data});
+        });
+        this.state.destinations.push("dowolnie")
+    }
     
     handleSubmit = (data) => {
         const searchParams = new URLSearchParams();
@@ -133,13 +146,13 @@ export class SearchForm extends Component {
                             label="Skąd?"
                             name="departure"
                             component={DropDown}
-                            options={departures_countries}/>
+                            options={departures}/>
 
                         <Field
                             label="Dokąd?"
                             name="destination"
                             component={DropDown}
-                            options={destination_countries}/>
+                            options={this.state.destinations}/>
 
                         <Field
                             label="Ile osób dorosłych?"

@@ -1,12 +1,12 @@
 ﻿import React, { Component} from "react";
 import { Form, Field } from "@progress/kendo-react-form";
-import destination_countries from "./destinations_countries";
-import departures_countries from "./departures_countries";
+import departures from "./departures";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 // a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
 // you will also need the css that comes with bootstrap-daterangepicker
 import 'bootstrap-daterangepicker/daterangepicker.css';
+import {createAPIEndpoint, ENDPOINTS} from "../api";
 
 
 const DateInput = (fieldProps) => {
@@ -142,9 +142,17 @@ export class OfferSearchForm extends Component {
 
     constructor(props) {
         super(props);
-    }
 
+        this.state = {
+            destinations: []
+        }
+    }
+    
     componentDidMount() {
+        createAPIEndpoint(ENDPOINTS.getDestinations).fetch().then((res) => {
+            this.setState({ destinations: res.data});
+        });
+        this.state.destinations.push("dowolnie")
         let selectDeparture = document.querySelector('#selectDeparture')
         let selectDestination = document.querySelector('#selectDestination')
         var optionsDeparture = selectDeparture.getElementsByTagName('option');
@@ -208,13 +216,13 @@ export class OfferSearchForm extends Component {
                             label="Skąd?"
                             name="departure"
                             component={DropDownDeparture}
-                            options={departures_countries}/>
+                            options={departures}/>
 
                         <Field
                             label="Dokąd?"
                             name="destination"
                             component={DropDownDestination}
-                            options={destination_countries}/>
+                            options={this.state.destinations}/>
                         </div>
 
                         <div className="col-auto">

@@ -19,6 +19,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddRequestClient<PaymentQuery>(RequestTimeout.After(s:2));
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", 5672, "/", h =>

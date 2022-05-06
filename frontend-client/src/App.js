@@ -6,11 +6,13 @@ import {Navigation} from './components/Navigation';
 import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
 import {Reservation} from "./components/Reservation";
-import {Payment} from "./components/Payment"
+import Payment from "./components/Payment"
 import Login from "./components/Login"
 import Logout from "./components/Logout"
 import LoginError from "./components/LoginError"
 import ReservationError from "./components/ReservationError"
+import PaymentOK from "./components/PaymentOK";
+import PaymentError from "./components/PaymentError";
 
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
                   <Route path="/loginError" element={<LoginError/>}/>
                   <Route path="/payment" element={<Payment/>}/>
                   <Route path="/reservationError" element={<ReservationError/>}/>
+                  <Route path="/paymentOk" element={<PaymentOK/>}/>
+                  <Route path="/paymentError" element={<PaymentError/>}/>
               </Routes>
           </div>
       </BrowserRouter>

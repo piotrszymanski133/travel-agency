@@ -190,6 +190,7 @@ namespace TripService.Saga
                        }).Publish(ctx => new PayForTripQuery()
                        {
                            ReservationId = ctx.Saga.CorrelationId,
+                           CardNumber = ctx.Message.CardNumber,
                            Price = ctx.Saga.hotelPrice + ctx.Saga.transportPrice
                        }).TransitionTo(WaitingForPaymentServiceResponse),
                    x =>

@@ -86,8 +86,13 @@ select{
 .offer img {
   float: left;
   height: 100%;
-  width: 30%;
+  width: 40%;
   margin-right: 30px;
+}
+
+.offerDetailsImg{
+  width: 550px;
+  height: auto;
 }
 
 .offerSearchForm {
