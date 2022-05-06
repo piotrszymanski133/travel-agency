@@ -7,13 +7,10 @@ namespace TripService.Saga
 {
     public class ReservationStateMachine: MassTransitStateMachine<ReservationState>
     {
-        public State? WaitingForHotelResponse => null;
-
-        public State? HotelReservationSucceded => null;
-
-        public State? WaitingForUserPayment => null;
-
-        private State? WaitingForPaymentServiceResponse => null;
+        public State WaitingForHotelResponse { get; private set; }
+        public State HotelReservationSucceded { get; private set; }
+        public State WaitingForUserPayment { get; private set; }
+        public State WaitingForPaymentServiceResponse { get; private set; }
 
         public ReservationStateMachine() 
         {
@@ -284,15 +281,15 @@ namespace TripService.Saga
                .Finalize();
     
         
-        public Schedule<ReservationState, PaymentExpired>? PaymentTimeout { get; set; }
-        public Event<PaymentExpired>? PaymentExpired { get; set; }
-        public Event<ReserveTripQuery>? ReserveTrip { get; private set; }
-        public Event<ReserveHotelSuccessResponse>? ReserveHotelSuccessResponse { get; private set; }
-        public Event<ReserveHotelFailureResponse>? ReserveHotelFailureResponse { get; private set; }
-        public Event<ReserveTransportSuccessResponse>? ReserveTransportSuccessResponse { get; private set; }
-        public Event<ReserveTransportFailureResponse>? ReserveTransportFailureResponse { get; private set; }
-        public Event<PaymentForTripAcceptedResponse>? PaymentForTripAcceptedResponse { get; private set; }
-        public Event<PaymentForTripRejectedResponse>? PaymentForTripRejectedResponse { get; private set; }
-        public Event<PaymentQuery>? PaymentQuery { get; private set; }
+        public Schedule<ReservationState, PaymentExpired> PaymentTimeout { get; set; }
+        public Event<PaymentExpired> PaymentExpired { get; set; }
+        public Event<ReserveTripQuery> ReserveTrip { get; private set; }
+        public Event<ReserveHotelSuccessResponse> ReserveHotelSuccessResponse { get; private set; }
+        public Event<ReserveHotelFailureResponse> ReserveHotelFailureResponse { get; private set; }
+        public Event<ReserveTransportSuccessResponse> ReserveTransportSuccessResponse { get; private set; }
+        public Event<ReserveTransportFailureResponse> ReserveTransportFailureResponse { get; private set; }
+        public Event<PaymentForTripAcceptedResponse> PaymentForTripAcceptedResponse { get; private set; }
+        public Event<PaymentForTripRejectedResponse> PaymentForTripRejectedResponse { get; private set; }
+        public Event<PaymentQuery> PaymentQuery { get; private set; }
     }
 }
