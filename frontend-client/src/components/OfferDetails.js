@@ -35,12 +35,14 @@ export class OfferDetails extends Component {
             roomPrices: [],
             roomPricesConverted: {},
             roomPricesConvertedWithId: {},
+            roomQuantities: {},
             selectedTransportType: "",
             transportPrices: [],
             transportPricesConverted: {},
             transportCitiesConverted: {},
             transportFromIdConverted: {},
-            transportToIdConverted: {}
+            transportToIdConverted: {},
+            transportQuantities: {}
         }
     }
 
@@ -154,6 +156,7 @@ export class OfferDetails extends Component {
             room => {
                 this.state.roomPricesConverted[room.name] = room.price
                 this.state.roomPricesConvertedWithId[room.name] = room.roomtypeId
+                this.state.roomQuantities[room.name] = room.quantity
             })
     }
 
@@ -164,6 +167,7 @@ export class OfferDetails extends Component {
                 this.state.transportCitiesConverted[transport.transportName] = transport.departureCity
                 this.state.transportFromIdConverted[transport.transportName] = transport.transportIDFrom
                 this.state.transportToIdConverted[transport.transportName] = transport.transportIDTo
+                this.state.transportQuantities[transport.transportName] = transport.quantity
             })
     }
     
@@ -188,12 +192,16 @@ export class OfferDetails extends Component {
                                 <option key={room.name}>{room.name}</option>
                             ))}
                         </select>
-                        <label className="mt-5"> Rodzaj transportu</label>
+                        <p> Ilość: {this.state.roomQuantities[this.state.selectedRoomType]}</p>
+                        <label className="mt-4"> Rodzaj transportu</label>
                         <select id="selectTransport">
                             {this.state.transportTypeList.map(transport => (
                                 <option key={transport.transportName}>{transport.transportName}</option>
                             ))}
                         </select>
+                        { this.state.selectedTransportType != "Own"  &&
+                            <p> Ilość: {this.state.transportQuantities[this.state.selectedTransportType]}</p>
+                        }
                         <button onClick={this.handleTypesChange} className="mt-5 mx-auto row center-column">Zmień konfigurację</button>
                         
                     </div>
