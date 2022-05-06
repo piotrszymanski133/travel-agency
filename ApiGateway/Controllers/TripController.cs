@@ -52,7 +52,7 @@ namespace ApiGateway.Controllers
             return response.Message;
         }
         [HttpGet]
-        [Route("GetTrip")]
+        [Route("GetUserTrips")]
         public async Task<GetUserTripsResponse> GetUserTrips([FromQuery] UserTripsQueryParemeters tripOfferQueryParameters)
         {
             var response = await _tripOfferClient.GetResponse<GetUserTripsResponse>(new GetUserTripsQuery
