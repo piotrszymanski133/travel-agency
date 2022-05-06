@@ -57,6 +57,7 @@ namespace CommonComponents
     {
         public Guid ReservationId { get; set; }
         public int Price { get; set; }
+        public string TransportTypeName { get; set; }
     }
 
     public class ReserveTransportFailureResponse
@@ -99,5 +100,9 @@ namespace CommonComponents
     {
         public string Username { get; set; }
         public List<UserTransports> UserTransportsList { get; set; }
+    }
+    public class CreateUserTripQueryResponse
+    {
+        public Guid id { get; set; }
     }
 }

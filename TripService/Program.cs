@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TripService.Consumers;
+using TripService.Repository;
 using TripService.Saga;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<ITripsRepository, TripsRepository>();
+
 builder.Services.AddMassTransit(x =>
 {
     x.AddSagaStateMachine<ReservationStateMachine, ReservationState>()
@@ -21,6 +24,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<GetTripsQueryConsumer>();
     x.AddConsumer<GetTripOfferQueryConsumer>();
     x.AddConsumer<GetUserTripsQueryConsumer>();
+    x.AddConsumer<CreateUserTripQueryConsumer>();
     x.AddDelayedMessageScheduler();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>

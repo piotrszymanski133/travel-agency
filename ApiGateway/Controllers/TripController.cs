@@ -21,15 +21,17 @@ namespace ApiGateway.Controllers
         private IRequestClient<ReserveTripQuery> _tripReservationClient;
         private IRequestClient<PaymentQuery> _tripPaymentClient;
         private IRequestClient<GetDestinationsQuery> _destinationsClient;
+        private IRequestClient<GetUserTripsQuery> _userTripsClients;
 
         public TripController(IRequestClient<GetTripsQuery> tripsClient,
             IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
-            IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient)
+            IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient, IRequestClient<GetUserTripsQuery> userTripsClients)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
             _tripPaymentClient = tripPaymentClient;
             _destinationsClient = destinationsClient;
+            _userTripsClients = userTripsClients;
             _tripsClient = tripsClient;
         }
 
@@ -55,9 +57,9 @@ namespace ApiGateway.Controllers
         [Route("GetUserTrips")]
         public async Task<GetUserTripsResponse> GetUserTrips([FromQuery] UserTripsQueryParemeters tripOfferQueryParameters)
         {
-            var response = await _tripOfferClient.GetResponse<GetUserTripsResponse>(new GetUserTripsQuery
+            var response = await _userTripsClients.GetResponse<GetUserTripsResponse>(new GetUserTripsQuery
             {
-                //params
+                Username = tripOfferQueryParameters.Username
             });
             
             return response.Message;

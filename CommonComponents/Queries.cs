@@ -111,3 +111,18 @@ public class GetUserTripsHotelsQuery
 {
     public string Username { get; set; }
 }
+
+public class CreateUserTripQuery
+{
+    public Guid id { get; set; }
+    public string RoomTypeName { get; set; }
+    public string City { get; set; }
+    public string Country { get; set; }
+    public string FoodTypeName { get; set; }
+    public string HotelName { get; set; }
+    public string TransportTypeName { get; set; }
+    public string username { get; set; }
+    public int Persons { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+}

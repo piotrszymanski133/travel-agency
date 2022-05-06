@@ -16,5 +16,12 @@ namespace TripService.Saga
         public Guid? TimeoutId { get; set; }
         public Uri? ResponseAddress { get; set; }
         public ReserveTripOfferParameters ReserveTripOfferParameters { get; set; }
+
+        public string RoomTypeName { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
+        public string FoodTypeName { get; set; }
+        public string HotelName { get; set; }
+        public string TransportTypeName { get; set; }
     }
 }

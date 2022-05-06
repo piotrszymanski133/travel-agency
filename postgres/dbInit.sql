@@ -136,7 +136,6 @@ CREATE TABLE TransportEvent (
     CONSTRAINT Transport_ID FOREIGN KEY(Transport_ID) REFERENCES Transport(ID)
 );
 
-
 INSERT INTO Places(ID, Country, City)
 VALUES
     (1, 'Polska', 'Gdańsk'),
@@ -157,14 +156,20 @@ VALUES
     (5, 5, 2,'Plane','2022-06-01',7),
     (6, 2, 6,'Plane','2022-06-03',7);
 
-/*
-INSERT INTO TransportEvent( Places, Transport_ID,Type,Event_ID)
-VALUES
-    (3, 1,'Book',),
-    (4, 2,'Book',),
-    (1, 2,'Book',),
-    (4, 3,'Book',),
-    (4, 4,'Reservation',),
-    (4, 5,'Reservation',),
-    (4, 6,'Reservation',);
- */
+CREATE DATABASE trips;
+\connect trips;
+
+CREATE TABLE OrderedTrips
+(
+    Trip_ID uuid PRIMARY KEY,
+    Username character varying(32) NOT NULL,
+    Room_Type_Name character varying(32) NOT NULL,
+    Country character varying(255) NOT NULL,
+    City character varying(255) NOT NULL,
+    Food character varying(36) NOT NULL,
+    Transport_Type_Name character varying(16) NOT NULL,
+    Hotel_Name character varying(255) NOT NULL,
+    Persons int NOT NULL,
+    StartDate date NOT NULL,
+    EndDate date NOT NULL
+);

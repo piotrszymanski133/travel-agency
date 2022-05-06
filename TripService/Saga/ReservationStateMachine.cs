@@ -90,6 +90,12 @@ namespace TripService.Saga
                 .ThenAsync(async ctx =>
                 {
                     ctx.Saga.hotelPrice = ctx.Message.Price;
+                    ctx.Saga.City = ctx.Message.City;
+                    ctx.Saga.Country = ctx.Message.Country;
+                    ctx.Saga.HotelName = ctx.Message.HotelName;
+                    ctx.Saga.RoomTypeName = ctx.Message.ReservedRoomName;
+                    ctx.Saga.FoodTypeName = ctx.Message.FoodType;
+                    
                     await Console.Out.WriteLineAsync($"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
 
                 })
@@ -124,6 +130,7 @@ namespace TripService.Saga
            When(ReserveTransportSuccessResponse).ThenAsync(ctx =>
                {
                    ctx.Saga.transportPrice = ctx.Message.Price;
+                   ctx.Saga.TransportTypeName = ctx.Message.TransportTypeName;
                    return Console.Out.WriteLineAsync(
                        $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
                })
@@ -269,6 +276,23 @@ namespace TripService.Saga
                        ReservationId = ctx.Saga.CorrelationId
                    }
                )
+               .Publish(ctx => new CreateUserTripQuery()
+               {
+                   id = ctx.Saga.CorrelationId,
+                   City = ctx.Saga.City,
+                   Country = ctx.Saga.Country,
+                   FoodTypeName = ctx.Saga.FoodTypeName,
+                   HotelName = ctx.Saga.HotelName,
+                   Persons = ctx.Saga.ReserveTripOfferParameters.Adults
+                             +ctx.Saga.ReserveTripOfferParameters.ChildrenUnder3
+                             +ctx.Saga.ReserveTripOfferParameters.ChildrenUnder10
+                             +ctx.Saga.ReserveTripOfferParameters.ChildrenUnder18,
+                   RoomTypeName = ctx.Saga.RoomTypeName,
+                   TransportTypeName = ctx.Saga.TransportTypeName,
+                   username = ctx.Saga.Username,
+                   StartDate = ctx.Saga.ReserveTripOfferParameters.StartDate,
+                   EndDate = ctx.Saga.ReserveTripOfferParameters.EndDate
+               })
                .ThenAsync(async ctx =>
                {
                    var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);

@@ -33,7 +33,8 @@ namespace TransportService.Consumer
                 await context.Publish(new ReserveTransportSuccessResponse()
                 {
                     Price = 0,
-                    ReservationId = command.ReservationId
+                    ReservationId = command.ReservationId,
+                    TransportTypeName = "Own"
                 });
             }
             else
@@ -42,7 +43,7 @@ namespace TransportService.Consumer
                     command.Places, command.ReservationId,
                     command.ReserveTripOfferParameters.StartDate,
                     command.ReserveTripOfferParameters.EndDate,command.ReserveTripOfferParameters.Username);
-                var succes = ret.Item3;
+                var succes = ret.Item2;
 
                 if (succes)
                 {
@@ -52,7 +53,8 @@ namespace TransportService.Consumer
                     await context.Publish(new ReserveTransportSuccessResponse()
                     {
                         Price = price,
-                        ReservationId = command.ReservationId
+                        ReservationId = command.ReservationId,
+                        TransportTypeName = ret.Item1
                     });
                 }
                 else

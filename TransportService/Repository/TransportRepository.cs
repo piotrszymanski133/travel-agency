@@ -16,7 +16,7 @@ namespace TripService.Repository
         List<Transport> MatchTransports(List<Transport> fromMatches, List<Transport> toMatches);
         List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,int Persons);
         TransportService.Models.Transport GetTransport(long id);
-        (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
+        (string, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
             int commandPlaces, Guid commandReservationId,DateTime StartDate,DateTime EndDate, string username);
 
         void RollbackReserveTransport(Guid commandReservationId);
@@ -189,11 +189,13 @@ namespace TripService.Repository
                 .First(transport => transport.Id == id);
         }
 
-        public (Guid, Guid, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces,
+        public (string, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces,
             Guid commandReservationId, DateTime StartDate, DateTime EndDate,string username)
         {
             var gui1 = Guid.NewGuid();
             var gui2 = Guid.NewGuid();
+
+            string transportTypeName = null;
             using (var context = new transportsdbContext())
             {
                 //Some Asserts
@@ -201,6 +203,8 @@ namespace TripService.Repository
                     .ToList();
                 var transportReturn = context.Transports.Where(x => x.Id == commandReturnTransportId).AsNoTracking()
                     .ToList();
+                
+               
                 
                 var bookedtransport1 = context.Transportevents
                     .Where(x => x.TransportId == commandDepartueTransportId)
@@ -217,7 +221,7 @@ namespace TripService.Repository
                     new DateOnly(StartDate.Year, StartDate.Month, StartDate.Day) ||
                     transportReturn[0].Transportdate != new DateOnly(EndDate.Year, EndDate.Month, EndDate.Day))
                 {
-                    return (Guid.Empty, Guid.Empty, false);
+                    return (transportReturn[0].Transporttype, false);
                 }
 
                 // Console.Out.WriteLine($"R1: {gui1}, R2: {gui2}");
@@ -242,12 +246,13 @@ namespace TripService.Repository
                     Username = username
                 };
 
+                transportTypeName = transportDepartue[0].Transporttype;
                 context.Transportevents.Add(reservation_departue);
                 context.Transportevents.Add(reservation_return);
                 context.SaveChanges();
                 
             }
-            return (gui1, gui2, true);
+            return (transportTypeName, true);
         }
 
         public void RollbackReserveTransport(Guid commandReservationId)
