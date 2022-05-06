@@ -24,7 +24,7 @@ const Payment = ()  => {
             var reservationObject = {
                 'userName': user.username,
                 'reservationId': reservationId,
-                //'cardNumber': cardNumber
+                'cardNumber': cardNumber
             }
             fetch(BASE_URL + ENDPOINTS.payment, {
                 method: 'POST',
