@@ -7,7 +7,7 @@ var reservationId = queryParams.get('reservationId');
 const PaymentOK = ()  =>{
     return (
         <div className="logout text-center">
-            <h3>Płatność przebiegła prawidłowo. Udało się zakupić ofertę o id {reservationId} dla użytkownika {userName}</h3>
+            <h3>Płatność przebiegła prawidłowo. Udało się zakupić ofertę dla użytkownika {userName}</h3>
         </div>
     );
 

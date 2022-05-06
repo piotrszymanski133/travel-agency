@@ -7,7 +7,7 @@ var reservationId = queryParams.get('reservationId');
 const PaymentError = ()  =>{
     return (
         <div className="logout text-center">
-            <h3>Nie udało się zakupić wycieczki o id {reservationId} w podanym czasie dla user {userName}.</h3>
+            <h3>Pojawił się błąd podczas rezerwacji o id {reservationId} w podanym czasie dla user {userName}.</h3>
         </div>
     );
 

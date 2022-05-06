@@ -194,7 +194,7 @@ export class OfferDetails extends Component {
                                 <option key={transport.transportName}>{transport.transportName}</option>
                             ))}
                         </select>
-                        <button onClick={this.handleTypesChange} className="mt-5 mx-auto row center-column">Przelicz</button>
+                        <button onClick={this.handleTypesChange} className="mt-5 mx-auto row center-column">Zmień konfigurację</button>
                         
                     </div>
                     <form className="col border border-dark list-group-item text-center reservationForm" onSubmit={this.handleReserve.bind(this)}>

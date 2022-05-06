@@ -37,12 +37,15 @@ export class Navigation extends Component{
                         <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/destinations">
                             Nasze kierunki
                         </NavLink>
+                        <NavLink className={(this.isLogged ? 'd-inline p-3 text-primary text-decoration-none' : 'd-none')} to="/userTrips">
+                            Twoje wycieczki
+                        </NavLink>
                     </Nav>
                     <Nav>
-                        <NavLink className={(this.isLogged ? 'd-none d-inline p-3 text-primary text-decoration-none' : 'd-inline p-3 text-primary text-decoration-none')} to="/login">
+                        <NavLink className={(this.isLogged ? 'd-none' : 'd-inline p-3 text-primary text-decoration-none')} to="/login">
                             Zaloguj
                         </NavLink>
-                        <NavLink className={(this.isLogged ? 'd-inline p-3 text-primary text-decoration-none': 'd-none  d-inline p-3 text-primary text-decoration-none')} to="/logout">
+                        <NavLink className={(this.isLogged ? 'd-inline p-3 text-primary text-decoration-none': 'd-none')} to="/logout">
                             Wyloguj
                         </NavLink>
                     </Nav>

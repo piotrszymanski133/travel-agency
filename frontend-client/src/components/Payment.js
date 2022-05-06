@@ -24,7 +24,7 @@ const Payment = ()  => {
             var reservationObject = {
                 'userName': user.username,
                 'reservationId': reservationId,
-                //'cardNumber': cardNumber
+                'cardNumber': cardNumber
             }
             fetch(BASE_URL + ENDPOINTS.payment, {
                 method: 'POST',
@@ -61,6 +61,7 @@ const Payment = ()  => {
                         <label htmlFor="username">Numer karty: </label>
                         <input
                             type="text"
+                            type="tel" pattern="\d*" maxlength="16"
                             onChange={({target}) => setCardNumber(target.value)}
                         />
                         <button className="button mt-3" type="submit">Zapłać</button>
