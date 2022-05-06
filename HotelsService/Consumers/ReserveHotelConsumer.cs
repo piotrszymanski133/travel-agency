@@ -26,7 +26,7 @@ namespace HotelsService.Consumers
             {
                 Hotel hotel = _hotelService.getHotel(context.Message.ReserveTripOfferParameters.HotelId);
                 string roomName = hotel.Hotelrooms
-                    .Find(r => r.Id == context.Message.ReserveTripOfferParameters.RoomTypeId)
+                    .Find(r => r.RoomtypeId == context.Message.ReserveTripOfferParameters.RoomTypeId)
                     .Roomtype
                     .Name;
                 await context.Publish(new ReserveHotelSuccessResponse()
