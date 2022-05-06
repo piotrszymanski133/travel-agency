@@ -102,6 +102,11 @@ public class GetUserTripsQuery
     public string Username { get; set; }
 }
 
+public class GetUserTripsTransportQuery
+{
+    public string Username { get; set; }
+}
+
 public class GetUserTripsHotelsQuery
 {
     public string Username { get; set; }

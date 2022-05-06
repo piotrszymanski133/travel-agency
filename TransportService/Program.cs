@@ -16,6 +16,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<ReserveTransportQueryConsumer>();
     x.AddConsumer<RollbackReserveTransportQueryConsumer>();
     x.AddConsumer<ConfirmTransportOrderConsumer>();
+    x.AddConsumer<GetUserTripsTransportConsumer>();
 
     builder.Services.AddTransient<ITransportRepository, TransportRepository>();
     x.UsingRabbitMq((context, cfg) =>
