@@ -33,6 +33,10 @@ namespace HotelsService.Consumers
                 {
                     Price = PriceCalculator.CalculateHotelRoomConfigPrice(hotel,
                         context.Message.ReserveTripOfferParameters),
+                    HotelName = hotel.Name,
+                    City = hotel.Destination.City,
+                    Country = hotel.Destination.Country,
+                    FoodType = hotel.Food,
                     ReservedRoomName = roomName,
                     ReservationId = context.Message.ReservationId,
                 });
