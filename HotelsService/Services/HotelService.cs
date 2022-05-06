@@ -57,7 +57,6 @@ namespace HotelsService.Services
                 room.CapacityPeople == neededCapacity && room.Quantity > 0);
             if (roomConfigurations.Count != 0)
             {
-                roomConfigurations.ForEach(room => room.Quantity = 1);
                 offer.RoomsConfigurations = roomConfigurations;
             }
 

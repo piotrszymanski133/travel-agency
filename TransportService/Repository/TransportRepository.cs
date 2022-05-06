@@ -114,7 +114,8 @@ namespace TripService.Repository
                             DestinationCity = transport.DestinationPlaces.City,
                             DestinationCountry = transport.DestinationPlaces.Country,
                             Name = transport.Transporttype,
-                            Id = transport.Id
+                            Id = transport.Id,
+                            Quantity = transport.Places - eventReserved
                         });
                     }
 
@@ -170,7 +171,8 @@ namespace TripService.Repository
                         DestinationCountry = transport.DestinationCountry,
                         Persons = Persons,
                         TransportIDTo = xx.Id,
-                        TransportName = transport.Name
+                        TransportName = transport.Name,
+                        Quantity = Math.Min(transport.Quantity,xx.Quantity)
                     });
                 }
             }

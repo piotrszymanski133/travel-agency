@@ -49,6 +49,7 @@ namespace TransportService.Consumer
                 TransportIDFrom = -1,
                 TransportIDTo = -1,
                 TransportName = "Own",
+                Quantity = 99
             });
             final_list.ForEach(transport => transport.Price = PriceCalculator.CalculateTransportOfferPrice(transport));
             await context.RespondAsync<GetTransportOffersResponse>(new GetTransportOffersResponse()

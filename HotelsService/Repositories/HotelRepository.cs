@@ -51,7 +51,6 @@ namespace HotelsService.Repositories
             {
                 hotels = db.Hotels
                     .Include(h => h.Events)
-                    .ThenInclude(e => e.Eventrooms)
                     .Include(h => h.Destination)
                     .Include(h => h.Hotelrooms)
                     .ThenInclude(r => r.Roomtype)
@@ -61,7 +60,6 @@ namespace HotelsService.Repositories
             {
                 hotels = db.Hotels
                     .Include(h => h.Events)
-                    .ThenInclude(e => e.Eventrooms)
                     .Include(h => h.Destination)
                     .Include(h => h.Hotelrooms)
                     .ThenInclude(r => r.Roomtype)
@@ -121,30 +119,28 @@ namespace HotelsService.Repositories
                 Name = room.Roomtype.Name
             }));
 
-            short[] maxReserved = new short[5];
-            for (int i = 0; i < 5; i++)
+            short[] maxReserved = new short[12];
+            for (int i = 0; i < 12; i++)
                 maxReserved[i] = 0;
 
             for (DateTime date = start; date <= end; date = date.AddDays(1))
             {
                 var reservations = hotel.Events.Where(e => e.StartDate <= date && e.EndDate >= date)
-                    .SelectMany(e => e.Eventrooms)
-                    .GroupBy(e => e.RoomtypeId)
-                    .Select(er => er
-                        .ToList()
-                        .Sum(er => er.Quantity))
-                    .ToArray();
+                    .GroupBy(e => e.RoomTypeId)
+                    .Select(e => new KeyValuePair<short, int>(e.Key, e.ToList().Count));
 
-                for (int i = 0; i < reservations.Length; i++)
+                var enumerator = reservations.GetEnumerator();
+
+                while (enumerator.MoveNext())
                 {
-                    if (maxReserved[i] < reservations[i])
-                        maxReserved[i] = (short)reservations[i];
+                    if (maxReserved[enumerator.Current.Key] < enumerator.Current.Value)
+                        maxReserved[enumerator.Current.Key] = (short)enumerator.Current.Value;
                 }
             }
 
             for (int i = 0; i < maxHotelState.FreeRooms.Count; i++)
             {
-                maxHotelState.FreeRooms[i].Quantity -= maxReserved[i];
+                maxHotelState.FreeRooms[i].Quantity -= maxReserved[maxHotelState.FreeRooms[i].RoomtypeId];
             }
 
             return maxHotelState;
@@ -177,7 +173,7 @@ namespace HotelsService.Repositories
                 .ToList();
             foreach (var hotel in hotels)
             {
-                List<Event> events = db.Events.Where(e => e.HotelId == hotel.Id).Include(e => e.Eventrooms).ToList();
+                List<Event> events = db.Events.Where(e => e.HotelId == hotel.Id).ToList();
                 if (events.Count < 10)
                 {
                     HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).First();
@@ -196,7 +192,6 @@ namespace HotelsService.Repositories
                 .Include(h => h.Hotelrooms)
                 .ThenInclude(r => r.Roomtype)
                 .Include(h => h.Events)
-                .ThenInclude(e => e.Eventrooms)
                 .ToList();
             Hotel hotel = db.Hotels.Find(hotelId);
             if (hotel == null)
@@ -221,21 +216,10 @@ namespace HotelsService.Repositories
                     EndDate = end.AddHours(4).ToUniversalTime().Date,
                     HotelId = hotel.Id,
                     Type = "Reservation",
+                    RoomTypeId = (short) roomTypeId,
                     Id = Guid.NewGuid()
                 };
                 db.Events.Add(e);
-                Eventroom eventroom = new Eventroom()
-                {
-                    Id = Guid.NewGuid(),
-                    Quantity = 2,
-                    RoomtypeId = (short)roomTypeId,
-                    Event = e,
-                };
-                e.Eventrooms = new List<Eventroom>()
-                {
-                    eventroom
-                };
-
                 db.SaveChanges();
             }
         }

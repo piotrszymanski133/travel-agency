@@ -45,21 +45,14 @@ CREATE TABLE Tours (
 
 CREATE TABLE Events (
     ID uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    Username character varying(32) NOT NULL, 
+    Username character varying(32) NOT NULL,
+    RoomType_ID smallint NOT NULL, 
     TripReservation_Id uuid NOT NULL UNIQUE, 
     Type character varying(16) NOT NULL,
     Hotel_ID character varying(36) NOT NULL,
     StartDate date NOT NULL,
     EndDate date NOT NULL,
     CONSTRAINT Hotel_ID FOREIGN KEY(Hotel_ID) REFERENCES Hotels(ID)
-);
-
-CREATE TABLE EventRooms(
-    ID uuid DEFAULT gen_random_uuid() PRIMARY KEY,
-    Event_ID uuid NOT NULL,
-    Quantity smallint NOT NULL,
-    RoomType_ID smallint NOT NULL,
-    CONSTRAINT Event_ID FOREIGN KEY(Event_ID) REFERENCES Events(ID) ON DELETE CASCADE
 );
 
 --TEST DATA
