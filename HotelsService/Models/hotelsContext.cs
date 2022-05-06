@@ -19,7 +19,6 @@ namespace HotelsService
 
         public virtual DbSet<Destination> Destinations { get; set; } = null!;
         public virtual DbSet<Event> Events { get; set; } = null!;
-        public virtual DbSet<Eventroom> Eventrooms { get; set; } = null!;
         public virtual DbSet<Hotel> Hotels { get; set; } = null!;
         public virtual DbSet<Hotelroom> Hotelrooms { get; set; } = null!;
         public virtual DbSet<Hotelroomtype> Hotelroomtypes { get; set; } = null!;
@@ -64,6 +63,9 @@ namespace HotelsService
                     .HasColumnName("id")
                     .HasDefaultValueSql("gen_random_uuid()");
 
+                entity.Property(e => e.RoomTypeId)
+                    .HasColumnName("roomtype_id");
+
                 entity.Property(e => e.TripReservationId)
                     .HasColumnName("tripreservation_id");
 
@@ -86,26 +88,6 @@ namespace HotelsService
                     .HasForeignKey(d => d.HotelId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("hotel_id");
-            });
-
-            modelBuilder.Entity<Eventroom>(entity =>
-            {
-                entity.ToTable("eventrooms");
-
-                entity.Property(e => e.Id)
-                    .HasColumnName("id")
-                    .HasDefaultValueSql("gen_random_uuid()");
-
-                entity.Property(e => e.EventId).HasColumnName("event_id");
-
-                entity.Property(e => e.Quantity).HasColumnName("quantity");
-
-                entity.Property(e => e.RoomtypeId).HasColumnName("roomtype_id");
-
-                entity.HasOne(d => d.Event)
-                    .WithMany(p => p.Eventrooms)
-                    .HasForeignKey(d => d.EventId)
-                    .HasConstraintName("event_id");
             });
 
             modelBuilder.Entity<Hotel>(entity =>

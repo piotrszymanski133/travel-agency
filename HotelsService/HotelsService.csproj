@@ -27,4 +27,8 @@
     <ProjectReference Include="..\CommonComponents\CommonComponents.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Models\Eventroom.cs" />
+  </ItemGroup>
+
 </Project>
