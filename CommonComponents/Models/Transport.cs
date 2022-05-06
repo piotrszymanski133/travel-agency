@@ -8,5 +8,6 @@
         public string DepartueCity { get; set; }
         public string DepartueCountry { get; set; }
         public long Id { get; set; }
+        public int Quantity { get; set; }
     }
 }

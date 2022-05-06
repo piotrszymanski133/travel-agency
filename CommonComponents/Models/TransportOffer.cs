@@ -14,5 +14,6 @@ namespace CommonComponents.Models
         public string DepartureCity { get; set; }
         public int Persons { get; set; }
         public int Price { get; set; }
+        public int Quantity { get; set; }
     }
 }
