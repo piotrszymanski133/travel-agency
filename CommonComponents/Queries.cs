@@ -96,3 +96,8 @@ public class GetDestinationsQuery
 {
     
 }
+
+public class GetUserTripsQuery
+{
+    public string Username { get; set; }
+}

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TransportService.Consumer;
+using TripService.Consumers;
 using TripService.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<ReserveTransportQueryConsumer>();
     x.AddConsumer<RollbackReserveTransportQueryConsumer>();
     x.AddConsumer<ConfirmTransportOrderConsumer>();
+    x.AddConsumer<GetUserTripsQueryConsumer>();
     builder.Services.AddTransient<ITransportRepository, TransportRepository>();
     x.UsingRabbitMq((context, cfg) =>
     {
