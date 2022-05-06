@@ -6,13 +6,10 @@ namespace HotelsService
 {
     public partial class Event
     {
-        public Event()
-        {
-            Eventrooms = new List<Eventroom>();
-        }
 
         public Guid Id { get; set; }
         public Guid TripReservationId { get; set; }
+        public short RoomTypeId { get; set; }
         public string Username { get; set; }
         public string Type { get; set; } = null!;
         public string HotelId { get; set; } = null!;
@@ -21,6 +18,5 @@ namespace HotelsService
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public virtual List<Eventroom> Eventrooms { get; set; }
     }
 }

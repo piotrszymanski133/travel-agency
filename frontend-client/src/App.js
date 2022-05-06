@@ -13,6 +13,7 @@ import LoginError from "./components/LoginError"
 import ReservationError from "./components/ReservationError"
 import PaymentOK from "./components/PaymentOK";
 import PaymentError from "./components/PaymentError";
+import {UserTrips} from "./components/UserTrips";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
                   <Route path="/reservationError" element={<ReservationError/>}/>
                   <Route path="/paymentOk" element={<PaymentOK/>}/>
                   <Route path="/paymentError" element={<PaymentError/>}/>
+                  <Route path="/userTrips" element={<UserTrips/>}/>
               </Routes>
           </div>
       </BrowserRouter>

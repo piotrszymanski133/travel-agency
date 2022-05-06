@@ -61,6 +61,7 @@ const Payment = ()  => {
                         <label htmlFor="username">Numer karty: </label>
                         <input
                             type="text"
+                            type="tel" pattern="\d*" maxlength="16"
                             onChange={({target}) => setCardNumber(target.value)}
                         />
                         <button className="button mt-3" type="submit">Zapłać</button>
