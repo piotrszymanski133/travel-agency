@@ -17,7 +17,7 @@ namespace TripService.Repository
         List<TransportOffer> MatchSpecyficTransports(List<Transport> fromMatches, List<Transport> toMatches,int Persons);
         TransportService.Models.Transport GetTransport(long id);
         (string, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId,
-            int commandPlaces, Guid commandReservationId,DateTime StartDate,DateTime EndDate, string username);
+            int commandPlaces, Guid commandReservationId,DateTime StartDate,DateTime EndDate, string username,string hotelCityName);
 
         void RollbackReserveTransport(Guid commandReservationId);
         void ConfirmTransport(Guid commandReservationId);
@@ -190,7 +190,7 @@ namespace TripService.Repository
         }
 
         public (string, bool) ReserveTransport(long commandDepartueTransportId, long commandReturnTransportId, int commandPlaces,
-            Guid commandReservationId, DateTime StartDate, DateTime EndDate,string username)
+            Guid commandReservationId, DateTime StartDate, DateTime EndDate,string username, string hotelCityName)
         {
             var gui1 = Guid.NewGuid();
             var gui2 = Guid.NewGuid();
@@ -199,9 +199,13 @@ namespace TripService.Repository
             using (var context = new transportsdbContext())
             {
                 //Some Asserts
-                var transportDepartue = context.Transports.Where(x => x.Id == commandDepartueTransportId).AsNoTracking()
+                var transportDepartue = context.Transports.Where(x => x.Id == commandDepartueTransportId)
+                    .Include(x=>x.DestinationPlaces)
+                    .Include(x=>x.SourcePlaces)
                     .ToList();
-                var transportReturn = context.Transports.Where(x => x.Id == commandReturnTransportId).AsNoTracking()
+                var transportReturn = context.Transports.Where(x => x.Id == commandReturnTransportId).Include(x=>x.DestinationPlaces).AsNoTracking()
+                    .Include(x=>x.DestinationPlaces)
+                    .Include(x=>x.SourcePlaces)
                     .ToList();
                 
                
@@ -219,7 +223,9 @@ namespace TripService.Repository
                     transportReturn[0].Places - bookedtransport2 < commandPlaces ||
                     transportDepartue[0].Transportdate !=
                     new DateOnly(StartDate.Year, StartDate.Month, StartDate.Day) ||
-                    transportReturn[0].Transportdate != new DateOnly(EndDate.Year, EndDate.Month, EndDate.Day))
+                    transportReturn[0].Transportdate != new DateOnly(EndDate.Year, EndDate.Month, EndDate.Day) ||
+                    transportDepartue[0].DestinationPlaces.City!= hotelCityName ||
+                    transportDepartue[0].DestinationPlaces.City!= transportReturn[0].SourcePlaces.City)
                 {
                     return (transportReturn[0].Transporttype, false);
                 }

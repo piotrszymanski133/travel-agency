@@ -55,6 +55,7 @@ public class ReserveTransportQuery
     public int Places { get; set; }
     public Guid ReservationId { get; set; }
     public ReserveTripOfferParameters ReserveTripOfferParameters { get; set; }
+    public string HotelCity { get; set; }
 }
 
 public class RollbackHotelReservationQuery

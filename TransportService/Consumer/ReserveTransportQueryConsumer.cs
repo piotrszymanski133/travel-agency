@@ -42,7 +42,7 @@ namespace TransportService.Consumer
                 var ret = _repository.ReserveTransport(command.DepartueTransportID, command.ReturnTransportID,
                     command.Places, command.ReservationId,
                     command.ReserveTripOfferParameters.StartDate,
-                    command.ReserveTripOfferParameters.EndDate,command.ReserveTripOfferParameters.Username);
+                    command.ReserveTripOfferParameters.EndDate,command.ReserveTripOfferParameters.Username,command.HotelCity);
                 var succes = ret.Item2;
 
                 if (succes)

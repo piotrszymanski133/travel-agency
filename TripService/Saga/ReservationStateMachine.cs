@@ -112,7 +112,8 @@ namespace TripService.Saga
                              ctx.Saga.ReserveTripOfferParameters.ChildrenUnder10 +
                              ctx.Saga.ReserveTripOfferParameters.ChildrenUnder18,
                     ReservationId = ctx.Saga.CorrelationId,
-                    ReserveTripOfferParameters = ctx.Saga.ReserveTripOfferParameters
+                    ReserveTripOfferParameters = ctx.Saga.ReserveTripOfferParameters,
+                    HotelCity = ctx.Saga.City
                 })
                 .TransitionTo(HotelReservationSucceded);
        private EventActivityBinder<ReservationState,ReserveHotelFailureResponse> WaitingForHotelResponseFailureHandler() => 
