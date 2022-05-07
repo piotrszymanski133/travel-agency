@@ -105,11 +105,13 @@ namespace HotelsService.Services
 
         public List<string> GetAllDestinations()
         {
-            return _hotelRepository.GetAllHotels()
+            List<string> destinations = _hotelRepository.GetAllHotels()
                 .GroupBy(h => h.Destination.Country)
                 .Select(x => x.FirstOrDefault())
                 .Select(x => x.Destination.Country)
                 .ToList();
+            destinations.Add("dowolnie");
+            return destinations;
         }
 
         public List<UserTripHotel> GetUserOrders(string messageUsername)
