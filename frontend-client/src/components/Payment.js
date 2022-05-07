@@ -44,14 +44,14 @@ const Payment = ()  => {
                                 if (resp.success === true) {
                                     window.location.href = "/paymentOk?" + searchParams;
                                 }
+                                else if (resp.timeout === true){
+                                    window.location.href = "/paymentErrorTimeout";
+                                }
                                 else{
                                     window.location.href = "/paymentError";
                                 }
                             }
                         )
-                    if(response.status === 500) {
-                        window.location.href = "/paymentErrorTimeout";
-                    }
                 })
         }
 
@@ -60,8 +60,7 @@ const Payment = ()  => {
                 <h4 className="text-center mt-5">Rezerwacja przeszła pomyślnie. Masz 1 minutę, aby dokonać
                     płatności.</h4>
                 <div className="paymentForm">
-                    <h5 className="text-center mb-5">Podaj numer karty, aby zapłacić za wycieczkę o
-                        id {reservationId}</h5>
+                    <h5 className="text-center mb-5">Podaj numer karty, aby zapłacić za wycieczkę</h5>
                     <h5 className="text-center">Cena: {price} PLN</h5>
                     <form onSubmit={handleSubmitPayment}>
                         <label htmlFor="username">Numer karty: </label>
