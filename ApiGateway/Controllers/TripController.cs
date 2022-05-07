@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using ApiGateway.Models;
@@ -98,6 +99,20 @@ namespace ApiGateway.Controllers
         public async Task<ReserveTripResponse> ReserveTrip(
             [FromBody] ReserveTripOfferParameters reserveTripOfferParameters)
         {
+            if (reserveTripOfferParameters.Adults <= 0 ||
+                reserveTripOfferParameters.ChildrenUnder3 < 0 ||
+                reserveTripOfferParameters.ChildrenUnder10 < 0 ||
+                reserveTripOfferParameters.ChildrenUnder18 < 0 || 
+                reserveTripOfferParameters.StartDate < DateTime.Today ||
+                reserveTripOfferParameters.EndDate < DateTime.Today ||
+                reserveTripOfferParameters.EndDate < reserveTripOfferParameters.StartDate)
+            {
+                return new ReserveTripResponse()
+                {
+                    Success = false,
+                    ReservationId = Guid.Empty
+                };
+            }
             var response = await _tripReservationClient.GetResponse<ReserveTripResponse>(new ReserveTripQuery()
             {
                 ReserveTripOfferParameters = reserveTripOfferParameters,
@@ -110,13 +125,35 @@ namespace ApiGateway.Controllers
         [Route("Payment")]
         public async Task<PaymentResponse> PayForTrip([FromBody] PaymentParameters paymentParameters)
         {
-            var response = await _tripPaymentClient.GetResponse<PaymentResponse>(new PaymentQuery()
+            if (paymentParameters.CardNumber.Length != 16 || !Regex.IsMatch(paymentParameters.CardNumber, @"^\d+$"))
             {
-                ReservationId = paymentParameters.ReservationId,
-                CardNumber = paymentParameters.CardNumber,
-                Username = paymentParameters.Username
-            });
-            return response.Message;
+                return new PaymentResponse()
+                {
+                    Success = false,
+                    Timeout = false,
+                    ReservationId = paymentParameters.ReservationId
+                };
+            }
+
+            try
+            {
+                var response = await _tripPaymentClient.GetResponse<PaymentResponse>(new PaymentQuery()
+                {
+                    ReservationId = paymentParameters.ReservationId,
+                    CardNumber = paymentParameters.CardNumber,
+                    Username = paymentParameters.Username
+                });
+                return response.Message;
+            }
+            catch (MassTransitException)
+            {
+                return new PaymentResponse()
+                {
+                    Success = false,
+                    Timeout = true,
+                    ReservationId = paymentParameters.ReservationId
+                };
+            }
         }
 
         [HttpGet]

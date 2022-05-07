@@ -214,6 +214,7 @@ namespace TripService.Saga
                            await endpoint.Send(new PaymentResponse()
                            {
                                Success = false,
+                               Timeout = false,
                                ReservationId = ctx.Saga.CorrelationId
                            }, r => r.RequestId = ctx.Saga.RequestId);
                        }).Publish(ctx => new RollbackHotelReservationQuery()
@@ -263,6 +264,7 @@ namespace TripService.Saga
                    await endpoint.Send(new PaymentResponse()
                    {
                        Success = false,
+                       Timeout = false,
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
                })
@@ -307,6 +309,7 @@ namespace TripService.Saga
                    await endpoint.Send(new PaymentResponse()
                    {
                        Success = true,
+                       Timeout = false,
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
                })

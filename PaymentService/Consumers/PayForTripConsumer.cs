@@ -9,7 +9,7 @@ namespace PaymentService.Consumers
     {
         public Task Consume(ConsumeContext<PayForTripQuery> context)
         {
-            if (new Random().Next() % 10 == 0)
+            if (context.Message.CardNumber.EndsWith("0"))
             {
                 context.Publish(new PaymentForTripRejectedResponse()
                 {

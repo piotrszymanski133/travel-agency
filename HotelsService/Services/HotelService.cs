@@ -70,13 +70,15 @@ namespace HotelsService.Services
         {
             try
             {
+                int peopleNumber = parameters.Adults + parameters.ChildrenUnder3 + parameters.ChildrenUnder10 +
+                                   parameters.ChildrenUnder18;
                 Hotel hotel = _hotelRepository.GetHotelWithDescription(parameters.HotelId);
                 HotelStateOnDay hotelStateOnDay = _hotelRepository.findFreeRoomsForReservationTime(hotel,
                     parameters.StartDate, parameters.EndDate);
                 HotelRoom roomToReserve =
                     hotelStateOnDay.FreeRooms.Find(
                         room => room.RoomtypeId == parameters.RoomTypeId && room.Quantity > 0);
-                if (roomToReserve == null)
+                if (roomToReserve == null || peopleNumber != roomToReserve.CapacityPeople)
                 {
                     return false;
                 }
@@ -103,13 +105,11 @@ namespace HotelsService.Services
 
         public List<string> GetAllDestinations()
         {
-            List<string> destinations = _hotelRepository.GetAllHotels()
+            return _hotelRepository.GetAllHotels()
                 .GroupBy(h => h.Destination.Country)
                 .Select(x => x.FirstOrDefault())
                 .Select(x => x.Destination.Country)
                 .ToList();
-            destinations.Add("Dowolnie");
-            return destinations;
         }
 
         public List<UserTripHotel> GetUserOrders(string messageUsername)

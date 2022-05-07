@@ -74,6 +74,7 @@ namespace CommonComponents
     {
         public Guid ReservationId { get; set; }
         public bool Success { get; set; }
+        public bool Timeout { get; set; }
     }
 
     public class PaymentForTripAcceptedResponse
