@@ -4,7 +4,7 @@
 const PaymentError = ()  =>{
     return (
         <div className="logout text-center">
-            <h3>Pojawił się błąd podczas dokonywania rezerwacji. Przekroczone okno czasowe</h3>
+            <h3>Pojawił się błąd podczas dokonywania płatności.</h3>
         </div>
     );
 
