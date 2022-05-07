@@ -17,7 +17,6 @@ const convertDate = (inputFormat) => {
     return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate()].join('-')
 }
 
-
 export class OfferDetails extends Component {
     constructor(props) {
         super(props);
@@ -42,7 +41,8 @@ export class OfferDetails extends Component {
             transportCitiesConverted: {},
             transportFromIdConverted: {},
             transportToIdConverted: {},
-            transportQuantities: {}
+            transportQuantities: {},
+            promoCode: ""
         }
     }
 
@@ -121,7 +121,8 @@ export class OfferDetails extends Component {
             "adults": parseInt(adults),
             "childrenUnder3": parseInt(children_under_3),
             "childrenUnder10": parseInt(children_under_10), 
-            "childrenUnder18": parseInt(children_under_18)
+            "childrenUnder18": parseInt(children_under_18),
+            "promoCode": this.state.promoCode
         }
         fetch(BASE_URL + ENDPOINTS.reserve, {
             method: 'POST',
@@ -208,6 +209,11 @@ export class OfferDetails extends Component {
                     <form className="col border border-dark list-group-item text-center reservationForm" onSubmit={this.handleReserve.bind(this)}>
                     <h5 className="mt-5">Cena: </h5>
                     <h5 className="mt-5">{this.state.roomPricesConverted[this.state.selectedRoomType] + this.state.transportPricesConverted[this.state.selectedTransportType]} PLN</h5>
+                        <label>Kod promocyjny: </label>
+                        <input
+                            type="text"
+                            onChange={({ target }) => this.setState({promoCode: target.value})}
+                        />
                     <p className={(!this.isLogged ?  'mt-5 text-danger' : 'd-none')}> Zaloguj się, aby dokonać rezerwacji</p>
                     <input className={(this.isLogged ?  'mt-5 mx-auto row center-column' : 'd-none')} type="submit" value="Rezerwuj"/>
                     </form>
