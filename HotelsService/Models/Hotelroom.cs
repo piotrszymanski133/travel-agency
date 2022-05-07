@@ -7,7 +7,7 @@ namespace HotelsService
     public partial class Hotelroom
     {
         public short Id { get; set; }
-        public string HotelId { get; set; } = null!;
+        public short HotelId { get; set; }
         public short RoomtypeId { get; set; }
         public short Quantity { get; set; }
 

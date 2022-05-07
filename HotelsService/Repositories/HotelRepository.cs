@@ -23,7 +23,7 @@ namespace HotelsService.Repositories
             DateTime end, string username);
 
         public List<CommonComponents.Models.Hotel> GetHotels(TripParameters tripParameters);
-        public HotelWithDescription GetHotelWithDescription(string hotelId);
+        public HotelWithDescription GetHotelWithDescription(short hotelId);
         public HotelStateOnDay findFreeRoomsForReservationTime(Hotel hotel, DateTime start, DateTime end);
         void rollbackReservation(Guid messageTripReservationId);
         void confirmOrder(Guid messageReservationId);
@@ -196,7 +196,7 @@ namespace HotelsService.Repositories
             return hotelsWithDescriptions;
         }
 
-        public HotelWithDescription GetHotelWithDescription(string hotelId)
+        public HotelWithDescription GetHotelWithDescription(short hotelId)
         {
             using var db = new hotelsContext();
             db.Hotels

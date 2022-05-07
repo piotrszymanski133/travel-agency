@@ -17,7 +17,7 @@ namespace HotelsService.Services
 
         bool tryToReserveHotel(ReserveTripOfferParameters parameters, Guid reservationId);
         void rollbackReservation(Guid messageTripReservationId);
-        public HotelWithDescription getHotel(string hotelId);
+        public HotelWithDescription getHotel(short hotelId);
         void confirmOrder(Guid messageReservationId);
         List<string> GetAllDestinations();
         List<UserTripHotel> GetUserOrders(string messageUsername);
@@ -93,7 +93,7 @@ namespace HotelsService.Services
             }
         }
 
-        public HotelWithDescription getHotel(string hotelId)
+        public HotelWithDescription getHotel(short hotelId)
         {
             return _hotelRepository.GetHotelWithDescription(hotelId);
         }

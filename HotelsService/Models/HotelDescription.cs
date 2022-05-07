@@ -5,11 +5,11 @@ namespace HotelsService.Models
 {
     public class HotelDescription
     {
-        [BsonId] public string Id { get; set; } = null!;
+        [BsonId] public short Id { get; set; }
 
         [BsonElement("Description")] public string Description { get; set; } = null!;
 
-        public HotelDescription(string id, string description)
+        public HotelDescription(short id, string description)
         {
             Id = id;
             Description = description;

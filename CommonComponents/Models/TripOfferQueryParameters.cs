@@ -4,7 +4,7 @@ namespace CommonComponents.Models
 {
     public class TripOfferQueryParameters
     {
-        public string HotelId { get; set; }
+        public short HotelId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int Adults { get; set; }

@@ -7,7 +7,7 @@ CREATE TABLE Destinations (
 );
 
 CREATE TABLE Hotels (
-    ID character varying(36) NOT NULL,
+    ID smallint NOT NULL,
     Name character varying(255) NOT NULL,
 	Destination_ID smallint NOT NULL,
 	Rating real NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE HotelRoomTypes (
 
 CREATE TABLE HotelRooms (
 	ID smallint NOT NULL,
-	Hotel_ID character varying(36) NOT NULL,
+	Hotel_ID smallint NOT NULL,
 	RoomType_ID smallint NOT NULL,
 	Quantity smallint NOT NULL,
 	PRIMARY KEY (ID),
@@ -49,7 +49,7 @@ CREATE TABLE Events (
     RoomType_ID smallint NOT NULL, 
     TripReservation_Id uuid NOT NULL UNIQUE, 
     Type character varying(16) NOT NULL,
-    Hotel_ID character varying(36) NOT NULL,
+    Hotel_ID smallint NOT NULL,
     StartDate date NOT NULL,
     EndDate date NOT NULL,
     CONSTRAINT Hotel_ID FOREIGN KEY(Hotel_ID) REFERENCES Hotels(ID)
@@ -66,10 +66,10 @@ VALUES
 	
 INSERT INTO Hotels(ID, Name, Destination_ID, Rating, Food, Stars)
 VALUES
-	('abcdefg', 'Hotel GDA', 1, 4.7, '2 posilki', 3),
-	('hijklmn', 'Mariott', 2, 5.5, '2 posilki', 5),
-	('qwertyu', 'France hotel', 3, 5.5, '2 posilki', 5),
-	('zxcvb', 'Italy hotel', 4, 5.5, '2 posilki', 5);
+	(1, 'Hotel GDA', 1, 4.7, '2 posilki', 3),
+	(2, 'Mariott', 2, 5.5, '2 posilki', 5),
+	(3, 'France hotel', 3, 5.5, '2 posilki', 5),
+	(4, 'Italy hotel', 4, 5.5, '2 posilki', 5);
 	
 INSERT INTO HotelRoomTypes(ID, Name, Capacity_people)
 VALUES 
@@ -88,18 +88,18 @@ VALUES
 
 INSERT INTO HotelRooms(ID, Hotel_ID, RoomType_ID, Quantity)
 VALUES
-	(1, 'abcdefg', 1, 10),
-	(2, 'abcdefg', 8, 10),
-	(3, 'hijklmn', 8, 50),
-	(4, 'hijklmn', 9, 30),
-	(5, 'hijklmn', 11, 10),
-    (6, 'qwertyu', 1, 50),
-    (7, 'qwertyu', 2, 30),
-    (8, 'qwertyu', 4, 10),
-    (9, 'zxcvb', 1, 50),
-    (10, 'zxcvb', 2, 30),
-    (11, 'zxcvb', 4, 10),
-    (12, 'zxcvb', 11, 10);
+	(1, 1, 1, 10),
+	(2, 1, 8, 10),
+	(3, 2, 8, 50),
+	(4, 2, 9, 30),
+	(5, 2, 11, 10),
+    (6, 3, 1, 50),
+    (7, 3, 2, 30),
+    (8, 3, 4, 10),
+    (9, 4, 1, 50),
+    (10, 4, 2, 30),
+    (11, 4, 4, 10),
+    (12, 4, 11, 10);
 
 
 CREATE DATABASE transportsdb;

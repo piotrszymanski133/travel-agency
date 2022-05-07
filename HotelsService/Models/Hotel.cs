@@ -12,7 +12,7 @@ namespace HotelsService.Models
             Events = new List<Event>();
         }
 
-        public string Id { get; set; } = null!;
+        public short Id { get; set; } 
         public string Name { get; set; } = null!;
         public short? DestinationId { get; set; }
         public float Rating { get; set; }

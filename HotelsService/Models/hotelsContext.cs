@@ -76,7 +76,6 @@ namespace HotelsService
                     .HasColumnName("enddate");
 
                 entity.Property(e => e.HotelId)
-                    .HasMaxLength(36)
                     .HasColumnName("hotel_id");
 
                 entity.Property(e => e.Type)
@@ -95,7 +94,7 @@ namespace HotelsService
                 entity.ToTable("hotels");
 
                 entity.Property(e => e.Id)
-                    .HasMaxLength(36)
+                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
                 entity.Property(e => e.DestinationId).HasColumnName("destination_id");

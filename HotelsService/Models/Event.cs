@@ -12,8 +12,7 @@ namespace HotelsService
         public short RoomTypeId { get; set; }
         public string Username { get; set; }
         public string Type { get; set; } = null!;
-        public string HotelId { get; set; } = null!;
-
+        public short HotelId { get; set; }
         public virtual Hotel Hotel { get; set; } = null!;
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

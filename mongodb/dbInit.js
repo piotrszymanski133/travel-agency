@@ -14,8 +14,8 @@ db = new Mongo().getDB("Hotels");
 db.createCollection('Descriptions', { capped: false });
 
 db.Descriptions.insert([
-    { "_id": 'abcdefg', "Description": 'opisHotel1' },
-    { "_id": 'hijklmn', "Description": 'opisHotel2' },
-    { "_id": 'qwertyu', "Description": 'opis Hotel Francja' },
-    { "_id": 'zxcvb', "Description": 'opis Hotel Włochy' }
+    { "_id": 1, "Description": 'opisHotel1' },
+    { "_id": 2, "Description": 'opisHotel2' },
+    { "_id": 3, "Description": 'opis Hotel Francja' },
+    { "_id": 4, "Description": 'opis Hotel Włochy' }
 ]);
