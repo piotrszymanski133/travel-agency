@@ -2,9 +2,7 @@
 import { Form, Field } from "@progress/kendo-react-form";
 import departures from "./departures";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-// a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
-// you will also need the css that comes with bootstrap-daterangepicker
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import {createAPIEndpoint, ENDPOINTS} from "../api";
 

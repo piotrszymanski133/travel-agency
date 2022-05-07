@@ -8,7 +8,6 @@ export class Destinations extends Component {
         this.state = {
             destinations: []
         }
-        
     }
 
     componentDidMount(){
@@ -43,7 +42,6 @@ export class Destinations extends Component {
                                 </li>
                         )
                     }
-
                 </ul>
             </div>
         )

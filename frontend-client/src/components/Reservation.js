@@ -1,8 +1,4 @@
 ﻿import React, {Component} from "react";
-import {Nav, Navbar} from "react-bootstrap";
-import {ReactComponent as Logo} from "../icons/logo.svg";
-import {NavLink} from "react-router-dom";
-
 
 export class Reservation extends Component{
 
@@ -23,7 +19,6 @@ export class Reservation extends Component{
     }
     
     render(){
-        // if there's a user show the message below
         if (!this.isLogged) {
             return (
                 <div className="mt-5">

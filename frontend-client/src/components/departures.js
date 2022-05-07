@@ -1,11 +1,14 @@
 ﻿export default [
-    "Bydgoszcz",
     "Gdańsk",
     "Łódź",
-    "Poznań",
-    "Warszawa",
-    "Wrocław",
     "Katowice",
-    "Kraków"
+    "Kraków",
+    "Rzeszów",
+    "Warszawa",
+    "Szczecin",
+    "Poznań",
+    "Bydgoszcz",
+    "Modlin",
+    "Wrocław"
 ];
 
