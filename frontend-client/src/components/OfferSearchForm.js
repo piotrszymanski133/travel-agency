@@ -152,7 +152,6 @@ export class OfferSearchForm extends Component {
         createAPIEndpoint(ENDPOINTS.getDestinations).fetch().then((res) => {
             this.setState({ destinations: res.data});
         });
-        this.state.destinations.push("dowolnie")
         let selectDeparture = document.querySelector('#selectDeparture')
         let selectDestination = document.querySelector('#selectDestination')
         var optionsDeparture = selectDeparture.getElementsByTagName('option');

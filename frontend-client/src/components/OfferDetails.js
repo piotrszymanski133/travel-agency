@@ -200,7 +200,7 @@ export class OfferDetails extends Component {
                                 <option key={transport.transportName}>{transport.transportName}</option>
                             ))}
                         </select>
-                        { this.state.selectedTransportType != "Own"  &&
+                        { this.state.selectedTransportType !== "Own"  &&
                             <p> Ilość: {this.state.transportQuantities[this.state.selectedTransportType]}</p>
                         }
                         <button onClick={this.handleTypesChange} className="mt-5 mx-auto row center-column">Zmień konfigurację</button>
