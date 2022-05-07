@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ApiGateway.Models;
+using CommonComponents.Exceptions;
 using CommonComponents.Models;
 using HotelsService.Models;
 using HotelsService.Services;
@@ -207,7 +208,7 @@ namespace HotelsService.Repositories
             Hotel hotel = db.Hotels.Find(hotelId);
             if (hotel == null)
             {
-                throw new Exception($"Hotel with id {hotelId} does not exist!");
+                throw new HotelDoesNotExistException($"Hotel with id {hotelId} does not exist!");
             }
 
             HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).FirstOrDefault();
