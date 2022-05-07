@@ -186,11 +186,8 @@ namespace HotelsService.Repositories
             foreach (var hotel in hotels)
             {
                 List<Event> events = db.Events.Where(e => e.HotelId == hotel.Id).ToList();
-                if (events.Count < 10)
-                {
-                    HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).First();
-                    hotelsWithDescriptions.Add(new HotelWithDescription(hotel, desc));
-                }
+                HotelDescription desc = _descriptions.Find(description => description.Id == hotel.Id).First();
+                hotelsWithDescriptions.Add(new HotelWithDescription(hotel, desc));
             }
 
             return hotelsWithDescriptions;
