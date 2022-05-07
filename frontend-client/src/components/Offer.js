@@ -91,7 +91,6 @@ export class Offer extends Component {
                                     </li>
                             )
                         }
-
                     </ul>
             </div>
         )

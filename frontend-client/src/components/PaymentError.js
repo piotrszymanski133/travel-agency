@@ -1,6 +1,5 @@
 ﻿import React from "react";
 
-
 const PaymentError = ()  =>{
     return (
         <div className="logout text-center">

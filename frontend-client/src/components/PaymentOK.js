@@ -2,7 +2,6 @@
 
 const queryParams = new URLSearchParams(window.location.search);
 var userName = queryParams.get('userName');
-var reservationId = queryParams.get('reservationId');
 
 const PaymentOK = ()  =>{
     return (

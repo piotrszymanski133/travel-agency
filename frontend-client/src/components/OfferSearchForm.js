@@ -2,9 +2,7 @@
 import { Form, Field } from "@progress/kendo-react-form";
 import departures from "./departures";
 import DateRangePicker from 'react-bootstrap-daterangepicker';
-// a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
-// you will also need the css that comes with bootstrap-daterangepicker
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import {createAPIEndpoint, ENDPOINTS} from "../api";
 
@@ -152,7 +150,6 @@ export class OfferSearchForm extends Component {
         createAPIEndpoint(ENDPOINTS.getDestinations).fetch().then((res) => {
             this.setState({ destinations: res.data});
         });
-        this.state.destinations.push("dowolnie")
         let selectDeparture = document.querySelector('#selectDeparture')
         let selectDestination = document.querySelector('#selectDestination')
         var optionsDeparture = selectDeparture.getElementsByTagName('option');

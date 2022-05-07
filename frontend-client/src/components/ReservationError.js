@@ -1,6 +1,5 @@
 ﻿import React from "react";
 
-
 const ReservationError = ()  =>{
     return (
         <div className="logout text-center">

@@ -8,7 +8,6 @@ export class Destinations extends Component {
         this.state = {
             destinations: []
         }
-        
     }
 
     componentDidMount(){
@@ -37,13 +36,12 @@ export class Destinations extends Component {
                     {
                         this.state.destinations.map(
                             destination =>
-                                <li key={destination} onClick={this.handleClick.bind(this, destination)}  value={destination} className="border list-group-item mt-3 offer h5">
-                                    { destination}
+                                destination !== "dowolnie"  && <li key={destination} onClick={this.handleClick.bind(this, destination)}  value={destination} className="border list-group-item mt-3 offer h5">
+                                    {destination}
                                     <button className="check_offer">Wyszukaj oferty</button>
                                 </li>
                         )
                     }
-
                 </ul>
             </div>
         )
