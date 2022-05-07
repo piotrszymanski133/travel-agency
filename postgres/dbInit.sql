@@ -28,10 +28,18 @@ CREATE TABLE HotelRooms (
 	ID smallint NOT NULL,
 	Hotel_ID smallint NOT NULL,
 	RoomType_ID smallint NOT NULL,
-	Quantity smallint NOT NULL,
 	PRIMARY KEY (ID),
 	CONSTRAINT Hotel_ID FOREIGN KEY(Hotel_ID) REFERENCES Hotels(ID),
 	CONSTRAINT RoomType_ID FOREIGN KEY(RoomType_ID) REFERENCES HotelRoomTypes(ID)
+);
+
+CREATE TABLE HotelRoomAvailabilities (
+    ID smallint NOT NULL,
+    HotelRoom_ID smallint NOT NULL,
+    Quantity smallint NOT NULL,
+    Date date NOT NULL,
+    PRIMARY KEY (ID),
+    CONSTRAINT HotelRoom_ID FOREIGN KEY(HotelRoom_ID) REFERENCES HotelRooms(ID)
 );
 
 CREATE TABLE Tours (
@@ -86,21 +94,30 @@ VALUES
     (11, 'Apartment Premium', 4),
     (12, 'Family Room Premium', 5);
 
-INSERT INTO HotelRooms(ID, Hotel_ID, RoomType_ID, Quantity)
+INSERT INTO HotelRooms(ID, Hotel_ID, RoomType_ID)
 VALUES
-	(1, 1, 1, 10),
-	(2, 1, 8, 10),
-	(3, 2, 8, 50),
-	(4, 2, 9, 30),
-	(5, 2, 11, 10),
-    (6, 3, 1, 50),
-    (7, 3, 2, 30),
-    (8, 3, 4, 10),
-    (9, 4, 1, 50),
-    (10, 4, 2, 30),
-    (11, 4, 4, 10),
-    (12, 4, 11, 10);
+	(1, 1, 1),
+	(2, 1, 8),
+	(3, 2, 8),
+	(4, 2, 9),
+	(5, 2, 11),
+    (6, 3, 1),
+    (7, 3, 2),
+    (8, 3, 4),
+    (9, 4, 1),
+    (10, 4, 2),
+    (11, 4, 4),
+    (12, 4, 11);
 
+INSERT INTO HotelRoomAvailabilities(ID, HotelRoom_ID, Quantity, Date)
+VALUES 
+    (1, 1, 3, '2022-05-20'),
+    (2, 1, 3, '2022-05-21'),
+    (3, 1, 3, '2022-05-22'),
+    (4, 1, 2, '2022-05-23'),
+    (5, 1, 2, '2022-05-24'),
+    (6, 1, 2, '2022-05-25'),
+    (7, 1, 2, '2022-05-26');
 
 CREATE DATABASE transportsdb;
 \connect transportsdb;

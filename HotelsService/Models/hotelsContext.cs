@@ -29,7 +29,7 @@ namespace HotelsService
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseNpgsql("Host=postgres;Database=hotels;Username=user;Password=example");
+                optionsBuilder.UseNpgsql("Host=localhost;Database=hotels;Username=user;Password=example");
             }
         }
 
@@ -129,9 +129,7 @@ namespace HotelsService
                 entity.Property(e => e.HotelId)
                     .HasMaxLength(36)
                     .HasColumnName("hotel_id");
-
-                entity.Property(e => e.Quantity).HasColumnName("quantity");
-
+                
                 entity.Property(e => e.RoomtypeId).HasColumnName("roomtype_id");
 
                 entity.HasOne(d => d.Hotel)
@@ -145,6 +143,29 @@ namespace HotelsService
                     .HasForeignKey(d => d.RoomtypeId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("roomtype_id");
+            });
+
+            modelBuilder.Entity<HotelRoomAvailability>(entity =>
+            {
+                entity.ToTable("hotelroomavailabilities");
+                
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+                
+                entity.Property(e => e.Date)
+                    .HasColumnName("date");
+
+                entity.Property(e => e.Quantity)
+                    .HasColumnName("quantity");
+
+                entity.Property(e => e.HotelRoomId)
+                    .HasColumnName("hotelroom_id");
+
+                entity.HasOne(d => d.Hotelroom)
+                    .WithMany(p => p.HotelRoomAvailabilities)
+                    .HasForeignKey(d => d.HotelRoomId);
+
             });
 
             modelBuilder.Entity<Hotelroomtype>(entity =>

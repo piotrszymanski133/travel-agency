@@ -56,6 +56,8 @@ namespace HotelsService.Repositories
                     .Include(h => h.Destination)
                     .Include(h => h.Hotelrooms)
                     .ThenInclude(r => r.Roomtype)
+                    .Include(h => h.Hotelrooms)
+                    .ThenInclude(r => r.HotelRoomAvailabilities)
                     .ToList();
             }
             else
@@ -65,6 +67,8 @@ namespace HotelsService.Repositories
                     .Include(h => h.Destination)
                     .Include(h => h.Hotelrooms)
                     .ThenInclude(r => r.Roomtype)
+                    .Include(h => h.Hotelrooms)
+                    .ThenInclude(r => r.HotelRoomAvailabilities)
                     .Where(h => h.Destination.Country == tripParameters.Destination)
                     .ToList();
             }
@@ -115,7 +119,7 @@ namespace HotelsService.Repositories
             HotelStateOnDay maxHotelState = new HotelStateOnDay();
             hotel.Hotelrooms.ForEach(room => maxHotelState.FreeRooms.Add(new HotelRoom()
             {
-                Quantity = room.Quantity,
+                Quantity = 0,
                 CapacityPeople = room.Roomtype.CapacityPeople,
                 RoomtypeId = room.RoomtypeId,
                 Name = room.Roomtype.Name
@@ -124,9 +128,30 @@ namespace HotelsService.Repositories
             short[] maxReserved = new short[12];
             for (int i = 0; i < 12; i++)
                 maxReserved[i] = 0;
-
+            bool availabilityExistForEveryDate = true;
+            hotel.Hotelrooms.ForEach(room =>
+            {
+                HotelRoom freeRoom = maxHotelState.FreeRooms.Find(fr => fr.RoomtypeId == room.RoomtypeId);
+                room.HotelRoomAvailabilities.Where(av => av.Date >= start && av.Date <= end)
+                    .ToList()
+                    .ForEach(av =>
+                    {
+                        if (freeRoom.Quantity > av.Quantity || freeRoom.Quantity == 0)
+                            freeRoom.Quantity = av.Quantity;
+                    });
+                if (!room.HotelRoomAvailabilities.Exists(av => av.Date == start) ||
+                    !room.HotelRoomAvailabilities.Exists(av => av.Date == end))
+                {
+                    freeRoom.Quantity = 0;
+                }
+            });
+            if (!availabilityExistForEveryDate)
+            {
+                return maxHotelState;
+            }
             for (DateTime date = start; date <= end; date = date.AddDays(1))
             {
+
                 var reservations = hotel.Events.Where(e => e.StartDate <= date && e.EndDate >= date)
                     .GroupBy(e => e.RoomTypeId)
                     .Select(e => new KeyValuePair<short, int>(e.Key, e.ToList().Count));
@@ -200,6 +225,8 @@ namespace HotelsService.Repositories
                 .Include(h => h.Destination)
                 .Include(h => h.Hotelrooms)
                 .ThenInclude(r => r.Roomtype)
+                .Include(h => h.Hotelrooms)
+                .ThenInclude(r => r.HotelRoomAvailabilities)
                 .Include(h => h.Events)
                 .ToList();
             Hotel hotel = db.Hotels.Find(hotelId);
