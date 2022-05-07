@@ -37,7 +37,7 @@ export class Destinations extends Component {
                     {
                         this.state.destinations.map(
                             destination =>
-                                <li onClick={this.handleClick.bind(this, destination)}  value={destination} className="border list-group-item mt-3 offer h5">
+                                <li key={destination} onClick={this.handleClick.bind(this, destination)}  value={destination} className="border list-group-item mt-3 offer h5">
                                     { destination}
                                     <button className="check_offer">Wyszukaj oferty</button>
                                 </li>

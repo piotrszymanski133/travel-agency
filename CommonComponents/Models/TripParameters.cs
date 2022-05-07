@@ -7,7 +7,6 @@ namespace ApiGateway.Models
 {
     public class TripParameters
     {
-        public string Departure { get; set; }
         public string Destination { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

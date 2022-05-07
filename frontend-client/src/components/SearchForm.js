@@ -103,14 +103,12 @@ export class SearchForm extends Component {
         this.state = {
             destinations: []
         }
-
     }
 
     componentDidMount(){
         createAPIEndpoint(ENDPOINTS.getDestinations).fetch().then((res) => {
             this.setState({ destinations: res.data});
         });
-        this.state.destinations.push("dowolnie")
     }
     
     handleSubmit = (data) => {

@@ -15,5 +15,7 @@ namespace CommonComponents.Models
         public int ChildrenUnder3 { get; set; }
         public int ChildrenUnder10 { get; set; }
         public int ChildrenUnder18 { get; set; }
+        
+        public string PromoCode { get; set; }
     }
 }
