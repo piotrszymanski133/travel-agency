@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommonComponents.Exceptions;
 using CommonComponents.Models;
 using HotelsService.Models;
 using HotelsService.Repositories;
@@ -59,9 +60,10 @@ namespace HotelsService.Services
             if (roomConfigurations.Count != 0)
             {
                 offer.RoomsConfigurations = roomConfigurations;
+                return offer;
             }
-
-            return offer;
+            throw new SuitableRoomConfigurationNotFoundException(
+                    $"Could not found free room for {neededCapacity} people in hotel {selectedHotel.Id}");
         }
 
         public bool tryToReserveHotel(ReserveTripOfferParameters parameters, Guid tripReservationId)
@@ -101,11 +103,13 @@ namespace HotelsService.Services
 
         public List<string> GetAllDestinations()
         {
-            return _hotelRepository.GetAllHotels()
+            List<string> destinations = _hotelRepository.GetAllHotels()
                 .GroupBy(h => h.Destination.Country)
                 .Select(x => x.FirstOrDefault())
                 .Select(x => x.Destination.Country)
                 .ToList();
+            destinations.Add("Dowolnie");
+            return destinations;
         }
 
         public List<UserTripHotel> GetUserOrders(string messageUsername)

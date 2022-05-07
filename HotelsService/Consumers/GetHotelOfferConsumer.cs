@@ -1,6 +1,9 @@
+using System;
 using System.Threading.Tasks;
+using ApiGateway.Models;
 using CommonComponents.Models;
 using CommonComponents;
+using CommonComponents.Exceptions;
 using HotelsService.Models;
 using HotelsService.Repositories;
 using HotelsService.Services;
@@ -22,21 +25,32 @@ namespace HotelsService.Consumers
 
         public async Task Consume(ConsumeContext<GetHotelOfferQuery> context)
         {
-            TripOfferQueryParameters tripOfferQueryParameters = context.Message.TripOfferQueryParameters;
-            HotelWithDescription selectedHotel =
-                _hotelRepository.GetHotelWithDescription(tripOfferQueryParameters.HotelId);
-            HotelOffer hotelOffer = _hotelService.createHotelOffer(tripOfferQueryParameters, selectedHotel);
-            foreach (HotelRoom hotelOfferRoomsConfiguration in hotelOffer.RoomsConfigurations)
+            try
             {
-                hotelOfferRoomsConfiguration.Price =
-                    PriceCalculator.CalculateHotelRoomConfigPrice(hotelOfferRoomsConfiguration,
-                        tripOfferQueryParameters, hotelOffer.Stars);
+                TripOfferQueryParameters tripOfferQueryParameters = context.Message.TripOfferQueryParameters;
+                HotelWithDescription selectedHotel =
+                    _hotelRepository.GetHotelWithDescription(tripOfferQueryParameters.HotelId);
+                HotelOffer hotelOffer = _hotelService.createHotelOffer(tripOfferQueryParameters, selectedHotel);
+                foreach (HotelRoom hotelOfferRoomsConfiguration in hotelOffer.RoomsConfigurations)
+                {
+                    hotelOfferRoomsConfiguration.Price =
+                        PriceCalculator.CalculateHotelRoomConfigPrice(hotelOfferRoomsConfiguration,
+                            tripOfferQueryParameters, hotelOffer.Stars);
+                }
+                await context.RespondAsync(new GetHotelOfferResponse()
+                {
+                    HotelOffer = hotelOffer
+                });
             }
-
-            await context.RespondAsync(new GetHotelOfferResponse()
+            catch (Exception exception)
             {
-                HotelOffer = hotelOffer
-            });
+                if (exception is HotelDoesNotExistException || exception is SuitableRoomConfigurationNotFoundException)
+                    await context.RespondAsync(new GetHotelOfferResponse());
+                else
+                {
+                    throw;
+                }
+            }
         }
     }
 }

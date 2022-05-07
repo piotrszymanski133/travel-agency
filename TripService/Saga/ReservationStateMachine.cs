@@ -90,6 +90,10 @@ namespace TripService.Saga
                 .ThenAsync(async ctx =>
                 {
                     ctx.Saga.hotelPrice = ctx.Message.Price;
+                    if (ctx.Saga.ReserveTripOfferParameters.PromoCode == "PROMOCJA")
+                    {
+                        ctx.Saga.hotelPrice = (int) (ctx.Saga.hotelPrice * 0.9);
+                    }
                     ctx.Saga.City = ctx.Message.City;
                     ctx.Saga.Country = ctx.Message.Country;
                     ctx.Saga.HotelName = ctx.Message.HotelName;
@@ -130,6 +134,10 @@ namespace TripService.Saga
            When(ReserveTransportSuccessResponse).ThenAsync(ctx =>
                {
                    ctx.Saga.transportPrice = ctx.Message.Price;
+                   if (ctx.Saga.ReserveTripOfferParameters.PromoCode == "PROMOCJA")
+                   {
+                       ctx.Saga.transportPrice = (int) (ctx.Saga.transportPrice * 0.9);
+                   }
                    ctx.Saga.TransportTypeName = ctx.Message.TransportTypeName;
                    return Console.Out.WriteLineAsync(
                        $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");

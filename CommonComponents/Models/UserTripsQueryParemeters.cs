@@ -1,4 +1,4 @@
-﻿namespace CommonComponents.Models
+namespace CommonComponents.Models
 {
     public class UserTripsQueryParemeters
     {

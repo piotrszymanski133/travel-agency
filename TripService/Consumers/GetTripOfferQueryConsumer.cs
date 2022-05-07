@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommonComponents;
@@ -28,7 +29,13 @@ namespace TripService.Consumers
                 {
                     TripOfferQueryParameters = tripOfferQueryParameters
                 });
-
+            
+            if (hotelResponse.Message.HotelOffer == null)
+            { 
+                await context.RespondAsync(new GetTripOfferResponse());
+                return;
+            }
+            
             var transportResponse = await _transportclient.GetResponse<GetTransportOffersResponse>(
                 new GetTransportOffersQuery()
                 {

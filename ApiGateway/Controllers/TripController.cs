@@ -8,7 +8,9 @@ using ApiGateway.Models;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using CommonComponents;
+using CommonComponents.Exceptions;
 using CommonComponents.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace ApiGateway.Controllers
 {
@@ -25,7 +27,8 @@ namespace ApiGateway.Controllers
 
         public TripController(IRequestClient<GetTripsQuery> tripsClient,
             IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
-            IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient, IRequestClient<GetUserTripsQuery> userTripsClients)
+            IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient,
+            IRequestClient<GetUserTripsQuery> userTripsClients)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
@@ -36,23 +39,48 @@ namespace ApiGateway.Controllers
         }
 
         [HttpGet]
-        public async Task<GetTripsResponse> Index([FromQuery] TripParameters tripParameters)
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> Index([FromQuery] TripParameters tripParameters)
         {
+            if (tripParameters.Adults <= 0 || tripParameters.ChildrenUnder3 < 0 || tripParameters.ChildrenUnder10 < 0 ||
+                tripParameters.ChildrenUnder18 < 0 || tripParameters.StartDate < DateTime.Today ||
+                tripParameters.EndDate < DateTime.Today || tripParameters.EndDate < tripParameters.StartDate)
+            {
+                return BadRequest($"Incorrect value of one of the parameters");
+            }
+
             var response =
-                await _tripsClient.GetResponse<GetTripsResponse>(new GetTripsQuery { TripParameters = tripParameters });
-            return response.Message;
+                await _tripsClient.GetResponse<GetTripsResponse>(new GetTripsQuery {TripParameters = tripParameters});
+            return Ok(response.Message);
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Route("GetTrip")]
-        public async Task<GetTripOfferResponse> GetTrip([FromQuery] TripOfferQueryParameters tripOfferQueryParameters)
+        public async Task<IActionResult> GetTrip([FromQuery] TripOfferQueryParameters tripOfferQueryParameters)
         {
+            if (tripOfferQueryParameters.Adults <= 0 || tripOfferQueryParameters.ChildrenUnder3 < 0 ||
+                tripOfferQueryParameters.ChildrenUnder10 < 0 ||
+                tripOfferQueryParameters.ChildrenUnder18 < 0 || tripOfferQueryParameters.StartDate < DateTime.Today ||
+                tripOfferQueryParameters.EndDate < DateTime.Today ||
+                tripOfferQueryParameters.EndDate < tripOfferQueryParameters.StartDate)
+            {
+                return BadRequest($"Incorrect value of one of the parameters");
+            }
+
             var response = await _tripOfferClient.GetResponse<GetTripOfferResponse>(new GetTripOfferQuery
             {
                 TripOfferQueryParameters = tripOfferQueryParameters
             });
-            return response.Message;
+            if (response.Message.TripOffer == null)
+            {
+                return BadRequest($"Incorrect value of one of the parameters");
+            }
+            return Ok(response.Message);
         }
+        
         [HttpGet]
         [Route("GetUserTrips")]
         public async Task<GetUserTripsResponse> GetUserTrips([FromQuery] UserTripsQueryParemeters tripOfferQueryParameters)
