@@ -44,10 +44,13 @@ const Payment = ()  => {
                                 if (resp.success === true) {
                                     window.location.href = "/paymentOk?" + searchParams;
                                 }
+                                else{
+                                    window.location.href = "/paymentError";
+                                }
                             }
                         )
                     if(response.status === 500) {
-                        window.location.href = "/paymentError";
+                        window.location.href = "/paymentErrorTimeout";
                     }
                 })
         }

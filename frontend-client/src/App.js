@@ -6,6 +6,7 @@ import {Navigation} from './components/Navigation';
 import {OfferDetails} from "./components/OfferDetails";
 import {Destinations} from "./components/Destinations";
 import {Reservation} from "./components/Reservation";
+import {UserTrips} from "./components/UserTrips";
 import Payment from "./components/Payment"
 import Login from "./components/Login"
 import Logout from "./components/Logout"
@@ -13,7 +14,7 @@ import LoginError from "./components/LoginError"
 import ReservationError from "./components/ReservationError"
 import PaymentOK from "./components/PaymentOK";
 import PaymentError from "./components/PaymentError";
-import {UserTrips} from "./components/UserTrips";
+import PaymentErrorTimeout from "./components/PaymentErrorTimeout";
 
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/reservationError" element={<ReservationError/>}/>
                   <Route path="/paymentOk" element={<PaymentOK/>}/>
                   <Route path="/paymentError" element={<PaymentError/>}/>
+                  <Route path="/paymentErrorTimeout" element={<PaymentErrorTimeout/>}/>
                   <Route path="/userTrips" element={<UserTrips/>}/>
               </Routes>
           </div>
