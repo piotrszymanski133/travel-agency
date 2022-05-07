@@ -49,7 +49,7 @@ namespace TransportService.Consumer
                 {
                     var transport = _repository.GetTransport(context.Message.DepartueTransportID);
                     int price = PriceCalculator.CalculateTransportOfferPrice(transport.Transporttype,
-                        context.Message.Places, transport.DestinationPlaces.City);
+                        context.Message.Places, transport.DestinationPlaces.Country);
                     await context.Publish(new ReserveTransportSuccessResponse()
                     {
                         Price = price,
