@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title /Trip endpoint flow 
+
+autonumber
+
+API_Gateway -> TripService: GetTripsQuery
+TripService -> HotelService: GetHotelsQuery
+
+HotelService --> TripService: GetHotelsResponse
+TripService --> API_Gateway: GetTripsResponse
+@enduml
