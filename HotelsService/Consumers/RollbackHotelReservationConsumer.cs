@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using HotelsService.Services;
 using MassTransit;
@@ -17,6 +18,7 @@ namespace HotelsService.Consumers
         public Task Consume(ConsumeContext<RollbackHotelReservationQuery> context)
         {
             _hotelService.rollbackReservation(context.Message.TripReservationId);
+            Console.WriteLine($"Hotel reservation rollbacked for id {context.Message.TripReservationId}");
             return Task.CompletedTask;
         }
     }

@@ -100,7 +100,7 @@ namespace TripService.Saga
                     ctx.Saga.RoomTypeName = ctx.Message.ReservedRoomName;
                     ctx.Saga.FoodTypeName = ctx.Message.FoodType;
                     
-                    await Console.Out.WriteLineAsync($"Sukces rezerwacji hotelu dla id: {ctx.Message.ReservationId}");
+                    await Console.Out.WriteLineAsync($"Reserved hotel for id: {ctx.Message.ReservationId}");
 
                 })
                 .Publish(ctx => new ReserveTransportQuery()
@@ -127,7 +127,7 @@ namespace TripService.Saga
                     ReservationId = Guid.Empty
                     
                 }, r => r.RequestId = ctx.Saga.RequestId); 
-                await Console.Out.WriteLineAsync($"Błąd rezerwacji hotelu dla id: {ctx.Message.ReservationId}"); 
+                await Console.Out.WriteLineAsync($"Reserve hotel error for id: {ctx.Message.ReservationId}"); 
             }).Finalize();
        
        private EventActivityBinder<ReservationState, ReserveTransportSuccessResponse>
@@ -141,7 +141,7 @@ namespace TripService.Saga
                    }
                    ctx.Saga.TransportTypeName = ctx.Message.TransportTypeName;
                    return Console.Out.WriteLineAsync(
-                       $"Sukces rezerwacji Transportu dla id: {ctx.Message.ReservationId}");
+                       $"Reserved transport for id: {ctx.Message.ReservationId}");
                })
                .ThenAsync(async ctx =>
                {
@@ -163,7 +163,7 @@ namespace TripService.Saga
            HotelReservationSucceedReserveTransportFailureResponse() =>
            When(ReserveTransportFailureResponse)
                .ThenAsync(ctx =>
-                   Console.Out.WriteLineAsync($"Błąd rezerwacji Transportu dla id: {ctx.Message.ReservationId}"))
+                   Console.Out.WriteLineAsync($"Reserve transport error for id: {ctx.Message.ReservationId}"))
                .Publish(ctx => new RollbackHotelReservationQuery()
                {
                    TripReservationId = ctx.Saga.CorrelationId
@@ -191,14 +191,14 @@ namespace TripService.Saga
                    ctx.Saga.RequestId = payload.RequestId;
                    ctx.Saga.ResponseAddress = payload.ResponseAddress;
                    return Console.Out.WriteLineAsync(
-                       $"Otrzymano żądanie płatności dla id: {ctx.Message.ReservationId}");
+                       $"Payment request received for id: {ctx.Message.ReservationId}");
                })
                .IfElse(ctx => ctx.Saga.Username == ctx.Message.Username,
                    x =>
                        x.ThenAsync(async context =>
                        {
                            Console.Out.WriteLineAsync(
-                               $"Username poprawny dla rezerwacji {context.Message.ReservationId}");
+                               $"Username for reservation and payment match for id: {context.Message.ReservationId}");
 
                        }).Publish(ctx => new PayForTripQuery()
                        {
@@ -210,7 +210,7 @@ namespace TripService.Saga
                        x.ThenAsync(async ctx =>
                        {
                            Console.Out.WriteLineAsync(
-                               $"Username niepoprawny dla rezerwacji {ctx.Message.ReservationId}");
+                               $"Username for reservation and payment do not match for id: {ctx.Message.ReservationId}");
                            var endpoint = await ctx.GetSendEndpoint(ctx.Saga.ResponseAddress);
                            await endpoint.Send(new PaymentResponse()
                            {
@@ -232,7 +232,7 @@ namespace TripService.Saga
                .ThenAsync(ctx =>
                {
                    return Console.Out.WriteLineAsync(
-                       $"Czas na płatnosc minal dla id: {ctx.Message.ReservationId}");
+                       $"Payment time expired for id: {ctx.Message.ReservationId}");
                })
                .Publish(ctx => new RollbackTransportReservationQuery()
                {
@@ -249,7 +249,7 @@ namespace TripService.Saga
                .ThenAsync(ctx =>
                {
                    return Console.Out.WriteLineAsync(
-                       $"Błąd płatności dla id: {ctx.Message.ReservationId}");
+                       $"Payment error for id: {ctx.Message.ReservationId}");
                })
                .Publish(ctx => new RollbackHotelReservationQuery()
                {
@@ -276,7 +276,7 @@ namespace TripService.Saga
                .ThenAsync(ctx =>
                {
                    return Console.Out.WriteLineAsync(
-                       $"Sukces płatności dla id: {ctx.Message.ReservationId}");
+                       $"Payment success for id: {ctx.Message.ReservationId}");
                })
                .Publish(ctx => new ConfirmHotelOrderQuery()
                {

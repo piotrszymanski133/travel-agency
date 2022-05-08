@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using HotelsService.Services;
 using CommonComponents;
@@ -16,6 +17,8 @@ namespace HotelsService.Consumers
         public Task Consume(ConsumeContext<ConfirmHotelOrderQuery> context)
         {
             _hotelService.confirmOrder(context.Message.ReservationId);
+            Console.WriteLine($"Hotel purchase confirmed for id {context.Message.ReservationId}");
+
             return Task.CompletedTask;
         }
     }

@@ -36,6 +36,7 @@ namespace TransportService.Consumer
                     ReservationId = command.ReservationId,
                     TransportTypeName = "Own"
                 });
+                Console.WriteLine($"Transport reservation confirmed for id {context.Message.ReservationId} ");
             }
             else
             {
@@ -63,6 +64,7 @@ namespace TransportService.Consumer
                     {
                         ReservationId = command.ReservationId
                     });
+                    Console.WriteLine($"Transport reservation failed for id {context.Message.ReservationId}");
                 }
             }
         }

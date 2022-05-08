@@ -40,6 +40,8 @@ namespace HotelsService.Consumers
                     ReservedRoomName = roomName,
                     ReservationId = context.Message.ReservationId,
                 });
+                Console.WriteLine($"Hotel reservation confirmed for id {context.Message.ReservationId}");
+
             }
             else
             {
@@ -47,6 +49,7 @@ namespace HotelsService.Consumers
                 {
                     ReservationId = context.Message.ReservationId,
                 });
+                Console.WriteLine($"Hotel reservation failed for id {context.Message.ReservationId}");
             }
         }
     }
