@@ -36,7 +36,7 @@ namespace CommonComponents
         public bool Success { get; set; }
         public Guid ReservationId { get; set; }
     }
-    
+
     public class ReserveHotelSuccessResponse
     {
         public Guid ReservationId { get; set; }
@@ -96,14 +96,16 @@ namespace CommonComponents
     {
         public List<UserTripHotel> OrderedHotels { get; set; }
     }
-    
+
     public class GetUserTripsTransporResponse
     {
         public string Username { get; set; }
         public List<UserTransports> UserTransportsList { get; set; }
     }
-    public class CreateUserTripQueryResponse
+    
+    public class GetUserTripsResponse
     {
-        public Guid id { get; set; }
+        public List<UserTrips> userTrips { get; set; }
     }
+
 }
