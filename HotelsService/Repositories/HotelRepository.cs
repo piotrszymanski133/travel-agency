@@ -125,8 +125,8 @@ namespace HotelsService.Repositories
                 Name = room.Roomtype.Name
             }));
 
-            short[] maxReserved = new short[12];
-            for (int i = 0; i < 12; i++)
+            short[] maxReserved = new short[13];
+            for (int i = 0; i < 13; i++)
                 maxReserved[i] = 0;
             bool availabilityExistForEveryDate = true;
             hotel.Hotelrooms.ForEach(room =>
