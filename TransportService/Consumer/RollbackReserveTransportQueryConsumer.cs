@@ -27,6 +27,8 @@ namespace TransportService.Consumer
         {
             var command = context.Message;
             _repository.RollbackReserveTransport(command.TripReservationId);
+            Console.WriteLine($"Transport reservation rollbacked for id {command.TripReservationId}");
+
         }
     }
 }

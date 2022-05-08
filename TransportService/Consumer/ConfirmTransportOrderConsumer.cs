@@ -14,12 +14,10 @@ namespace TransportService.Consumer
 {
     public class ConfirmTransportOrderConsumer: IConsumer<ConfirmTransportOrderQuery>
     {
-        private readonly ILogger<GetTransportOffersQuery> _logger;
         private ITransportRepository _repository;
 
-        public ConfirmTransportOrderConsumer(ILogger<GetTransportOffersQuery> logger, ITransportRepository repository)
+        public ConfirmTransportOrderConsumer(ITransportRepository repository)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _repository = repository;
         }
 
@@ -27,6 +25,7 @@ namespace TransportService.Consumer
         {
             var command = context.Message;
             _repository.ConfirmTransport(command.ReservationId);
+            Console.WriteLine($"Transport purchase confirmed for id {command.ReservationId}");
         }
     }
 }
