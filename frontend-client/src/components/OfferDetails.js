@@ -42,7 +42,10 @@ export class OfferDetails extends Component {
             transportFromIdConverted: {},
             transportToIdConverted: {},
             transportQuantities: {},
-            promoCode: ""
+            promoCode: "",
+            price: 0,
+            roomSelectedPrice: 0,
+            transportSelectedPrice: 0
         }
     }
 
@@ -177,6 +180,9 @@ export class OfferDetails extends Component {
         this.state.transportTypeList = this.state.offer.tripOffer.transportOffers
         this.convertRoomPricesList()
         this.convertTransportPricesList()
+        this.state.roomSelectedPrice = this.state.roomPricesConverted[this.state.selectedRoomType]
+        this.state.transportSelectedPrice = this.state.transportPricesConverted[this.state.selectedTransportType]
+        this.state.price = this.state.roomSelectedPrice + this.state.transportSelectedPrice
         return (
             <div className="p-5 mb-4 align-items-center">
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
@@ -208,7 +214,7 @@ export class OfferDetails extends Component {
                     </div>
                     <form className="col border border-dark list-group-item text-center reservationForm" onSubmit={this.handleReserve.bind(this)}>
                     <h5 className="mt-5">Cena: </h5>
-                    <h5 className="mt-5">{this.state.roomPricesConverted[this.state.selectedRoomType] + this.state.transportPricesConverted[this.state.selectedTransportType]} PLN</h5>
+                    <h5 className="mt-5">{ this.state.price} PLN</h5>
                         <label>Kod promocyjny: </label>
                         <input
                             type="text"

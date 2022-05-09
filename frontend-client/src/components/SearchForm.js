@@ -16,7 +16,7 @@ const DateInput = (fieldProps) => {
             <label>
                 { label }
             </label>
-            <DateRangePicker onApply={onChange} onCancel={(event, picker)=>handleDateCancel(event, picker)} initialSettings={ {minDate:current, startDate: '5/20/2022', endDate: '5/27/2022'}}>
+            <DateRangePicker onApply={onChange} onCancel={(event, picker)=>handleDateCancel(event, picker)} initialSettings={ {minDate:current, startDate: '6/1/2022', endDate: '6/8/2022'}}>
                 <input readOnly
                        value={value}
                        type="text"/>
@@ -125,7 +125,7 @@ export class SearchForm extends Component {
             <Form
                 onSubmit={this.handleSubmit.bind(this)}
                 initialValues={{
-                    when: "05/20/2022 - 05/27/2022", departure: "Bydgoszcz", destination: "dowolnie", adults: "0",
+                    when: "06/01/2022 - 06/08/2022", departure: "Bydgoszcz", destination: "dowolnie", adults: "0",
                     children_under_3:"0", children_under_10:"0", children_under_18:"0"
                 }}
                 render={(formRenderProps) => (
