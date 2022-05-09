@@ -49,10 +49,12 @@ export class UserTrips extends Component{
                         <th> ID rezerwacji </th>
                         <th> Data początkowa </th>
                         <th> Data końcowa </th>
+                        <th> Liczba osób </th>
                         <th> Kraj </th>
                         <th> Miasto </th>
                         <th> Hotel </th>
                         <th> Posiłki </th>
+                        <th> Typ pokoju </th>
                         <th> Typ transportu </th>
                     </tr>
                     </thead>
@@ -64,10 +66,12 @@ export class UserTrips extends Component{
                                     <td> {offer.id} </td>
                                     <td> {new Date (offer.startDate).toLocaleDateString()} </td>
                                     <td> {new Date (offer.endDate).toLocaleDateString()} </td>
+                                    <td> {offer.persons} </td>
                                     <td> {offer.country} </td>
                                     <td> {offer.city} </td>
                                     <td> {offer.hotelName} </td>
                                     <td> {offer.foodType} </td>
+                                    <td> {offer.hotelRoomName} </td>
                                     <td> {offer.transportTypeName} </td>
                                 </tr>
                         )

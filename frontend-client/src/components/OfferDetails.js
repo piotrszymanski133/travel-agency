@@ -218,6 +218,7 @@ export class OfferDetails extends Component {
                         <label>Kod promocyjny: </label>
                         <input
                             type="text"
+                            value={""}
                             onChange={({ target }) => this.setState({promoCode: target.value})}
                         />
                     <p className={(!this.isLogged ?  'mt-5 text-danger' : 'd-none')}> Zaloguj się, aby dokonać rezerwacji</p>
