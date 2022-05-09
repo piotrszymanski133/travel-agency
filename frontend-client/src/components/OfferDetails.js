@@ -45,7 +45,8 @@ export class OfferDetails extends Component {
             promoCode: "",
             price: 0,
             roomSelectedPrice: 0,
-            transportSelectedPrice: 0
+            transportSelectedPrice: 0,
+            isGetFinished: false
         }
     }
 
@@ -59,9 +60,6 @@ export class OfferDetails extends Component {
             endDate = convertDate(endDate)
         }
         const searchParams = new URLSearchParams();
-        if(departure === "" || departure === "dowolnie"){
-            departure = "any"
-        }
         if(destination === "" || destination === "dowolnie"){
             destination = "any"
         }
@@ -84,6 +82,7 @@ export class OfferDetails extends Component {
             this.setState({ selectedRoomType: res.data.tripOffer.hotelOffer.roomsConfigurations[0].name});
             this.setState({ transportPrices: res.data.tripOffer.transportOffers});
             this.setState({ selectedTransportType: res.data.tripOffer.transportOffers[0].transportName});
+            this.setState({ isGetFinished: true})
         });
         
         
@@ -214,7 +213,7 @@ export class OfferDetails extends Component {
                     </div>
                     <form className="col border border-dark list-group-item text-center reservationForm" onSubmit={this.handleReserve.bind(this)}>
                     <h5 className="mt-5">Cena: </h5>
-                    <h5 className="mt-5">{ this.state.price} PLN</h5>
+                    <h5 className="mt-5">{ this.state.isGetFinished === true  && this.state.price} PLN</h5>
                         <label>Kod promocyjny: </label>
                         <input
                             type="text"
