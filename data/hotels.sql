@@ -61,9 +61,3 @@ CREATE TABLE Events (
     EndDate date NOT NULL,
     CONSTRAINT Hotel_ID FOREIGN KEY(Hotel_ID) REFERENCES Hotels(ID)
 );
-
-COPY Destinations FROM '/csv/destinations.csv' CSV HEADER encoding 'utf-8';
-COPY Hotels FROM '/csv/hotels.csv' CSV HEADER encoding 'utf-8';
-COPY HotelRoomTypes FROM '/csv/hotel_room_types.csv' CSV HEADER encoding 'utf-8';
-COPY HotelRooms FROM '/csv/hotel_rooms.csv' CSV HEADER encoding 'utf-8';
-COPY HotelRoomAvailabilities FROM '/csv/hotel_room_availabilities.csv' CSV HEADER encoding 'utf-8';

@@ -3,98 +3,36 @@ version: "3.4"
 services:
     front:
         hostname: front
-        container_name: front
-        build:
-            context: ./frontend-client
+        image: piotrszymanski/rsww_frontend
         ports:
-            - 8080:3000
+            - 17574:3000
 
     api:
         depends_on:
             -   rabbitmq
-        container_name: api
-        build:
-            context: .
-            dockerfile: ApiGateway.Dockerfile
+        image: piotrszymanski/rsww_api
         ports:
-            - 8081:80
+            - 17577:80
               
     hotel-service:
         depends_on:
             - rabbitmq
-        container_name: hotel-service
-        build:
-            context: .
-            dockerfile: HotelsService.Dockerfile
+        image: piotrszymanski/rsww_hotel_service
             
     transport-service:
         depends_on:
             - rabbitmq
-        container_name: transport-service
-        build:
-            context: .
-            dockerfile: TransportService.Dockerfile
+        image: piotrszymanski/rsww_transport_service
             
     trip-service:
         depends_on:
             - rabbitmq
-        container_name: trip-service
-        build:
-            context: .
-            dockerfile: TripService.Dockerfile
+        image: piotrszymanski/rsww_trip_service
             
     payment-service:
         depends_on:
             - rabbitmq
-        container_name: payment-service
-        build:
-            context: .
-            dockerfile: PaymentService.Dockerfile
+        image: piotrszymanski/rsww_payment_service
             
     rabbitmq:
-        container_name: rabbitmq
         image: heidiks/rabbitmq-delayed-message-exchange:3.9.13-management
-        ports:
-          - 5672:5672
-          - 15672:15672
-        
-    postgres:
-        container_name: postgres
-        restart: always
-        ports:
-          - 5432:5432
-        build:
-            context: ./postgres
-        environment:
-            POSTGRES_USER: user
-            POSTGRES_PASSWORD: example
-            POSTGRES_DB: hotels
-
-    adminer:
-        container_name: adminer
-        image: adminer
-        restart: always
-        ports:
-          - 9080:8080
-          
-    mongodb:
-        container_name: mongodb
-        build:
-            context: ./mongodb
-        restart: always
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: "root"
-            MONGO_INITDB_ROOT_PASSWORD: "example"
-        ports:
-            - '27017:27017'
-    
-    mongo-express:
-        image: mongo-express
-        container_name: mongo-express
-        restart: always
-        environment:
-            ME_CONFIG_MONGODB_ADMINUSERNAME: root
-            ME_CONFIG_MONGODB_ADMINPASSWORD: example
-            ME_CONFIG_MONGODB_SERVER: mongodb
-        ports:
-            - 8083:8081

@@ -22,7 +22,7 @@ builder.Services.AddMassTransit(x =>
     x.AddRequestClient<PaymentQuery>(RequestTimeout.After(s:3));
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq", 5672, "/", h =>
+        cfg.Host("rsww_175741_rabbitmq", 5672, "/", h =>
         {
             h.Username("guest");
             h.Password("guest");
@@ -46,7 +46,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseCors(options =>
-    options.WithOrigins("http://localhost:8080")
+    options.WithOrigins("http://localhost:17574")
         .AllowAnyMethod()
         .AllowAnyHeader());
 

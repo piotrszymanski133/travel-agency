@@ -35,7 +35,7 @@ builder.Services.AddMassTransit(x =>
         x.SetKebabCaseEndpointNameFormatter();
         x.UsingRabbitMq((context, cfg) =>
         {
-            cfg.Host("rabbitmq", 5672, "/", h =>
+            cfg.Host("rsww_175741_rabbitmq", 5672, "/", h =>
             {
                 h.Username("guest");
                 h.Password("guest");

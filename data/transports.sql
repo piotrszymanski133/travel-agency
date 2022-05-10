@@ -27,6 +27,3 @@ CREATE TABLE TransportEvent (
     PRIMARY KEY (ID),
     CONSTRAINT Transport_ID FOREIGN KEY(Transport_ID) REFERENCES Transport(ID)
 );
-
-COPY Places FROM '/csv/places.csv' CSV HEADER encoding 'utf-8';
-COPY Transport FROM '/csv/transports.csv' CSV HEADER encoding 'utf-8';

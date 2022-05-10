@@ -174,7 +174,7 @@ export class OfferSearchForm extends Component {
 
     handleSubmit = (data, event) => {
         event.preventDefault();
-        fetch('http://localhost:8081/Trip', {
+        fetch('http://localhost:17577/Trip', {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(data)
