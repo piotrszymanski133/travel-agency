@@ -46,6 +46,8 @@ namespace CommonComponents
         public string FoodType { get; set; }
         public string ReservedRoomName { get; set; }
         public int Price { get; set; }
+        
+        public int HotelId { get; set; }
     }
 
     public class ReserveHotelFailureResponse

@@ -4,11 +4,12 @@ import { ReactNotifications } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import { Store } from 'react-notifications-component';
 
-const Chat = () => {
+const Chat = (props) => {
     const [ connection, setConnection ] = useState(null);
     const [ chat, setChat ] = useState([]);
     const latestChat = useRef(null);
-
+    const hotelId = useRef(props)
+    
     latestChat.current = chat;
     
     useEffect(() => {
@@ -21,29 +22,29 @@ const Chat = () => {
     }, []);
 
     useEffect(() => {
+        var hotelID = hotelId.current.hotelId
         if (connection) {
             connection.start()
                 .then(result => {
                     console.log('Connected!');
+                    console.log(hotelID)
 
                     connection.on('SendMessage', message => {
-                        const updatedChat = [...latestChat.current];
-                        updatedChat.push(message);
-
-                        setChat(updatedChat);
-                        Store.addNotification({
-                            title: "Powiadomienie!",
-                            message: message.message,
-                            type: "info",
-                            insert: "top",
-                            container: "top-left",
-                            animationIn: ["animate__animated", "animate__fadeIn"],
-                            animationOut: ["animate__animated", "animate__fadeOut"],
-                            dismiss: {
-                                duration: 5000,
-                                onScreen: true
-                            }
-                        });
+                        if(message.hotelId == hotelID){
+                            Store.addNotification({
+                                title: "Powiadomienie!",
+                                message: message.message,
+                                type: "info",
+                                insert: "top",
+                                container: "top-left",
+                                animationIn: ["animate__animated", "animate__fadeIn"],
+                                animationOut: ["animate__animated", "animate__fadeOut"],
+                                dismiss: {
+                                    duration: 5000,
+                                    onScreen: true
+                                }
+                            });
+                        }
                     });
                 })
                 .catch(e => console.log('Connection failed: ', e));

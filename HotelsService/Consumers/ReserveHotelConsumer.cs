@@ -39,6 +39,7 @@ namespace HotelsService.Consumers
                     FoodType = hotel.Food,
                     ReservedRoomName = roomName,
                     ReservationId = context.Message.ReservationId,
+                    HotelId = hotel.Id
                 });
                 Console.WriteLine($"Hotel reservation confirmed for id {context.Message.ReservationId}");
 

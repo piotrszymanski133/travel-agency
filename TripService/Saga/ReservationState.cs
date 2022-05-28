@@ -22,6 +22,7 @@ namespace TripService.Saga
         public string Country { get; set; }
         public string FoodTypeName { get; set; }
         public string HotelName { get; set; }
+        public int HotelId { get; set; }
         public string TransportTypeName { get; set; }
     }
 }

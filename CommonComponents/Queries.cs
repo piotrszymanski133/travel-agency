@@ -127,3 +127,9 @@ public class CreateUserTripQuery
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
 }
+
+public class NotifyAboutTripPurchaseQuery
+{
+    public string UserName { get; set; }
+    public int HotelId { get; set; }
+}

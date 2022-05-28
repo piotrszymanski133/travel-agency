@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace ApiGateway.Hubs
 {
-    public class TestHub : Hub<IChatClient>
+    public class NotificationHub : Hub<INotificationClient>
     {
     }
 }

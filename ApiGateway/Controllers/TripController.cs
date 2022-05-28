@@ -28,12 +28,12 @@ namespace ApiGateway.Controllers
         private IRequestClient<PaymentQuery> _tripPaymentClient;
         private IRequestClient<GetDestinationsQuery> _destinationsClient;
         private IRequestClient<GetUserTripsQuery> _userTripsClients;
-        private IHubContext<TestHub, IChatClient> _hub;
+        private IHubContext<NotificationHub, INotificationClient> _hub;
 
         public TripController(IRequestClient<GetTripsQuery> tripsClient,
             IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
             IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient,
-            IRequestClient<GetUserTripsQuery> userTripsClients, IHubContext<TestHub, IChatClient> hub)
+            IRequestClient<GetUserTripsQuery> userTripsClients, IHubContext<NotificationHub, INotificationClient> hub)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
@@ -67,7 +67,6 @@ namespace ApiGateway.Controllers
         [Route("GetTrip")]
         public async Task<IActionResult> GetTrip([FromQuery] TripOfferQueryParameters tripOfferQueryParameters)
         {
-            await _hub.Clients.All.SendMessage(new ChatMessage {Message = "ddd"});
             if (tripOfferQueryParameters.Adults <= 0 || tripOfferQueryParameters.ChildrenUnder3 < 0 ||
                 tripOfferQueryParameters.ChildrenUnder10 < 0 ||
                 tripOfferQueryParameters.ChildrenUnder18 < 0 || tripOfferQueryParameters.StartDate < DateTime.Today ||

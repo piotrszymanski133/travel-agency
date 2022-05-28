@@ -1,5 +1,6 @@
 using System;
 using ApiGateway;
+using ApiGateway.Consumers;
 using ApiGateway.Hubs;
 using ApiGateway.Services;
 using MassTransit;
@@ -21,6 +22,7 @@ builder.Services.AddSignalR();
 builder.Services.AddMassTransit(x =>
 {
     x.AddRequestClient<PaymentQuery>(RequestTimeout.After(s:3));
+    x.AddConsumer<NotifyAboutTripPurchaseConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", 5672, "/", h =>
@@ -45,7 +47,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<TestHub>("/hubs/test");
+app.MapHub<NotificationHub>("/hubs/test");
 
 
 app.UseCors(options =>

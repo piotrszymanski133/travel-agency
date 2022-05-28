@@ -99,6 +99,7 @@ namespace TripService.Saga
                     ctx.Saga.HotelName = ctx.Message.HotelName;
                     ctx.Saga.RoomTypeName = ctx.Message.ReservedRoomName;
                     ctx.Saga.FoodTypeName = ctx.Message.FoodType;
+                    ctx.Saga.HotelId = ctx.Message.HotelId;
                     
                     await Console.Out.WriteLineAsync($"Reserved hotel for id: {ctx.Message.ReservationId}");
 
@@ -313,6 +314,11 @@ namespace TripService.Saga
                        Timeout = false,
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
+               })
+               .Publish(ctx => new NotifyAboutTripPurchaseQuery()
+               {
+                   HotelId = ctx.Saga.HotelId,
+                   UserName = ctx.Saga.Username
                })
                .Finalize();
     
