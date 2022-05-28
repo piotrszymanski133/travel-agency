@@ -128,6 +128,16 @@ public class CreateUserTripQuery
     public DateTime EndDate { get; set; }
 }
 
+public class NewReservationCompleatedQuery
+{
+    public string CountryName { get; set; }
+    public DateTime EventDate { get; set; }
+}
+public class NewPopularCountryQuery
+{
+    public string CountryName { get; set; }
+}
+
 public class NotifyAboutTripPurchaseQuery
 {
     public string UserName { get; set; }

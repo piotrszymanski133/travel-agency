@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using TripService.Consumers;
 using TripService.Repository;
 using TripService.Saga;
+using TripService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ITripsRepository, TripsRepository>();
+builder.Services.AddSingleton<IDepartueDirectionsPerferances,DepartueDirectionsPerferances>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -25,6 +27,8 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<GetTripOfferQueryConsumer>();
     x.AddConsumer<GetUserTripsQueryConsumer>();
     x.AddConsumer<CreateUserTripQueryConsumer>();
+    x.AddConsumer<NewReservationCompleatedQueryConsumer>();
+        
     x.AddDelayedMessageScheduler();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>
