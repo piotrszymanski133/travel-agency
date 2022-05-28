@@ -5,6 +5,8 @@ using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using ApiGateway.Hubs;
+using ApiGateway.Hubs.Clients;
 using ApiGateway.Models;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +14,7 @@ using CommonComponents;
 using CommonComponents.Exceptions;
 using CommonComponents.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 
 namespace ApiGateway.Controllers
 {
@@ -25,17 +28,19 @@ namespace ApiGateway.Controllers
         private IRequestClient<PaymentQuery> _tripPaymentClient;
         private IRequestClient<GetDestinationsQuery> _destinationsClient;
         private IRequestClient<GetUserTripsQuery> _userTripsClients;
+        private IHubContext<TestHub, IChatClient> _hub;
 
         public TripController(IRequestClient<GetTripsQuery> tripsClient,
             IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
             IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient,
-            IRequestClient<GetUserTripsQuery> userTripsClients)
+            IRequestClient<GetUserTripsQuery> userTripsClients, IHubContext<TestHub, IChatClient> hub)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
             _tripPaymentClient = tripPaymentClient;
             _destinationsClient = destinationsClient;
             _userTripsClients = userTripsClients;
+            _hub = hub;
             _tripsClient = tripsClient;
         }
 
@@ -62,6 +67,7 @@ namespace ApiGateway.Controllers
         [Route("GetTrip")]
         public async Task<IActionResult> GetTrip([FromQuery] TripOfferQueryParameters tripOfferQueryParameters)
         {
+            await _hub.Clients.All.SendMessage(new ChatMessage {Message = "ddd"});
             if (tripOfferQueryParameters.Adults <= 0 || tripOfferQueryParameters.ChildrenUnder3 < 0 ||
                 tripOfferQueryParameters.ChildrenUnder10 < 0 ||
                 tripOfferQueryParameters.ChildrenUnder18 < 0 || tripOfferQueryParameters.StartDate < DateTime.Today ||

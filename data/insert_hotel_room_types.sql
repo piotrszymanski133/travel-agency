@@ -1,0 +1,12 @@
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (1,'Small Room',1);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (2,'Medium Room',2);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (3,'Large Room',3);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (4,'Apartment',4);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (5,'Family Room',5);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (6,'Big Apartment',6);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (7,'Big Family Room',7);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (8,'Small Room Premium',1);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (9,'Medium Room Premium',2);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (10,'Large Room Premium',3);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (11,'Apartment Premium',4);
+INSERT INTO HotelRoomTypes(ID,Name,Capacity_people) VALUES (12,'Family Room Premium',5);

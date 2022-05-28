@@ -1,5 +1,6 @@
 ﻿import React, {Component} from 'react';
 import {SearchForm} from './SearchForm';
+import Chat from './Hub/Chat'
 
 const Aux = props => props.children;
 
