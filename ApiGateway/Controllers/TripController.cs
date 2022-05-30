@@ -47,7 +47,7 @@ namespace ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Index([FromQuery] TripParameters tripParameters)
+        public async Task<IActionResult> Index([FromQuery] TripParameters tripParameters, string connectionId)
         {
             if (tripParameters.Adults <= 0 || tripParameters.ChildrenUnder3 < 0 || tripParameters.ChildrenUnder10 < 0 ||
                 tripParameters.ChildrenUnder18 < 0 || tripParameters.StartDate < DateTime.Today ||
@@ -56,8 +56,16 @@ namespace ApiGateway.Controllers
                 return BadRequest($"Incorrect value of one of the parameters");
             }
 
+            var popularCountry =
+                await _tripsClient.GetResponse<GetNotificationAboutPopularCountryResponse>(
+                    new GetNotificationAboutPopularCountryQuery());
             var response =
                 await _tripsClient.GetResponse<GetTripsResponse>(new GetTripsQuery {TripParameters = tripParameters});
+
+            _hub.Clients.Client(connectionId).SendPopularCountryMessage(new PopularCountryNotificationMessage()
+            {
+                Country = $"Aktualnie najczęściej wybierany kraj wycieczek to {popularCountry.Message.CountryName}",
+            });
             return Ok(response.Message);
         }
 

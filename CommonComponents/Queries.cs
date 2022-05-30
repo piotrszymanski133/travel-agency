@@ -133,7 +133,7 @@ public class NewReservationCompleatedQuery
     public string CountryName { get; set; }
     public DateTime EventDate { get; set; }
 }
-public class NewPopularCountryQuery
+public class NotifyAboutNewPopularCountryQuery
 {
     public string CountryName { get; set; }
 }
@@ -142,4 +142,8 @@ public class NotifyAboutTripPurchaseQuery
 {
     public string UserName { get; set; }
     public int HotelId { get; set; }
+}
+
+public class GetNotificationAboutPopularCountryQuery
+{
 }

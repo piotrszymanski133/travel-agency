@@ -23,6 +23,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddRequestClient<PaymentQuery>(RequestTimeout.After(s:3));
     x.AddConsumer<NotifyAboutTripPurchaseConsumer>();
+    x.AddConsumer<NotifyAboutNewPopularCountryConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", 5672, "/", h =>

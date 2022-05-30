@@ -110,4 +110,8 @@ namespace CommonComponents
         public List<UserTrips> userTrips { get; set; }
     }
 
+    public class GetNotificationAboutPopularCountryResponse
+    {
+        public string CountryName { get; set; }
+    }
 }

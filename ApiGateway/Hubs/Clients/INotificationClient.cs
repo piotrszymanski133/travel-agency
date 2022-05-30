@@ -7,5 +7,6 @@ namespace ApiGateway.Hubs.Clients
         Task ReceiveMessage(PurchaseNotificationMessage message);
 
         Task SendMessage(PurchaseNotificationMessage message);
+        Task SendPopularCountryMessage(PopularCountryNotificationMessage message);
     }
 }

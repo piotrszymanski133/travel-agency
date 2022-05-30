@@ -28,7 +28,8 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<GetUserTripsQueryConsumer>();
     x.AddConsumer<CreateUserTripQueryConsumer>();
     x.AddConsumer<NewReservationCompleatedQueryConsumer>();
-        
+    x.AddConsumer<GetNotificationAboutPopularCountryConsumer>();
+
     x.AddDelayedMessageScheduler();
     x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>

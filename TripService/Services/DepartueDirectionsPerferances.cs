@@ -2,7 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using MassTransit;
 using MassTransit.Configuration;
+using CommonComponents;
 
 namespace TripService.Services
 {
@@ -26,12 +29,14 @@ namespace TripService.Services
 
     public class DepartueDirectionsPerferances: IDepartueDirectionsPerferances
     {
+        private IPublishEndpoint _publishEndpoint;
         private SortedSet<PurchaseDirectionEvents> _eventsSet;
         private string _popularCountry = string.Empty;
         private int _popularCount = 0;
 
-        public DepartueDirectionsPerferances()
+        public DepartueDirectionsPerferances(IPublishEndpoint publishEndpoint)
         {
+            _publishEndpoint = publishEndpoint;
             _eventsSet = new SortedSet<PurchaseDirectionEvents>(new CustomComparator());
         }
 
@@ -61,7 +66,7 @@ namespace TripService.Services
                 _popularCountry = result.First().Country;
                 _popularCount = result.First().Occurences;
                 Console.Out.WriteLine($"New Popular country: {_popularCountry}");
-                //TODO SEND MESSEGE NewPopularCountryQuery
+                NotifyAboutNewPopularCountry();
             }
 
         }
@@ -69,6 +74,14 @@ namespace TripService.Services
         public string GetPerferences()
         {
             return _popularCountry;
+        }
+
+        private void NotifyAboutNewPopularCountry()
+        {
+            _publishEndpoint.Publish(new NotifyAboutNewPopularCountryQuery
+            {
+                CountryName = _popularCountry
+            });
         }
     }
 
