@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react'
 import { createAPIEndpoint, ENDPOINTS, BASE_URL } from '../api'
-import {OfferSearchForm} from "./OfferSearchForm";
+import {OfferSearchForm} from "./OfferSearchForm"
 import PopularCountry from './Hub/PopularCountry'
 
 const queryParams = new URLSearchParams(window.location.search);
