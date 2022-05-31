@@ -1,6 +1,5 @@
 ﻿import React, {Component} from 'react'
 import {BASE_URL, createAPIEndpoint, ENDPOINTS} from "../api";
-import {ChatComponent} from './Hub/ChatComponent'
 import Chat from './Hub/Chat'
 
 const queryParams = new URLSearchParams(window.location.search);

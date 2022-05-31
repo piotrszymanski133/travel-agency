@@ -27,8 +27,6 @@ const Chat = (props) => {
             connection.start()
                 .then(result => {
                     console.log('Connected!');
-                    console.log(hotelID)
-
                     connection.on('SendMessage', message => {
                         if(message.hotelId == hotelID){
                             Store.addNotification({
