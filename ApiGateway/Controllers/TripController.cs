@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using CommonComponents;
 using CommonComponents.Exceptions;
 using CommonComponents.Models;
+using MassTransit.Internals;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 
@@ -28,12 +29,14 @@ namespace ApiGateway.Controllers
         private IRequestClient<PaymentQuery> _tripPaymentClient;
         private IRequestClient<GetDestinationsQuery> _destinationsClient;
         private IRequestClient<GetUserTripsQuery> _userTripsClients;
+        private IRequestClient<GetNotificationAboutPopularCountryQuery> _notificationCountryClient;
         private IHubContext<NotificationHub, INotificationClient> _hub;
 
         public TripController(IRequestClient<GetTripsQuery> tripsClient,
             IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
             IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient,
-            IRequestClient<GetUserTripsQuery> userTripsClients, IHubContext<NotificationHub, INotificationClient> hub)
+            IRequestClient<GetUserTripsQuery> userTripsClients, IHubContext<NotificationHub, INotificationClient> hub,
+            IRequestClient<GetNotificationAboutPopularCountryQuery> notificationCountryClient)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
@@ -41,13 +44,14 @@ namespace ApiGateway.Controllers
             _destinationsClient = destinationsClient;
             _userTripsClients = userTripsClients;
             _hub = hub;
+            _notificationCountryClient = notificationCountryClient;
             _tripsClient = tripsClient;
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Index([FromQuery] TripParameters tripParameters, string connectionId)
+        public async Task<IActionResult> Index([FromQuery] TripParameters tripParameters)
         {
             if (tripParameters.Adults <= 0 || tripParameters.ChildrenUnder3 < 0 || tripParameters.ChildrenUnder10 < 0 ||
                 tripParameters.ChildrenUnder18 < 0 || tripParameters.StartDate < DateTime.Today ||
@@ -55,17 +59,9 @@ namespace ApiGateway.Controllers
             {
                 return BadRequest($"Incorrect value of one of the parameters");
             }
-
-            var popularCountry =
-                await _tripsClient.GetResponse<GetNotificationAboutPopularCountryResponse>(
-                    new GetNotificationAboutPopularCountryQuery());
             var response =
                 await _tripsClient.GetResponse<GetTripsResponse>(new GetTripsQuery {TripParameters = tripParameters});
-
-            _hub.Clients.Client(connectionId).SendPopularCountryMessage(new PopularCountryNotificationMessage()
-            {
-                Country = $"Aktualnie najczęściej wybierany kraj wycieczek to {popularCountry.Message.CountryName}",
-            });
+            
             return Ok(response.Message);
         }
 

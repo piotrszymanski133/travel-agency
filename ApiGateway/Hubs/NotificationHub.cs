@@ -6,5 +6,12 @@ namespace ApiGateway.Hubs
 {
     public class NotificationHub : Hub<INotificationClient>
     {
+        public void GetPopularCountry(string d)
+        {
+            Clients.Caller.SendPopularCountryMessage(new PopularCountryNotificationMessage
+            {
+                Country = "Bydgoszcz"
+            });
+        }
     }
 }

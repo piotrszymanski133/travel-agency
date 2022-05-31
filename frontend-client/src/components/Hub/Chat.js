@@ -27,11 +27,12 @@ const Chat = (props) => {
             connection.start()
                 .then(result => {
                     console.log('Connected!');
-                    connection.on('SendMessage', message => {
+                    connection.send('GetPopularCountry', 'ddd')
+                    connection.on('SendPopularCountryMessage', message => {
                         if(message.hotelId == hotelID){
                             Store.addNotification({
                                 title: "Powiadomienie!",
-                                message: message.message,
+                                message: message.country,
                                 type: "info",
                                 insert: "top",
                                 container: "top-left",
