@@ -1,6 +1,6 @@
 ﻿import React, {Component} from 'react'
 import {BASE_URL, createAPIEndpoint, ENDPOINTS} from "../api";
-import Chat from './Hub/Chat'
+import Purchase from './Hub/Purchase'
 
 const queryParams = new URLSearchParams(window.location.search);
 var hotelID = queryParams.get('hotelID');
@@ -188,7 +188,7 @@ export class OfferDetails extends Component {
         this.state.hotelID = hotelID
         return (
             <div className="p-5 mb-4 align-items-center">
-                <Chat hotelId={this.state.hotelID}/>
+                <Purchase hotelId={this.state.hotelID}/>
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
                 <div className="row mt-3">
                     <div className="col-sm offerDetails">

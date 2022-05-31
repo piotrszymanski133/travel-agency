@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react'
 import { createAPIEndpoint, ENDPOINTS, BASE_URL } from '../api'
 import {OfferSearchForm} from "./OfferSearchForm";
-import Chat from './Hub/Chat'
+import PopularCountry from './Hub/PopularCountry'
 
 const queryParams = new URLSearchParams(window.location.search);
 var when = queryParams.get('when');
@@ -74,7 +74,7 @@ export class Offer extends Component {
     render() {
         return (
             <div className="p-5 mb-4 align-items-center">
-                <Chat/>
+                <PopularCountry/>
                 <div className="mt-5">
                     <OfferSearchForm className="row"></OfferSearchForm>
                 </div>

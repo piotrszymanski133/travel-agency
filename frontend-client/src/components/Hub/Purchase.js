@@ -4,13 +4,9 @@ import { ReactNotifications } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import { Store } from 'react-notifications-component';
 
-const Chat = (props) => {
+const Purchase = (props) => {
     const [ connection, setConnection ] = useState(null);
-    const [ chat, setChat ] = useState([]);
-    const latestChat = useRef(null);
     const hotelId = useRef(props)
-    
-    latestChat.current = chat;
     
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -27,12 +23,11 @@ const Chat = (props) => {
             connection.start()
                 .then(result => {
                     console.log('Connected!');
-                    connection.send('GetPopularCountry', 'ddd')
-                    connection.on('SendPopularCountryMessage', message => {
+                    connection.on('SendMessage', message => {
                         if(message.hotelId == hotelID){
                             Store.addNotification({
                                 title: "Powiadomienie!",
-                                message: message.country,
+                                message: message.message,
                                 type: "info",
                                 insert: "top",
                                 container: "top-left",
@@ -51,4 +46,4 @@ const Chat = (props) => {
     }, [connection]);
 };
 
-export default Chat;
+export default Purchase;
