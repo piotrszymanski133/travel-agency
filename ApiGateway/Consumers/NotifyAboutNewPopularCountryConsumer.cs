@@ -19,9 +19,9 @@ namespace ApiGateway.Consumers
 
         public async Task Consume(ConsumeContext<NotifyAboutNewPopularCountryQuery> context)
         {
-            await _hub.Clients.All.SendPopularCountryMessage(new PopularCountryNotificationMessage()
+            await _hub.Clients.All.SendPopularCountryMessage(new PopularCountryNotificationMessage
             {
-                Country = $"Aktualnie najczęściej wybierany kraj wycieczek to {context.Message.CountryName}",
+                Country = $"Aktualnie najczęściej wybierany kraj wycieczek to {context.Message.CountryName}"
             });
         }
     }

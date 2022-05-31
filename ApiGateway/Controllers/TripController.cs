@@ -29,22 +29,17 @@ namespace ApiGateway.Controllers
         private IRequestClient<PaymentQuery> _tripPaymentClient;
         private IRequestClient<GetDestinationsQuery> _destinationsClient;
         private IRequestClient<GetUserTripsQuery> _userTripsClients;
-        private IRequestClient<GetNotificationAboutPopularCountryQuery> _notificationCountryClient;
-        private IHubContext<NotificationHub, INotificationClient> _hub;
 
         public TripController(IRequestClient<GetTripsQuery> tripsClient,
             IRequestClient<GetTripOfferQuery> tripOfferClient, IRequestClient<ReserveTripQuery> tripReservationClient,
             IRequestClient<PaymentQuery> tripPaymentClient, IRequestClient<GetDestinationsQuery> destinationsClient,
-            IRequestClient<GetUserTripsQuery> userTripsClients, IHubContext<NotificationHub, INotificationClient> hub,
-            IRequestClient<GetNotificationAboutPopularCountryQuery> notificationCountryClient)
+            IRequestClient<GetUserTripsQuery> userTripsClients)
         {
             _tripOfferClient = tripOfferClient;
             _tripReservationClient = tripReservationClient;
             _tripPaymentClient = tripPaymentClient;
             _destinationsClient = destinationsClient;
             _userTripsClients = userTripsClients;
-            _hub = hub;
-            _notificationCountryClient = notificationCountryClient;
             _tripsClient = tripsClient;
         }
 

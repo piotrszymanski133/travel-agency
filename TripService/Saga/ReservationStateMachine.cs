@@ -154,11 +154,6 @@ namespace TripService.Saga
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
                })
-               .Publish(ctx => new NewReservationCompleatedQuery()
-               {
-                   CountryName = ctx.Saga.Country,
-                   EventDate = DateTime.Now
-               })
                .Schedule(PaymentTimeout, ctx => new PaymentExpired()
                {
                    ReservationId = ctx.Saga.CorrelationId
@@ -319,6 +314,11 @@ namespace TripService.Saga
                        Timeout = false,
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
+               })
+               .Publish(ctx => new NewReservationCompleatedQuery()
+               {
+                   CountryName = ctx.Saga.Country,
+                   EventDate = DateTime.Now
                })
                .Publish(ctx => new NotifyAboutTripPurchaseQuery()
                {

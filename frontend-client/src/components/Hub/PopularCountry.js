@@ -21,7 +21,7 @@ const PopularCountry = (props) => {
             connection.start()
                 .then(result => {
                     console.log('Connected!');
-                    connection.send('GetPopularCountry', 'ddd')
+                    connection.send('GetPopularCountry')
                     connection.on('SendPopularCountryMessage', message => {
                         Store.addNotification({
                             title: "Powiadomienie!",
