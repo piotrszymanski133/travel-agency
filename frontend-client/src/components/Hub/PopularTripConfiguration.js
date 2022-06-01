@@ -4,7 +4,7 @@ import { ReactNotifications } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import { Store } from 'react-notifications-component';
 
-const PopularCountry = (props) => {
+const PopularTripConfiguration = (props) => {
     const [ connection, setConnection ] = useState(null);
 
     useEffect(() => {
@@ -21,14 +21,14 @@ const PopularCountry = (props) => {
             connection.start()
                 .then(result => {
                     console.log('Connected!');
-                    connection.send('GetPopularCountry')
-                    connection.on('SendPopularCountryMessage', message => {
+                    connection.send('GetPopularHotelConfiguration')
+                    connection.on('SendPopularTripConfigurationMessage', message => {
                         Store.addNotification({
                             title: "Powiadomienie!",
-                            message: message.country,
-                            type: "success",
+                            message: message.message,
+                            type: "warning",
                             insert: "top",
-                            container: "top-left",
+                            container: "bottom-left",
                             animationIn: ["animate__animated", "animate__fadeIn"],
                             animationOut: ["animate__animated", "animate__fadeOut"],
                             dismiss: {
@@ -43,4 +43,4 @@ const PopularCountry = (props) => {
     }, [connection]);
 };
 
-export default PopularCountry;
+export default PopularTripConfiguration;
