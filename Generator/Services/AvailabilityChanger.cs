@@ -49,6 +49,7 @@ namespace Generator.Services
                     IdentifierList = identifiers,
                     startDate = newStartDate,
                     endDate = newEndDate,
+                    HotelId = hotel.Id,
                     ChangeQuantity = (short) -_random.Next(3)
                 });
             }
@@ -59,6 +60,7 @@ namespace Generator.Services
                     IdentifierList = identifiers,
                     startDate = newStartDate,
                     endDate = newEndDate,
+                    HotelId = hotel.Id,
                     ChangeQuantity = (short) _random.Next(3)
                 });         
             }

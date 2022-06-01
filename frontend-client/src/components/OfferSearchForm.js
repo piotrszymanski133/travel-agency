@@ -113,7 +113,7 @@ const handleDateCancel = (event, picker) => {
 }
 
 const queryParams = new URLSearchParams(window.location.search);
-var when = "06/01/2022 - 06/08/2022";
+var when = "06/04/2022 - 06/11/2022";
 if(queryParams.get('when')){
     when = queryParams.get('when')
 }

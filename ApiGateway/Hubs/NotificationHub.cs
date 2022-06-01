@@ -57,8 +57,21 @@ namespace ApiGateway.Hubs
             });
         }
 
-        public async Task GetTrip(TripOfferQueryParameters tripOfferQueryParameters)
+        public async Task GetTrip(short hotelId, DateTime startDate, DateTime endDate, int adults,
+                                int childrenUnder3, int childrenUnder10, int childrenUnder18, string departure)
         {
+            TripOfferQueryParameters tripOfferQueryParameters = new TripOfferQueryParameters
+            {
+                HotelId = hotelId,
+                StartDate = startDate,
+                EndDate = endDate,
+                Adults = adults,
+                ChildrenUnder3 = childrenUnder3,
+                ChildrenUnder10 = childrenUnder10,
+                ChildrenUnder18 = childrenUnder18,
+                Departure = departure
+            };
+                                                                
             if (tripOfferQueryParameters.Adults <= 0 || tripOfferQueryParameters.ChildrenUnder3 < 0 ||
                 tripOfferQueryParameters.ChildrenUnder10 < 0 ||
                 tripOfferQueryParameters.ChildrenUnder18 < 0 || tripOfferQueryParameters.StartDate < DateTime.Today ||
@@ -67,18 +80,21 @@ namespace ApiGateway.Hubs
             {
                 return;
             }
+            
             var response = await _tripOfferClient.GetResponse<GetTripOfferResponse>(new GetTripOfferQuery
             {
                 TripOfferQueryParameters = tripOfferQueryParameters
             });
+            
             if (response.Message.TripOffer == null)
             {
                 return;
             }
-            await Clients.All.SendTripOffer(new UpdatedTrip
+            await Clients.Caller.SendTripOffer(new UpdatedTrip
             {
                 TripOffer = response.Message.TripOffer
             });
+            
         }
     }
 }

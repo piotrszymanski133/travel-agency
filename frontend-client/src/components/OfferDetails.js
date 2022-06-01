@@ -3,6 +3,7 @@ import {BASE_URL, createAPIEndpoint, ENDPOINTS} from "../api";
 import Purchase from './Hub/Purchase'
 import PopularCountry from './Hub/PopularCountry'
 import PopularTripConfiguration from './Hub/PopularTripConfiguration'
+import HotelStateChange from './Hub/HotelStateChange'
 
 const queryParams = new URLSearchParams(window.location.search);
 var hotelID = queryParams.get('hotelID');
@@ -186,13 +187,20 @@ export class OfferDetails extends Component {
         this.state.transportSelectedPrice = this.state.transportPricesConverted[this.state.selectedTransportType]
         this.state.price = this.state.roomSelectedPrice + this.state.transportSelectedPrice
         const queryParams = new URLSearchParams(window.location.search);
-        var hotelID = queryParams.get('hotelID');
+        var hotelID = queryParams.get('hotelID')
         this.state.hotelID = hotelID
+        var when = queryParams.get('when').split("-")
+        var startDate = convertDate(when[0].replace(/\s/g, ""))
+        var endDate = convertDate(when[1].replace(/\s/g, ""))
         return (
             <div className="p-5 mb-4 align-items-center">
+                <HotelStateChange hotelId={hotelID} startDate={startDate} endDate={endDate}
+                                  adults={adults} childrenUnder3={children_under_3}
+                                  childrenUnder10={children_under_10} childrenUnder18={children_under_18}
+                                  departure={departure}/>
                 <PopularTripConfiguration/>
                 <PopularCountry/>
-                <Purchase hotelId={this.state.hotelID}/>
+                <Purchase hotelId={hotelID}/>
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
                 <div className="row mt-3">
                     <div className="col-sm offerDetails">
