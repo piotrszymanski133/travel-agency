@@ -2,22 +2,23 @@
 using System.Linq;
 using CommonComponents;
 using CommonComponents.Models;
+using TripService.Models;
 
 namespace TripService.Repository
 {
     public interface ITripsRepository
     {
-        List<UserTrips> GetUserTrips(string Username);
+        List<UserTrips> GetUserTrips(string username);
         void SetUserTrip(CreateUserTripQuery queryParameters);
     }
     
     public class TripsRepository: ITripsRepository
     {
-        public List<UserTrips> GetUserTrips(string Username)
+        public List<UserTrips> GetUserTrips(string username)
         {
             using var context = new tripsContext();
 
-            var result = context.Orderedtrips.Where(x => x.Username == Username).ToList();
+            var result = context.Orderedtrips.Where(x => x.Username == username).ToList();
             List<UserTrips> returnList = new();
 
             foreach (var orderedtrip in result)

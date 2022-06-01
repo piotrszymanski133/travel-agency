@@ -17,7 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ITripsRepository, TripsRepository>();
-builder.Services.AddSingleton<IDepartueDirectionsPerferances,DepartueDirectionsPerferances>();
+builder.Services.AddSingleton<IDepartureDirectionsPreferences,DepartureDirectionsPreferences>();
 
 builder.Services.AddMassTransit(x =>
 {

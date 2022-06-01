@@ -154,14 +154,6 @@ namespace TripService.Saga
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
                })
-               .Publish(ctx => new NewReservationCompleatedQuery()
-               {
-                   CountryName = ctx.Saga.Country,
-                   EventDate = DateTime.Now,
-                   HotelName = ctx.Saga.HotelName,
-                   NameOfRoom = ctx.Saga.RoomTypeName,
-                   TransportType = ctx.Saga.TransportTypeName
-               })
                .Schedule(PaymentTimeout, ctx => new PaymentExpired()
                {
                    ReservationId = ctx.Saga.CorrelationId
@@ -322,11 +314,14 @@ namespace TripService.Saga
                        Timeout = false,
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
-               })
-               .Publish(ctx => new NotifyAboutTripPurchaseQuery()
+               }).Publish(ctx => new NewReservationCompleatedQuery() 
                {
-                   HotelId = ctx.Saga.HotelId,
-                   UserName = ctx.Saga.Username
+                   CountryName = ctx.Saga.Country,
+                   EventDate = DateTime.Now,
+                   HotelName = ctx.Saga.HotelName,
+                   NameOfRoom = ctx.Saga.RoomTypeName,
+                   TransportType = ctx.Saga.TransportTypeName
+                               
                })
                .Finalize();
     

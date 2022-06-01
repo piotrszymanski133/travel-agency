@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using ApiGateway.Models;
 using CommonComponents;
 using CommonComponents.Models;
 using MassTransit;
+using TripService.Models;
 using TripService.Repository;
 using TripService.Services;
 
@@ -13,12 +15,12 @@ namespace TripService.Consumers
     {
 
         private ITripsRepository _tripsRepository;
-        private IDepartueDirectionsPerferances _departueDirectionsPerferances;
+        private IDepartureDirectionsPreferences _departureDirectionsPreferences;
 
-        public NewReservationCompleatedQueryConsumer(ITripsRepository tripsRepository, IDepartueDirectionsPerferances departueDirectionsPerferances)
+        public NewReservationCompleatedQueryConsumer(ITripsRepository tripsRepository, IDepartureDirectionsPreferences departureDirectionsPreferences)
         {
             _tripsRepository = tripsRepository;
-            _departueDirectionsPerferances = departueDirectionsPerferances;
+            _departureDirectionsPreferences = departureDirectionsPreferences;
         }
 
   
@@ -27,10 +29,17 @@ namespace TripService.Consumers
         {
             var msg = context.Message;
             
-            _departueDirectionsPerferances.AddDirectionEvent(new PurchaseDirectionEvents()
+            _departureDirectionsPreferences.AddDirectionEvent(new PurchaseDirectionEvents()
             {
                 Country = msg.CountryName,
                 EventDate = msg.EventDate
+            });
+            _departureDirectionsPreferences.AddPreferencesEvent(new PurchasePreferencesEvents
+            {
+                HotelName = msg.HotelName,
+                EventDate = msg.EventDate,
+                NameOfRoom = msg.NameOfRoom,
+                TransportType = msg.TransportType
             });
             
         }

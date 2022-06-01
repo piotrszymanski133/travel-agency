@@ -6,39 +6,12 @@ using System.Threading.Tasks;
 using MassTransit;
 using MassTransit.Configuration;
 using CommonComponents;
+using TripService.Helpers;
+using TripService.Models;
 
 namespace TripService.Services
 {
-    public class CustomDireciornComparator : IComparer<PurchaseDirectionEvents>
-    {
-        public int Compare(PurchaseDirectionEvents x, PurchaseDirectionEvents y)
-        {
-            if (ReferenceEquals(x, y)) return 0;
-            if (ReferenceEquals(null, y)) return 1;
-            if (ReferenceEquals(null, x)) return -1;
-            return x.EventDate.CompareTo(y.EventDate);
-        }
-    }
-    public class CustomComparator : IComparer<PurchasePreferencesEvents>
-    {
-        public int Compare(PurchasePreferencesEvents x, PurchasePreferencesEvents y)
-        {
-            if (ReferenceEquals(x, y)) return 0;
-            if (ReferenceEquals(null, y)) return 1;
-            if (ReferenceEquals(null, x)) return -1;
-            return x.EventDate.CompareTo(y.EventDate);
-        }
-    }
-
-    public interface IDepartueDirectionsPerferances
-    {
-        public void AddDirectionEvent(PurchaseDirectionEvents pEvent);
-        public void AddPreferencesEvent(PurchasePreferencesEvents pEvent);
-        public void GetTopDirectionPerference();
-        public string GetPerferences();
-    }
-
-    public class DepartueDirectionsPerferances: IDepartueDirectionsPerferances
+    public class DepartureDirectionsPreferences: IDepartureDirectionsPreferences
     {
         private IPublishEndpoint _publishEndpoint;
         private SortedSet<PurchaseDirectionEvents> _eventsSet;
@@ -56,10 +29,10 @@ namespace TripService.Services
         private string _popularTransport = string.Empty;
         private int _popularTransportCount = 0;
 
-        public DepartueDirectionsPerferances(IPublishEndpoint publishEndpoint)
+        public DepartureDirectionsPreferences(IPublishEndpoint publishEndpoint)
         {
             _publishEndpoint = publishEndpoint;
-            _eventsSet = new SortedSet<PurchaseDirectionEvents>(new CustomDireciornComparator());
+            _eventsSet = new SortedSet<PurchaseDirectionEvents>(new CustomDirectionComparator());
             _preferencessSet = new SortedSet<PurchasePreferencesEvents>(new CustomComparator());
         }
 
@@ -72,7 +45,7 @@ namespace TripService.Services
                 _eventsSet.Remove(_eventsSet.Last());
             }
 
-            GetTopDirectionPerference();
+            GetTopDirectionPreference();
 
         }
 
@@ -85,10 +58,10 @@ namespace TripService.Services
                 _preferencessSet.Remove(_preferencessSet.Last());
             }
 
-            GetTopHotelPerference();
+            GetTopHotelPreference();
         }
 
-        private void GetTopHotelPerference()
+        private void GetTopHotelPreference()
         {
             var isChanged = false;
             
@@ -102,11 +75,12 @@ namespace TripService.Services
 
             var findResult = result.Find(x => x.NameFiled == _popularHotel);
             
-            if (findResult== null || _popularHotelCount != result.First().Occurences){
+            if (findResult== null || (_popularHotelCount != result.First().Occurences && _popularHotel!= result.First().NameFiled)){
                 _popularHotel = result.First().NameFiled;
                 _popularHotelCount = result.First().Occurences;
                 Console.Out.WriteLine($"New Popular Hotel: {_popularHotel}");
                 isChanged = true;
+                //TODO CHANGE HOTEL NAME
             }
             
             //Transport
@@ -118,11 +92,12 @@ namespace TripService.Services
 
             findResult = result.Find(x => x.NameFiled == _popularTransport);
             
-            if (findResult== null || _popularTransportCount != result.First().Occurences){
+            if (findResult== null ||( _popularTransportCount != result.First().Occurences && _popularTransport!= result.First().NameFiled)){
                 _popularTransport = result.First().NameFiled;
                 _popularTransportCount = result.First().Occurences;
                 Console.Out.WriteLine($"New Popular Transport: {_popularTransport}");
                 isChanged = true;
+                //TODO CHANGE TRANSPORT TYPE
             }
             
             //RoomType
@@ -134,19 +109,20 @@ namespace TripService.Services
 
             findResult = result.Find(x => x.NameFiled == _popularRoom);
             
-            if (findResult== null || _popularRoomCount != result.First().Occurences){
+            if (findResult== null ||( _popularRoomCount != result.First().Occurences && _popularRoom!=result.First().NameFiled)){
                 _popularRoom = result.First().NameFiled;
                 _popularRoomCount = result.First().Occurences;
                 Console.Out.WriteLine($"New Popular RoomType: {_popularRoom}");
                 isChanged = true;
+                //TODO CHANGE ROOM TYPE
             }
             
             if (isChanged){
-                //TODO NOTIFY_ABOUT_CHANGE_OF_ROOM_OR_HOTEL_OR_TRANSPORT
+                //TODO OR NOTIFY_ABOUT_CHANGE_OF_ROOM_OR_HOTEL_OR_TRANSPORT
             }
         }
 
-        public void GetTopDirectionPerference()
+        public void GetTopDirectionPreference()
         {
             var result = _eventsSet.GroupBy(item => item.Country).Select(grp =>
                 new {
@@ -156,7 +132,7 @@ namespace TripService.Services
 
             var findResult = result.Find(x => x.Country == _popularCountry);
             
-            if (findResult== null || _popularCountryCount != result.First().Occurences){
+            if (findResult== null ||( _popularCountryCount != result.First().Occurences && _popularCountry!=result.First().Country)){
                 _popularCountry = result.First().Country;
                 _popularCountryCount = result.First().Occurences;
                 Console.Out.WriteLine($"New Popular country: {_popularCountry}");
@@ -165,10 +141,19 @@ namespace TripService.Services
 
         }
         
-        public string GetPerferences()
+        public string GetCountryPreferences()
         {
-            throw new NotImplementedException();
             return _popularCountry;
+        }
+        public PopularGeneralPreferences GetGeneralPreferences()
+        {
+            return new PopularGeneralPreferences()
+            {
+                PopularHotel = _popularHotel,
+                PopularTransport = _popularTransport,
+                PopularRoom = _popularRoom
+                
+            };
         }
 
         private void NotifyAboutNewPopularCountry()
@@ -179,6 +164,4 @@ namespace TripService.Services
             });
         }
     }
-
-   
 }

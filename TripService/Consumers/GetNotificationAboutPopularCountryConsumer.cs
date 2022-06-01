@@ -7,18 +7,18 @@ namespace TripService.Consumers
 {
     public class GetNotificationAboutPopularCountryConsumer : IConsumer<GetNotificationAboutPopularCountryQuery>
     {
-        private IDepartueDirectionsPerferances _departuePerferancesService;
+        private IDepartureDirectionsPreferences _departurePreferencesService;
 
-        public GetNotificationAboutPopularCountryConsumer(IDepartueDirectionsPerferances departuePerferancesService)
+        public GetNotificationAboutPopularCountryConsumer(IDepartureDirectionsPreferences departurePreferencesService)
         {
-            _departuePerferancesService = departuePerferancesService;
+            _departurePreferencesService = departurePreferencesService;
         }
 
         public async Task Consume(ConsumeContext<GetNotificationAboutPopularCountryQuery> context)
         {
             await context.RespondAsync(new GetNotificationAboutPopularCountryResponse()
             {
-                CountryName = _departuePerferancesService.GetPerferences()
+                CountryName = _departurePreferencesService.GetCountryPreferences()
             });
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace TripService
+namespace TripService.Models
 {
     public partial class Orderedtrip
     {

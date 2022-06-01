@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TripService
+namespace TripService.Models
 {
     public class PurchaseDirectionEvents
     {
