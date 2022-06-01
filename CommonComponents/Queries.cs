@@ -150,3 +150,14 @@ public class NotifyAboutTripPurchaseQuery
 public class GetNotificationAboutPopularCountryQuery
 {
 }
+
+public class GetNotificationAboutPopularTripConfigurationQuery
+{
+}
+
+public class NotifyAboutNewPopularTripConfigQuery
+{
+    public string Hotel { get; set; }
+    public string Room { get; set; }
+    public string Transport { get; set; }
+}

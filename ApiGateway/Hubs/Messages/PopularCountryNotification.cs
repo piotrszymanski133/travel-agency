@@ -1,6 +1,6 @@
 namespace ApiGateway.Hubs
 {
-    public class PopularCountryNotificationMessage
+    public class PopularCountryNotification
     {
         public string Country { get; set; }
     }

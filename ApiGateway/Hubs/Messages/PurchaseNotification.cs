@@ -1,6 +1,6 @@
 namespace ApiGateway.Hubs
 {
-    public class PurchaseNotificationMessage
+    public class PurchaseNotification
     {
         public string Message { get; set; }
         public int HotelId { get; set; }

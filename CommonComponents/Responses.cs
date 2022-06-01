@@ -114,4 +114,11 @@ namespace CommonComponents
     {
         public string CountryName { get; set; }
     }
+    
+    public class GetNotificationAboutPopularTripConfigurationResponse
+    {
+        public string Hotel { get; set; }
+        public string Room { get; set; }
+        public string Transport { get; set; }
+    }
 }

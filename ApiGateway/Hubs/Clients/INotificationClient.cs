@@ -4,9 +4,10 @@ namespace ApiGateway.Hubs.Clients
 {
     public interface INotificationClient
     {
-        Task ReceiveMessage(PurchaseNotificationMessage message);
+        Task ReceiveMessage(PurchaseNotification message);
 
-        Task SendMessage(PurchaseNotificationMessage message);
-        Task SendPopularCountryMessage(PopularCountryNotificationMessage message);
+        Task SendMessage(PurchaseNotification message);
+        Task SendPopularCountryMessage(PopularCountryNotification message);
+        Task SendPopularTripConfigurationMessage(PopularTripConfigurationNotification message);
     }
 }

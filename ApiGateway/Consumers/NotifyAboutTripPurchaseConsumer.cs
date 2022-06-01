@@ -18,8 +18,7 @@ namespace ApiGateway.Consumers
         
         public async Task Consume(ConsumeContext<NotifyAboutTripPurchaseQuery> context)
         {
-
-            await _hub.Clients.All.SendMessage(new PurchaseNotificationMessage
+            await _hub.Clients.All.SendMessage(new PurchaseNotification
             {
                 Message = $"Użytkownik {context.Message.UserName} zarezerwował właśnie pokój w tym hotelu!",
                 HotelId = context.Message.HotelId

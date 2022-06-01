@@ -9,10 +9,13 @@ namespace ApiGateway.Hubs
     public class NotificationHub : Hub<INotificationClient>
     {
         private IRequestClient<GetNotificationAboutPopularCountryQuery> _notificationCountryClient;
+        private IRequestClient<GetNotificationAboutPopularTripConfigurationQuery> _notificationTripClient;
 
-        public NotificationHub(IRequestClient<GetNotificationAboutPopularCountryQuery> notificationCountryClient)
+        public NotificationHub(IRequestClient<GetNotificationAboutPopularCountryQuery> notificationCountryClient,
+            IRequestClient<GetNotificationAboutPopularTripConfigurationQuery> notificationTripClient)
         {
             _notificationCountryClient = notificationCountryClient;
+            _notificationTripClient = notificationTripClient;
         }
 
         public async Task GetPopularCountry()
@@ -25,9 +28,26 @@ namespace ApiGateway.Hubs
                 return;
             }
             
-            await Clients.Caller.SendPopularCountryMessage(new PopularCountryNotificationMessage
+            await Clients.Caller.SendPopularCountryMessage(new PopularCountryNotification
             {
                 Country = $"Aktualnie najczęściej wybierany kraj wycieczek to {response.Result.Message.CountryName}"
+            });
+        }
+
+        public async Task GetPopularHotelConfiguration()
+        {
+            var response = _notificationTripClient.GetResponse<GetNotificationAboutPopularTripConfigurationResponse>
+                (new GetNotificationAboutPopularTripConfigurationQuery());
+            
+            if (response.Result.Message.Hotel == string.Empty)
+            {
+                return;
+            }
+            
+            await Clients.Caller.SendPopularTripConfigurationMessage(new PopularTripConfigurationNotification
+            {
+                Message = $"Aktualnie najczęściej wybierana wycieczka to Hotel: {response.Result.Message.Hotel}, pokój:" +
+                          $"{response.Result.Message.Room}, transport: {response.Result.Message.Transport}"
             });
         }
     }

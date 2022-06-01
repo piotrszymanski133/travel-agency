@@ -117,8 +117,9 @@ namespace TripService.Services
                 //TODO CHANGE ROOM TYPE
             }
             
-            if (isChanged){
-                //TODO OR NOTIFY_ABOUT_CHANGE_OF_ROOM_OR_HOTEL_OR_TRANSPORT
+            if (isChanged)
+            {
+                NotifyAboutNewPopularTripConfiguration();
             }
         }
 
@@ -161,6 +162,16 @@ namespace TripService.Services
             _publishEndpoint.Publish(new NotifyAboutNewPopularCountryQuery
             {
                 CountryName = _popularCountry
+            });
+        }
+
+        private void NotifyAboutNewPopularTripConfiguration()
+        {
+            _publishEndpoint.Publish(new NotifyAboutNewPopularTripConfigQuery
+            {
+                Hotel = _popularHotel,
+                Room = _popularRoom,
+                Transport = _popularTransport
             });
         }
     }
