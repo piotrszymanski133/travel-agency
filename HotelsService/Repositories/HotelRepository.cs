@@ -28,6 +28,7 @@ namespace HotelsService.Repositories
         void rollbackReservation(Guid messageTripReservationId);
         void confirmOrder(Guid messageReservationId);
         List<Event> GetUserOrders(string messageUsername);
+        void ChangeHotelAvaliabilities(List<short> identifierList, short change);
     }
 
     public class HotelRepository : IHotelRepository
@@ -258,6 +259,19 @@ namespace HotelsService.Repositories
                 db.Events.Add(e);
                 db.SaveChanges();
             }
+        }
+
+        public void ChangeHotelAvaliabilities(List<short> identifierList, short change)
+        {
+            using (var db = new hotelsContext())
+            {
+                db.HotelRoomAvailabilities
+                    .Where(av => identifierList.Contains(av.Id))
+                    .ToList()
+                    .ForEach(av => av.Quantity += change);
+                db.SaveChanges();
+            }
+
         }
     }
 }

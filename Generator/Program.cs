@@ -1,13 +1,10 @@
-using System;
-using ApiGateway;
-using ApiGateway.Consumers;
-using ApiGateway.Hubs;
-using ApiGateway.Services;
+using Generator;
+using Generator.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using CommonComponents;
+using Quartz;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,15 +14,25 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddSignalR();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<ITransportRepository, TransportRepository>();
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+
+    var jobKey = new JobKey("AvailabilityChangeJob");
+    q.AddJob<AvailabilityChanger>(opts => opts.WithIdentity(jobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("AvailabilityChangeJob-trigger")
+        .WithSimpleSchedule(x => x
+            .WithIntervalInSeconds(5)
+            .RepeatForever()));
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 builder.Services.AddMassTransit(x =>
 {
-    x.AddRequestClient<PaymentQuery>(RequestTimeout.After(s:3));
-    x.AddConsumer<NotifyAboutTripPurchaseConsumer>();
-    x.AddConsumer<NotifyAboutNewPopularCountryConsumer>();
-    x.AddConsumer<NotifyAboutNewPopularTripConfigConsumer>();
-    x.AddConsumer<ChangeHotelAvailabilityConsumer>();
+    x.SetKebabCaseEndpointNameFormatter();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", 5672, "/", h =>
@@ -37,7 +44,6 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,16 +53,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapHub<NotificationHub>("/hubs/test");
-
-
-app.UseCors(options =>
-    options.WithOrigins("http://localhost:3000")
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials());
 
 app.Run();

@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransportService", "Transpo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentService", "PaymentService\PaymentService.csproj", "{33A41537-D045-4652-B9EC-DD014C6DD4A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generator", "Generator\Generator.csproj", "{87999036-3977-4523-B30E-D4EB923FBA3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{33A41537-D045-4652-B9EC-DD014C6DD4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33A41537-D045-4652-B9EC-DD014C6DD4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33A41537-D045-4652-B9EC-DD014C6DD4A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87999036-3977-4523-B30E-D4EB923FBA3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87999036-3977-4523-B30E-D4EB923FBA3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87999036-3977-4523-B30E-D4EB923FBA3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87999036-3977-4523-B30E-D4EB923FBA3C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

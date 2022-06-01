@@ -42,3 +42,6 @@
 /PaymentService/obj
 /PaymentService/bin
 
+#Generator
+/Generator/obj
+/Generator/bin

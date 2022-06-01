@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ApiGateway.Models;
 using CommonComponents.Models;
 
@@ -160,4 +161,14 @@ public class NotifyAboutNewPopularTripConfigQuery
     public string Hotel { get; set; }
     public string Room { get; set; }
     public string Transport { get; set; }
+}
+
+public class ChangeHotelAvailabilityQuery
+{
+    public List<short> IdentifierList { get; set; }
+    public short ChangeQuantity { get; set; }
+    public short HotelId { get; set; }
+    public DateTime startDate { get; set; }
+    public DateTime endDate { get; set; }
+
 }
