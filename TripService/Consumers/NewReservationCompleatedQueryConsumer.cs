@@ -27,7 +27,7 @@ namespace TripService.Consumers
         {
             var msg = context.Message;
             
-            _departueDirectionsPerferances.AddEvent(new PurchaseDirectionEvents()
+            _departueDirectionsPerferances.AddDirectionEvent(new PurchaseDirectionEvents()
             {
                 Country = msg.CountryName,
                 EventDate = msg.EventDate

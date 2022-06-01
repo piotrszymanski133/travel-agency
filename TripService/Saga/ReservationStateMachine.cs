@@ -157,7 +157,10 @@ namespace TripService.Saga
                .Publish(ctx => new NewReservationCompleatedQuery()
                {
                    CountryName = ctx.Saga.Country,
-                   EventDate = DateTime.Now
+                   EventDate = DateTime.Now,
+                   HotelName = ctx.Saga.HotelName,
+                   NameOfRoom = ctx.Saga.RoomTypeName,
+                   TransportType = ctx.Saga.TransportTypeName
                })
                .Schedule(PaymentTimeout, ctx => new PaymentExpired()
                {

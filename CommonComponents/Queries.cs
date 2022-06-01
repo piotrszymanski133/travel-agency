@@ -131,6 +131,9 @@ public class CreateUserTripQuery
 public class NewReservationCompleatedQuery
 {
     public string CountryName { get; set; }
+    public string HotelName { get; set; }
+    public string TransportType { get; set; }
+    public string NameOfRoom { get; set; }
     public DateTime EventDate { get; set; }
 }
 public class NotifyAboutNewPopularCountryQuery
