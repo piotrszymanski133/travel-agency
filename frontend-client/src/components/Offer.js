@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react'
 import { createAPIEndpoint, ENDPOINTS, BASE_URL } from '../api'
-import {OfferSearchForm} from "./OfferSearchForm";
+import {OfferSearchForm} from "./OfferSearchForm"
+import PopularCountry from './Hub/PopularCountry'
 
 const queryParams = new URLSearchParams(window.location.search);
 var when = queryParams.get('when');
@@ -26,7 +27,7 @@ export class Offer extends Component {
         var d = new Date(inputFormat)
         return [pad(d.getFullYear()), pad(d.getMonth()+1), d.getDate()].join('-')
     }
-
+    
     componentWillMount(){
         if(when !== null) {
             var date = when.split("-");
@@ -42,6 +43,7 @@ export class Offer extends Component {
         if(destination === "" || destination === "dowolnie"){
             destination = "any"
         }
+        
         searchParams.append("startDate", startDate);
         searchParams.append("endDate", endDate);
         searchParams.append("departure", departure);
@@ -72,6 +74,7 @@ export class Offer extends Component {
     render() {
         return (
             <div className="p-5 mb-4 align-items-center">
+                <PopularCountry/>
                 <div className="mt-5">
                     <OfferSearchForm className="row"></OfferSearchForm>
                 </div>

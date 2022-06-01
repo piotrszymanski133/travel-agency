@@ -7,9 +7,9 @@ namespace TripService.Consumers
 {
     public class GetNotificationAboutPopularCountryConsumer : IConsumer<GetNotificationAboutPopularCountryQuery>
     {
-        private DepartueDirectionsPerferances _departuePerferancesService;
+        private IDepartueDirectionsPerferances _departuePerferancesService;
 
-        public GetNotificationAboutPopularCountryConsumer(DepartueDirectionsPerferances departuePerferancesService)
+        public GetNotificationAboutPopularCountryConsumer(IDepartueDirectionsPerferances departuePerferancesService)
         {
             _departuePerferancesService = departuePerferancesService;
         }
