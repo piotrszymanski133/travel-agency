@@ -28,7 +28,8 @@ namespace Generator
                 .ToList();
             
             Random rnd = new Random();
-            return hotels[rnd.Next(hotels.Count)];
+            //return hotels[rnd.Next(hotels.Count)];
+            return hotels.Find(h => h.Id==1);
 
         }
 

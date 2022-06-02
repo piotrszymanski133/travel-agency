@@ -18,7 +18,7 @@ export class Destinations extends Component {
 
     handleClick = (data) => {
         const searchParams = new URLSearchParams();
-        searchParams.append("when", "06/01/2022 - 06/08/2022");
+        searchParams.append("when", "06/04/2022 - 06/11/2022");
         searchParams.append("departure", "Bydgoszcz");
         searchParams.append("destination", data);
         searchParams.append("adults", '1');

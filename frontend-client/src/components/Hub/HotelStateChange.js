@@ -14,6 +14,7 @@ const HotelStateChange = (props) => {
     const childrenUnder10 = useRef(props.childrenUnder10).current
     const childrenUnder18 = useRef(props.childrenUnder18).current
     const departure = useRef(props.departure).current
+    const [ message, setMessage ] = useState(null);
     
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
@@ -40,12 +41,12 @@ const HotelStateChange = (props) => {
                         if(messageHotelId == hotelId){
                             if(startDate <= messageEndDate && messageStartDate <= endDate){
                                 console.log("Hotel's parameters are equals")
-                                var wera = 9
                                 connection.send('GetTrip', parseInt(hotelId), startDate, endDate,
                                                 parseInt(adults), parseInt(childrenUnder3), parseInt(childrenUnder10),
                                                 parseInt(childrenUnder18), departure.toString())
                                 connection.on('SendTripOffer', message => {
                                     console.log(message)
+                                    setMessage(message)
                                 });
                             }
                         }

@@ -4,6 +4,8 @@ import Purchase from './Hub/Purchase'
 import PopularCountry from './Hub/PopularCountry'
 import PopularTripConfiguration from './Hub/PopularTripConfiguration'
 import HotelStateChange from './Hub/HotelStateChange'
+import HotelStateContext from './HotelStateContext';
+
 
 const queryParams = new URLSearchParams(window.location.search);
 var hotelID = queryParams.get('hotelID');
@@ -11,9 +13,9 @@ var when = queryParams.get('when');
 var departure = queryParams.get('departure');
 var destination = queryParams.get('destination');
 var adults = queryParams.get('adults');
-var children_under_3 = queryParams.get('childrenUnder3')
-var children_under_10 = queryParams.get('childrenUnder10')
-var children_under_18 = queryParams.get('childrenUnder18')
+var childrenUnder3 = queryParams.get('childrenUnder3')
+var childrenUnder10 = queryParams.get('childrenUnder10')
+var childrenUnder18 = queryParams.get('childrenUnder18')
 
 const convertDate = (inputFormat) => {
     function pad(s) { return (s < 10) ? '0' + s : s; }
@@ -54,7 +56,6 @@ export class OfferDetails extends Component {
         }
     }
 
-
     componentWillMount(){
         if(when !== null) {
             var date = when.split("-");
@@ -73,9 +74,9 @@ export class OfferDetails extends Component {
         searchParams.append("departure", departure);
         searchParams.append("destination", destination);
         searchParams.append("adults", adults);
-        searchParams.append("childrenUnder3", children_under_3);
-        searchParams.append("childrenUnder10", children_under_10);
-        searchParams.append("childrenUnder18", children_under_18);
+        searchParams.append("childrenUnder3", childrenUnder3);
+        searchParams.append("childrenUnder10", childrenUnder10);
+        searchParams.append("childrenUnder18", childrenUnder18);
 
         createAPIEndpoint(ENDPOINTS.getTrip + '?' + searchParams).fetch().then((res) => {
             this.setState({ offer: res.data});
@@ -125,9 +126,9 @@ export class OfferDetails extends Component {
             "transportToId": this.state.transportToIdConverted[this.state.selectedTransportType],
             "username": parsedUser.username,
             "adults": parseInt(adults),
-            "childrenUnder3": parseInt(children_under_3),
-            "childrenUnder10": parseInt(children_under_10), 
-            "childrenUnder18": parseInt(children_under_18),
+            "childrenUnder3": parseInt(childrenUnder3),
+            "childrenUnder10": parseInt(childrenUnder10), 
+            "childrenUnder18": parseInt(childrenUnder18),
             "promoCode": this.state.promoCode
         }
         fetch(BASE_URL + ENDPOINTS.reserve, {
@@ -194,13 +195,13 @@ export class OfferDetails extends Component {
         var endDate = convertDate(when[1].replace(/\s/g, ""))
         return (
             <div className="p-5 mb-4 align-items-center">
-                <HotelStateChange hotelId={hotelID} startDate={startDate} endDate={endDate}
-                                  adults={adults} childrenUnder3={children_under_3}
-                                  childrenUnder10={children_under_10} childrenUnder18={children_under_18}
-                                  departure={departure}/>
                 <PopularTripConfiguration/>
                 <PopularCountry/>
                 <Purchase hotelId={hotelID}/>
+                <HotelStateChange hotelId={hotelID} startDate={startDate} endDate={endDate}
+                                  adults={adults} childrenUnder3={childrenUnder3}
+                                  childrenUnder10={childrenUnder10} childrenUnder18={childrenUnder18}
+                                  departure={departure}/>
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
                 <div className="row mt-3">
                     <div className="col-sm offerDetails">

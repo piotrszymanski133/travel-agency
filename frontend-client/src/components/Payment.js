@@ -4,6 +4,7 @@ import {BASE_URL, ENDPOINTS} from "../api";
 const queryParams = new URLSearchParams(window.location.search);
 var price = queryParams.get('price');
 var reservationId = queryParams.get('reservationId');
+var paymentError = queryParams.get('paymentError');
 
 
 const Payment = ()  => {
@@ -39,6 +40,7 @@ const Payment = ()  => {
                             resp => {
                                 console.log(resp.success)
                                 const searchParams = new URLSearchParams();
+                                searchParams.append("price", price)
                                 searchParams.append("userName", user.username);
                                 searchParams.append("reservationId", reservationId);
                                 if (resp.success === true) {
@@ -48,7 +50,8 @@ const Payment = ()  => {
                                     window.location.href = "/paymentErrorTimeout";
                                 }
                                 else{
-                                    window.location.href = "/paymentError";
+                                    searchParams.append("paymentError", true);
+                                    window.location.href = "payment?" + searchParams;
                                 }
                             }
                         )
@@ -59,6 +62,7 @@ const Payment = ()  => {
             <div className="p-5 mb-4 align-items-center">
                 <h4 className="text-center mt-5">Rezerwacja przeszła pomyślnie. Masz 1 minutę, aby dokonać
                     płatności.</h4>
+                <h5 className={(paymentError ? "text-center mt-5 text-danger" : "d-none")}>Pojawił się błąd. Spróbuj zapłacić ponownie</h5>
                 <div className="paymentForm">
                     <h5 className="text-center mb-5">Podaj numer karty, aby zapłacić za wycieczkę</h5>
                     <h5 className="text-center">Cena: {price} PLN</h5>
