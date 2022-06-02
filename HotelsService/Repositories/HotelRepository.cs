@@ -140,8 +140,8 @@ namespace HotelsService.Repositories
                         if (freeRoom.Quantity > av.Quantity || freeRoom.Quantity == 0)
                             freeRoom.Quantity = av.Quantity;
                     });
-                if (!room.HotelRoomAvailabilities.Exists(av => av.Date == start) ||
-                    !room.HotelRoomAvailabilities.Exists(av => av.Date == end))
+                if (!room.HotelRoomAvailabilities.Exists(av => av.Date.Date == start.Date) ||
+                    !room.HotelRoomAvailabilities.Exists(av => av.Date.Date == end.Date))
                 {
                     freeRoom.Quantity = 0;
                 }

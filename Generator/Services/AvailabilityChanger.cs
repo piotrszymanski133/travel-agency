@@ -41,7 +41,10 @@ namespace Generator.Services
             Console.WriteLine($"Hotel {hotel.Id} rooms {freeRooms}" );
             List<short> identifiers = new List<short>();
             roomAvailabilities.ForEach( av => identifiers.Add(av.Id));
-            
+            if (freeRooms > 10)
+            {
+                Console.WriteLine("eee");
+            }
             if (freeRooms > 3)
             {
                 _publishEndpoint.Publish(new ChangeHotelAvailabilityQuery
@@ -74,7 +77,7 @@ namespace Generator.Services
             
             List<Hotelroomavailability> hotelroomavailabilities = new List<Hotelroomavailability>();
             for (DateOnly date = DateOnly.FromDateTime(newDate);
-                date < DateOnly.FromDateTime(newDate.AddDays(daysToChange));
+                date <= DateOnly.FromDateTime(newDate.AddDays(daysToChange));
                 date = date.AddDays(1))
             {
                 Hotelroomavailability avail = hotelRoom.Hotelroomavailabilities.FirstOrDefault(av => av.Date == date);
