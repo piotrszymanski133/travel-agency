@@ -18,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<ILastChangesService,LastChangesService>();
 builder.Services.AddSignalR();
 builder.Services.AddMassTransit(x =>
 {

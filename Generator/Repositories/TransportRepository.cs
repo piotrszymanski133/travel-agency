@@ -17,6 +17,7 @@ namespace Generator
             List<Transport> transports = db.Transports
                 .Include(transport => transport.DestinationPlaces)
                 .Include(transport => transport.SourcePlaces)
+                .Include(transport => transport.Transportevents)
                 .ToList();
             
             Random rnd = new Random();

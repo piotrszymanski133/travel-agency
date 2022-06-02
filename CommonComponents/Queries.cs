@@ -165,6 +165,7 @@ public class NotifyAboutNewPopularTripConfigQuery
 
 public class ChangeHotelAvailabilityQuery
 {
+    //List of id's hotelroomaval
     public List<short> IdentifierList { get; set; }
     public short ChangeQuantity { get; set; }
     public short HotelId { get; set; }
