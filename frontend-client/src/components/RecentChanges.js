@@ -53,7 +53,7 @@ const RecentChanges = (props) => {
                     <th> Transport ID </th>
                     <th> Destination Places ID</th>
                     <th> Source Places ID </th>
-                    <th> EndDate </th>
+                    <th> Transport type </th>
                 </tr>
                 </thead>
                 <tbody>
