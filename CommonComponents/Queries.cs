@@ -172,3 +172,13 @@ public class ChangeHotelAvailabilityQuery
     public DateTime endDate { get; set; }
 
 }
+
+public class ChangeTransportPlacesQuery
+{
+    public int ChangePlaces { get; set; }
+    public long TransportId { get; set; }
+    public long DestinationPlacesId { get; set; }
+    public long SourcePlacesId { get; set; }
+    public string Transporttype { get; set; } = null!;
+    public DateTime Transportdate { get; set; }
+}

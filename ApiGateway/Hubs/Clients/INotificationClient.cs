@@ -10,6 +10,7 @@ namespace ApiGateway.Hubs.Clients
         Task SendPopularCountryMessage(PopularCountryNotification message);
         Task SendPopularTripConfigurationMessage(PopularTripConfigurationNotification message);
         Task SendHotelStateChangeMessage(HotelStateChangeNotification message);
+        Task SendTransportStateChangeMessage(TransportStateChangeNotification message);
         Task SendTripOffer(UpdatedTrip message);
     }
 }

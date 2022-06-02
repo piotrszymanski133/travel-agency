@@ -67,7 +67,36 @@ namespace Generator.Services
                     ChangeQuantity = (short) _random.Next(3)
                 });         
             }
-            GetRandomTransport();
+            Transport transport = _transportRepository.GetRandomTransport();
+            int freePlaces = GetNumberOfFreePlaces(transport);
+            Console.WriteLine($"Before - Transport {transport.Id} places {transport.Places}");
+            int random = _random.Next(5);
+            if (freePlaces > 5)
+            {
+                _publishEndpoint.Publish(new ChangeTransportPlacesQuery
+                {
+
+                    Transportdate = transport.Transportdate.ToDateTime(TimeOnly.Parse("10:00 PM")),
+                    TransportId = transport.Id,
+                    DestinationPlacesId = transport.DestinationPlacesId,
+                    SourcePlacesId = transport.SourcePlacesId,
+                    Transporttype = transport.Transporttype,
+                    ChangePlaces = (short)-random
+                });
+            }
+            else
+            {
+                _publishEndpoint.Publish(new ChangeTransportPlacesQuery
+                {
+                    Transportdate = transport.Transportdate.ToDateTime(TimeOnly.Parse("10:00 PM")),
+                    TransportId = transport.Id,
+                    DestinationPlacesId = transport.DestinationPlacesId,
+                    SourcePlacesId = transport.SourcePlacesId,
+                    Transporttype = transport.Transporttype,
+                    ChangePlaces = (short)random
+                });
+            }
+            Console.WriteLine($"After - Transport {transport.Id} places {transport.Places}, change {random}");
             return Task.CompletedTask;
         }
 
@@ -110,10 +139,21 @@ namespace Generator.Services
             return roomsList[_random.Next(roomsList.Count)];
         }
 
-        public void GetRandomTransport()
+        private int GetNumberOfFreePlaces(Transport transport)
         {
-            Transport t = _transportRepository.GetRandomTransport();
-            Console.WriteLine($"{t.Id} name: {t.Transporttype}");
+            int freePlaces = Int32.MaxValue;
+            int reservations = 0;
+            List<Transportevent> transportevents = transport.Transportevents.ToList();
+            foreach (Transportevent transportevent in transportevents)
+            {
+                reservations += transportevent.Places;
+            }
+
+
+            freePlaces = transport.Places - reservations;
+            
+
+            return freePlaces;
         }
 
     }
