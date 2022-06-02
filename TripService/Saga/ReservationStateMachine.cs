@@ -322,6 +322,10 @@ namespace TripService.Saga
                    NameOfRoom = ctx.Saga.RoomTypeName,
                    TransportType = ctx.Saga.TransportTypeName
                                
+               }).Publish(ctx => new NotifyAboutTripPurchaseQuery()
+               {
+                   HotelId = ctx.Saga.HotelId,
+                   UserName = ctx.Saga.Username
                })
                .Finalize();
     
