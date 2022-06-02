@@ -22,7 +22,7 @@ builder.Services.AddMassTransit(x =>
     builder.Services.AddTransient<ITransportRepository, TransportRepository>();
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("rabbitmq", "/", h =>
+        cfg.Host("rsww_175741_rabbitmq", "/", h =>
         {
             h.Username("guest");
             h.Password("guest");

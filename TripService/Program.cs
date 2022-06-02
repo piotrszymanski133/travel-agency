@@ -36,7 +36,7 @@ builder.Services.AddMassTransit(x =>
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.UseDelayedMessageScheduler();
-        cfg.Host("rabbitmq", 5672, "/", h =>
+        cfg.Host("rsww_175741_rabbitmq", 5672, "/", h =>
         {
             h.Username("guest");
             h.Password("guest");

@@ -9,7 +9,7 @@ const PopularCountry = (props) => {
 
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
-            .withUrl('http://localhost:8081/hubs/test')
+            .withUrl('http://localhost:17577/hubs/test')
             .withAutomaticReconnect()
             .build();
 
