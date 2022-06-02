@@ -69,7 +69,7 @@ namespace Generator.Services
             }
             Transport transport = _transportRepository.GetRandomTransport();
             int freePlaces = GetNumberOfFreePlaces(transport);
-            Console.WriteLine($"Before - Transport {transport.Id} places {transport.Places}");
+           
             int random = _random.Next(5);
             if (freePlaces > 5)
             {
@@ -96,7 +96,7 @@ namespace Generator.Services
                     ChangePlaces = (short)random
                 });
             }
-            Console.WriteLine($"After - Transport {transport.Id} places {transport.Places}, change {random}");
+            Console.WriteLine($"Transport {transport.Id} places {transport.Places}, change {random}");
             return Task.CompletedTask;
         }
 

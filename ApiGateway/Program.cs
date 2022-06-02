@@ -26,6 +26,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<NotifyAboutNewPopularCountryConsumer>();
     x.AddConsumer<NotifyAboutNewPopularTripConfigConsumer>();
     x.AddConsumer<ChangeHotelAvailabilityConsumer>();
+    x.AddConsumer<ChangeTransportPlacesConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", 5672, "/", h =>

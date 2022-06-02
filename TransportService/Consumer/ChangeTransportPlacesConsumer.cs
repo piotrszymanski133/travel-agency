@@ -4,7 +4,7 @@ using TripService.Repository;
 using MassTransit;
 using CommonComponents;
 
-namespace TransportService.Consumers
+namespace TransportService.Consumer
 {
     public class ChangeTransportPlacesConsumer : IConsumer<ChangeTransportPlacesQuery>
     {
