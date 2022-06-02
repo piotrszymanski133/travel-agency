@@ -90,24 +90,9 @@ const OfferDetailsHook = (props) => {
                                     parseInt(adults), parseInt(childrenUnder3), parseInt(childrenUnder10),
                                     parseInt(childrenUnder18), departure.toString())
                                 connection.on('SendTripOffer', message => {
-                                    console.log(message.tripOffer.hotelOffer.roomsConfigurations)
                                     setMessage(message)
-                                    setRoomPrices(                                    [
-                                        {
-                                            "capacityPeople": 1,
-                                            "quantity": 10,
-                                            "roomtypeId": 1,
-                                            "name": "Small Room",
-                                            "price": 2184
-                                        },
-                                        {
-                                            "capacityPeople": 1,
-                                            "quantity": 2,
-                                            "roomtypeId": 8,
-                                            "name": "Small Room Premium",
-                                            "price": 3120
-                                        }
-                                    ])
+                                    setRoomPrices(message.tripOffer.hotelOffer.roomsConfigurations)
+                                    setTransportPrices(message.tripOffer.transportOffers)
                                 });
                             }
                         }
