@@ -97,4 +97,11 @@ services:
             ME_CONFIG_MONGODB_ADMINPASSWORD: example
             ME_CONFIG_MONGODB_SERVER: mongodb
         ports:
-            - 8083:8081
+            - 8083:8081              
+              
+    generator:
+        container_name: generator
+        restart: always
+        build:
+            context: .
+            dockerfile: Generator.Dockerfile

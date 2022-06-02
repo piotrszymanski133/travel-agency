@@ -46,7 +46,7 @@ namespace Generator.Services
             {
                 Console.WriteLine("eee");
             }
-            if (freeRooms > 3)
+            if (freeRooms > 5)
             {
                 _publishEndpoint.Publish(new ChangeHotelAvailabilityQuery
                 {
@@ -54,7 +54,7 @@ namespace Generator.Services
                     startDate = startDate,
                     endDate = endDate,
                     HotelId = hotel.Id,
-                    ChangeQuantity = (short) -_random.Next(3)
+                    ChangeQuantity = (short) -(_random.Next(4) + 1)
                 });
             }
             else
@@ -65,7 +65,7 @@ namespace Generator.Services
                     startDate = startDate,
                     endDate = endDate,
                     HotelId = hotel.Id,
-                    ChangeQuantity = (short) _random.Next(3)
+                    ChangeQuantity = (short) (_random.Next(4) + 1)
                 });         
             }
             Transport transport = _transportRepository.GetRandomTransport();

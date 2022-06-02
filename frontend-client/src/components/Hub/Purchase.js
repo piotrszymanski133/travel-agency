@@ -10,7 +10,7 @@ const Purchase = (props) => {
     
     useEffect(() => {
         const newConnection = new HubConnectionBuilder()
-            .withUrl('https://localhost:7048/hubs/test')
+            .withUrl('http://localhost:8081/hubs/test')
             .withAutomaticReconnect()
             .build();
 
