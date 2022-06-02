@@ -301,7 +301,7 @@ const OfferDetailsHook = (props) => {
                     </div>
                     <div className="transportInfo">
                         <p>Informacje o transporcie</p>
-                        
+                        <p>Miasto wyjazdu: {transportCitiesConverted[selectedTransportType]} </p>
                     </div>
                 </div>
             </div>
