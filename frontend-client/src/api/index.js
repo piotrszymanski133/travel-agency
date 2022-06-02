@@ -9,7 +9,8 @@ export const ENDPOINTS = {
     login: 'Login',
     reserve: 'Trip/ReserveTrip',
     payment: 'Trip/Payment',
-    getUserTrips: 'Trip/GetUserTrips'
+    getUserTrips: 'Trip/GetUserTrips',
+    getLastChanges: 'LastChanges/GetLastChanges'
 }
 
 export const createAPIEndpoint = endpoint => {

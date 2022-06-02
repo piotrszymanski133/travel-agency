@@ -3,9 +3,12 @@ import {BASE_URL, createAPIEndpoint, ENDPOINTS} from "../api";
 import Purchase from './Hub/Purchase'
 import PopularCountry from './Hub/PopularCountry'
 import PopularTripConfiguration from './Hub/PopularTripConfiguration'
-import HotelStateChange from './Hub/HotelStateChange'
-import {HubConnectionBuilder} from "@microsoft/signalr";
 import axios from 'axios';
+
+import { HubConnectionBuilder } from '@microsoft/signalr';
+import { ReactNotifications } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+import { Store } from 'react-notifications-component';
 
 const queryParams = new URLSearchParams(window.location.search);
 var hotelID = queryParams.get('hotelID');
@@ -53,6 +56,66 @@ const OfferDetailsHook = (props) => {
     const [roomSelectedPrice, setRoomSelectedPrice] = useState(0)
     const [transportSelectedPrice, setTransportSelectedPrice] = useState(0)
     const [ price, setPrice ] = useState(0);
+    const [ startDateTo, setStartDateTo] = useState()
+    const [ endDateTo, setEndDateTo] = useState()
+    
+    const [ connection, setConnection ] = useState(null);
+    const [ message, setMessage ] = useState(null);
+    const [ roomTypeListMessage, setRoomTypeListMessage] = useState([]);
+
+    useEffect(() => {
+        const newConnection = new HubConnectionBuilder()
+            .withUrl('https://localhost:7048/hubs/test')
+            .withAutomaticReconnect()
+            .build();
+
+        setConnection(newConnection);
+    }, []);
+
+    useEffect(() => {
+        if (connection) {
+            connection.start()
+                .then(result => {
+                    console.log('Connected!');
+                    connection.on('SendHotelStateChangeMessage', message => {
+                        var messageHotelId = message.hotelId
+                        var convertedStartDate = new Date(startDate)
+                        var convertedEndDate = new Date(endDate)
+                        var messageStartDate = new Date(message.startDate)
+                        var messageEndDate = new Date(message.endDate)
+                        if(messageHotelId == hotelID){
+                            if(convertedStartDate <= messageEndDate && messageStartDate <= convertedEndDate){
+                                console.log("Hotel's parameters are equals")
+                                connection.send('GetTrip', parseInt(hotelID), convertedStartDate, convertedEndDate,
+                                    parseInt(adults), parseInt(childrenUnder3), parseInt(childrenUnder10),
+                                    parseInt(childrenUnder18), departure.toString())
+                                connection.on('SendTripOffer', message => {
+                                    console.log(message.tripOffer.hotelOffer.roomsConfigurations)
+                                    setMessage(message)
+                                    setRoomPrices(                                    [
+                                        {
+                                            "capacityPeople": 1,
+                                            "quantity": 10,
+                                            "roomtypeId": 1,
+                                            "name": "Small Room",
+                                            "price": 2184
+                                        },
+                                        {
+                                            "capacityPeople": 1,
+                                            "quantity": 2,
+                                            "roomtypeId": 8,
+                                            "name": "Small Room Premium",
+                                            "price": 3120
+                                        }
+                                    ])
+                                });
+                            }
+                        }
+                    });
+                })
+                .catch(e => console.log('Connection failed: ', e));
+        }
+    }, [connection]);
 
     useEffect(() => {
         async function fetchData() {
@@ -82,15 +145,14 @@ const OfferDetailsHook = (props) => {
 
             const result = await axios.get(BASE_URL+ ENDPOINTS.getTrip + '?' + searchParams);
             setOffer(result.data);
+            setStartDateTo(result.data.tripOffer.startDate)
+            setEndDateTo(result.data.tripOffer.endDate)
             setRoomTypeList(result.data.tripOffer.hotelOffer.roomsConfigurations)
             setSelectedRoomType(result.data.tripOffer.hotelOffer.roomsConfigurations[0].name)
             setTransportTypeList(result.data.tripOffer.transportOffers)
             setSelectedTransportType(result.data.tripOffer.transportOffers[0].transportName)
             setRoomPrices(result.data.tripOffer.hotelOffer.roomsConfigurations)
             setTransportPrices(result.data.tripOffer.transportOffers)
-            //setRoomSelectedPrice(result.data.tripOffer.hotelOffer.roomsConfigurations[0].price)
-            //setTransportSelectedPrice(result.data.tripOffer.transportOffers[0].price)
-            //setPrice(roomSelectedPrice + transportSelectedPrice)
             
 
             const key = Object.keys(localStorage)
@@ -112,8 +174,8 @@ const OfferDetailsHook = (props) => {
         setPrice(roomSelectedPrice + transportSelectedPrice)
 
     });
-
-
+    
+    
     const handleTypesChange = () => {
         let selectRoomType = document.querySelector('#selectRoomType')
         var optionsRoomType = selectRoomType.getElementsByTagName('option');
@@ -135,11 +197,11 @@ const OfferDetailsHook = (props) => {
         event.preventDefault();
         var reservationObject = {
             'hotelId': hotelID,
-            'startDate': startDate,
-            'endDate': endDate,
-            "roomTypeId": roomPricesConvertedWithId[this.state.selectedRoomType],
-            "transportFromId": transportFromIdConverted[this.state.selectedTransportType],
-            "transportToId": transportToIdConverted[this.state.selectedTransportType],
+            'startDate': startDateTo,
+            'endDate': endDateTo,
+            "roomTypeId": roomPricesConvertedWithId[selectedRoomType],
+            "transportFromId": transportFromIdConverted[selectedTransportType],
+            "transportToId": transportToIdConverted[selectedTransportType],
             "username": parsedUser.username,
             "adults": parseInt(adults),
             "childrenUnder3": parseInt(childrenUnder3),
@@ -195,10 +257,6 @@ const OfferDetailsHook = (props) => {
             <PopularTripConfiguration/>
             <PopularCountry/>
             <Purchase hotelId={hotelID}/>
-            <HotelStateChange hotelId={hotelID} startDate={startDate} endDate={endDate}
-                              adults={adults} childrenUnder3={childrenUnder3}
-                              childrenUnder10={childrenUnder10} childrenUnder18={childrenUnder18}
-                              departure={departure}/>
             <h3 className="text-center mt-5">Szczegóły oferty</h3>
             <div className="row mt-3">
                 <div className="col-sm offerDetails">

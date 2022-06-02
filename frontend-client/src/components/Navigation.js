@@ -40,6 +40,9 @@ export class Navigation extends Component{
                         <NavLink className={(this.isLogged ? 'd-inline p-3 text-primary text-decoration-none' : 'd-none')} to="/userTrips">
                             Twoje wycieczki
                         </NavLink>
+                        <NavLink className="d-inline p-3 text-primary text-decoration-none" to="/recentChanges">
+                            Ostatnie zmiany
+                        </NavLink>
                     </Nav>
                     <Nav>
                         <NavLink className={(this.isLogged ? 'd-none' : 'd-inline p-3 text-primary text-decoration-none')} to="/login">

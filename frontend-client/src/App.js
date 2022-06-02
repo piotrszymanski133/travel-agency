@@ -16,38 +16,37 @@ import ReservationError from "./components/ReservationError"
 import PaymentOK from "./components/PaymentOK";
 import PaymentError from "./components/PaymentError";
 import PaymentErrorTimeout from "./components/PaymentErrorTimeout";
-import HotelStateContext from './components/HotelStateContext'
 import OfferDetailsHook from './components/OfferDetailsHook'
+import RecentChanges from './components/RecentChanges'
 
 const App = props => {
     const [message, setMessage] = useState(false);
 
     return (
-        <HotelStateContext.Provider value={[message, setMessage]}>
-            <BrowserRouter>
-                <div className="container w-75 justify-content-center">
+        <BrowserRouter>
+            <div className="container w-75 justify-content-center">
 
-                    <Navigation/>
+                <Navigation/>
 
-                    <Routes>
-                        <Route path="/" element={<Home/>} exact/>
-                        <Route path="/offer" element={<Offer/>}/>
-                        <Route path="/offer_details" element={<OfferDetailsHook/>}/>
-                        <Route path="/destinations" element={<Destinations/>}/>
-                        <Route path="/login" element={<Login/>}/>
-                        <Route path="/logout" element={<Logout/>}/>
-                        <Route path="/reservation" element={<Reservation/>}/>
-                        <Route path="/loginError" element={<LoginError/>}/>
-                        <Route path="/payment" element={<Payment/>}/>
-                        <Route path="/reservationError" element={<ReservationError/>}/>
-                        <Route path="/paymentOk" element={<PaymentOK/>}/>
-                        <Route path="/paymentError" element={<PaymentError/>}/>
-                        <Route path="/paymentErrorTimeout" element={<PaymentErrorTimeout/>}/>
-                        <Route path="/userTrips" element={<UserTrips/>}/>
-                    </Routes>
-                </div>
-            </BrowserRouter>
-        </HotelStateContext.Provider >
+                <Routes>
+                    <Route path="/" element={<Home/>} exact/>
+                    <Route path="/offer" element={<Offer/>}/>
+                    <Route path="/offer_details" element={<OfferDetailsHook/>}/>
+                    <Route path="/destinations" element={<Destinations/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/logout" element={<Logout/>}/>
+                    <Route path="/reservation" element={<Reservation/>}/>
+                    <Route path="/loginError" element={<LoginError/>}/>
+                    <Route path="/payment" element={<Payment/>}/>
+                    <Route path="/reservationError" element={<ReservationError/>}/>
+                    <Route path="/paymentOk" element={<PaymentOK/>}/>
+                    <Route path="/paymentError" element={<PaymentError/>}/>
+                    <Route path="/paymentErrorTimeout" element={<PaymentErrorTimeout/>}/>
+                    <Route path="/userTrips" element={<UserTrips/>}/>
+                    <Route path="/recentChanges" element={<RecentChanges/>}/>
+                </Routes>
+            </div>
+        </BrowserRouter>
     )
 }
 

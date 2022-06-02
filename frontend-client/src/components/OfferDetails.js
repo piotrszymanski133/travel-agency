@@ -3,8 +3,6 @@ import {BASE_URL, createAPIEndpoint, ENDPOINTS} from "../api";
 import Purchase from './Hub/Purchase'
 import PopularCountry from './Hub/PopularCountry'
 import PopularTripConfiguration from './Hub/PopularTripConfiguration'
-import HotelStateChange from './Hub/HotelStateChange'
-import HotelStateContext from './HotelStateContext';
 
 
 const queryParams = new URLSearchParams(window.location.search);
@@ -198,10 +196,6 @@ export class OfferDetails extends Component {
                 <PopularTripConfiguration/>
                 <PopularCountry/>
                 <Purchase hotelId={hotelID}/>
-                <HotelStateChange hotelId={hotelID} startDate={startDate} endDate={endDate}
-                                  adults={adults} childrenUnder3={childrenUnder3}
-                                  childrenUnder10={childrenUnder10} childrenUnder18={childrenUnder18}
-                                  departure={departure}/>
                 <h3 className="text-center mt-5">Szczegóły oferty</h3>
                 <div className="row mt-3">
                     <div className="col-sm offerDetails">
