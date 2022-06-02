@@ -18,6 +18,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<ILastChangesService,LastChangesService>();
 builder.Services.AddSignalR();
 builder.Services.AddMassTransit(x =>
 {
@@ -26,6 +27,7 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<NotifyAboutNewPopularCountryConsumer>();
     x.AddConsumer<NotifyAboutNewPopularTripConfigConsumer>();
     x.AddConsumer<ChangeHotelAvailabilityConsumer>();
+    x.AddConsumer<ChangeTransportPlacesConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("localhost", 5672, "/", h =>

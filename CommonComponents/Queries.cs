@@ -165,10 +165,21 @@ public class NotifyAboutNewPopularTripConfigQuery
 
 public class ChangeHotelAvailabilityQuery
 {
+    //List of id's hotelroomaval
     public List<short> IdentifierList { get; set; }
     public short ChangeQuantity { get; set; }
     public short HotelId { get; set; }
     public DateTime startDate { get; set; }
     public DateTime endDate { get; set; }
 
+}
+
+public class ChangeTransportPlacesQuery
+{
+    public int ChangePlaces { get; set; }
+    public long TransportId { get; set; }
+    public long DestinationPlacesId { get; set; }
+    public long SourcePlacesId { get; set; }
+    public string Transporttype { get; set; } = null!;
+    public DateTime Transportdate { get; set; }
 }

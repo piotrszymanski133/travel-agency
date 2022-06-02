@@ -22,6 +22,8 @@ namespace TripService.Repository
         void RollbackReserveTransport(Guid commandReservationId);
         void ConfirmTransport(Guid commandReservationId);
         List<UserTransports> getUserTransportsInfo(string msgUsername);
+
+        void ChangeTransportPlaces(long id, int change);
     }
 
 
@@ -311,6 +313,19 @@ namespace TripService.Repository
             List <UserTransports>  returnList = xx.ToList();
 
             return returnList;
+        }
+
+        public void ChangeTransportPlaces(long id, int change)
+        {
+            using (var db = new transportsdbContext())
+            {
+                db.Transports
+                    .Where(av => av.Id == id)
+                    .ToList() 
+                    .ForEach(av => av.Places += change);
+                db.SaveChanges();
+            }
+
         }
     }
 }

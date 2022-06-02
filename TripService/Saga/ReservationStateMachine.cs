@@ -182,7 +182,6 @@ namespace TripService.Saga
 
        private EventActivityBinder<ReservationState,PaymentQuery> WaitingForUserPaymentPaymentQuery() =>
            When(PaymentQuery)
-               .Unschedule(PaymentTimeout)
                .ThenAsync(ctx =>
                {
                    if (!ctx.TryGetPayload(
@@ -270,10 +269,11 @@ namespace TripService.Saga
                        ReservationId = ctx.Saga.CorrelationId
                    }, r => r.RequestId = ctx.Saga.RequestId);
                })
-               .Finalize();
+               .TransitionTo(WaitingForUserPayment);
        
        private EventActivityBinder<ReservationState,PaymentForTripAcceptedResponse> WaitingForPaymentServiceResponsePaymentAccepted() =>
            When(PaymentForTripAcceptedResponse)
+               .Unschedule(PaymentTimeout)
                .ThenAsync(ctx =>
                {
                    return Console.Out.WriteLineAsync(
