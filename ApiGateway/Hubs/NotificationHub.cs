@@ -63,7 +63,7 @@ namespace ApiGateway.Hubs
             TripOfferQueryParameters tripOfferQueryParameters = new TripOfferQueryParameters
             {
                 HotelId = hotelId,
-                StartDate = startDate,
+                StartDate = startDate.AddHours(2),
                 EndDate = endDate,
                 Adults = adults,
                 ChildrenUnder3 = childrenUnder3,

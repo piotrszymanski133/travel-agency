@@ -29,14 +29,15 @@ namespace Generator.Services
         {
             Hotel hotel = _hotelRepository.GetRandomHotel();
             int daysToChange = new Random().Next(5);
-            DateTime startDate = new DateTime(2022, 6, 1);
-            DateTime endDate = new DateTime(2022, 6, 30 - daysToChange);
-            TimeSpan timeSpan = endDate - startDate;
-            TimeSpan newSpan = new TimeSpan(0, _random.Next(0, (int) timeSpan.TotalMinutes), 0);
-            DateTime newStartDate = startDate + newSpan;
-            DateTime newEndDate = newStartDate.AddDays(daysToChange);
+            DateTime startDate = new DateTime(2022, 6, 6);
+            DateTime endDate = new DateTime(2022, 6, 10);
+            //DateTime endDate = new DateTime(2022, 6, 30 - daysToChange);
+            //TimeSpan timeSpan = endDate - startDate;
+            //TimeSpan newSpan = new TimeSpan(0, _random.Next(0, (int) timeSpan.TotalMinutes), 0);
+            //DateTime newStartDate = startDate + newSpan;
+            //DateTime newEndDate = newStartDate.AddDays(daysToChange);
             
-            List<Hotelroomavailability> roomAvailabilities = GetRandomRoomAvailabilitiesForHotel(hotel, newStartDate, daysToChange);
+            List<Hotelroomavailability> roomAvailabilities = GetRandomRoomAvailabilitiesForHotel(hotel, startDate, daysToChange);
             int freeRooms = GetNumberOfFreeRooms(roomAvailabilities, hotel);
             Console.WriteLine($"Hotel {hotel.Id} rooms {freeRooms}" );
             List<short> identifiers = new List<short>();
@@ -50,8 +51,8 @@ namespace Generator.Services
                 _publishEndpoint.Publish(new ChangeHotelAvailabilityQuery
                 {
                     IdentifierList = identifiers,
-                    startDate = newStartDate,
-                    endDate = newEndDate,
+                    startDate = startDate,
+                    endDate = endDate,
                     HotelId = hotel.Id,
                     ChangeQuantity = (short) -_random.Next(3)
                 });
@@ -61,8 +62,8 @@ namespace Generator.Services
                 _publishEndpoint.Publish(new ChangeHotelAvailabilityQuery
                 {
                     IdentifierList = identifiers,
-                    startDate = newStartDate,
-                    endDate = newEndDate,
+                    startDate = startDate,
+                    endDate = endDate,
                     HotelId = hotel.Id,
                     ChangeQuantity = (short) _random.Next(3)
                 });         
@@ -136,7 +137,8 @@ namespace Generator.Services
         private Hotelroom GetRandomRoom(Hotel hotel)
         {
             List<Hotelroom> roomsList = hotel.Hotelrooms.ToList();
-            return roomsList[_random.Next(roomsList.Count)];
+           // return roomsList[_random.Next(roomsList.Count)];
+           return roomsList.Find(h => h.Id == 1);
         }
 
         private int GetNumberOfFreePlaces(Transport transport)
